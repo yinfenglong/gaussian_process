@@ -5,7 +5,6 @@
 Date: 19.09.2021
 Author: Yinfeng Long
 usage
-    python3 gpr_GPyTorch_dataload_train.py q330  
     x_train_idx = ['x', 'y', 'z', 'vx', 'vy', 'vz']
     y_train_idx = ['y_x', 'y_y', 'y_z', 'y_vx', 'y_vy', 'y_vz']
 '''
@@ -20,8 +19,10 @@ from gpytorch.variational import VariationalStrategy
 from math import floor
 import time
 import sys
+from matplotlib import pyplot as plt
 from tqdm.notebook import tqdm
 import tqdm
+import os.path
 
 class GpTrainCombine(object):
     def __init__(self, x_train_idx, y_train_idx, gp_model_file_path, npz_name ):
@@ -31,7 +32,7 @@ class GpTrainCombine(object):
         self.train_x = None 
         self.train_y = None
         self.train_loader = None 
-        # self.train_y_range = None
+        self.train_y_range = None
         self.load_data(x_train_idx, y_train_idx )
 
         self.observed_pred = None
@@ -48,11 +49,9 @@ class GpTrainCombine(object):
         # numpy into one dimension, then create a Tensor form from numpy (=torch.linspace)
         X = (gp_train[x_train_idx]).flatten()
         y = (gp_train[y_train_idx]).flatten()
-        print("before shuffle dimension of x:", np.array(X).shape)
-        print("before shuffle dimension of y:", np.array(y).shape)
         np.random.shuffle(X)
-        np.random.shuffle(y) 
-        # self.train_y_range = np.max(y) - np.min(y)
+        np.random.shuffle(y)
+        self.train_y_range = np.max(y) - np.min(y)
         X = torch.from_numpy( X )
         y = torch.from_numpy( y )
         print("dimension of x:", np.array(X).shape)
@@ -105,7 +104,10 @@ class GpTrainCombine(object):
         time_2 = time.time()
         print("training time is: ", (time_2 - time_1))
         # torch.save(model.state_dict(), './model_state.pth')
-        torch.save(model.state_dict(), './' +  sys.argv[1] + '/train_pre_model/model_state_' + x_train_idx +'.pth')
+        model_path = './' +  sys.argv[1] + '/train_pre_model/'
+        if not os.path.exists(model_path):
+            os.makedirs( model_path )
+        torch.save(model.state_dict(), model_path + 'model_state_' + x_train_idx +'.pth')
         # likelihood_state_dict = likelihood.state_dict()
         # torch.save(likelihood_state_dict, './likelihood_state.pth')
         # torch.save(likelihood_state_dict, './' + sys.argv[1] + '/train_pre_model/likelihood_state_' + x_train_idx +'.pth')
@@ -129,22 +131,17 @@ class GPModel(ApproximateGP):
 if __name__ == '__main__':
     # ### From .npz load datas for gp training### #
     file_path = './' + sys.argv[1]
-    npz_name = 'combined_q330.npz'
+    # npz_name = 'combined_q330.npz'
+    npz_name = sys.argv[2] 
     gp_train = np.load( file_path + '/' + npz_name)
 
-    # all dimensions: x, y, z, vx, vy, vz
-    # x_idx_list = [i for i in gp_train.keys()][:6]
-    # y_idx_list = [i for i in gp_train.keys()][6:]
-    # for i in range(len(x_idx_list)):
-    #     x_train_idx = x_idx_list[i]
-    #     y_train_idx = y_idx_list[i]
-    #     print("***************************")
-    #     print("x_train_idx: {}".format(x_train_idx) )
-    #     print("y_train_idx: {}".format(y_train_idx) )
+    x_idx_list = [i for i in gp_train.keys()][:6]
+    y_idx_list = [i for i in gp_train.keys()][6:]
+    for i in range(len(x_idx_list)):
+        x_train_idx = x_idx_list[i]
+        y_train_idx = y_idx_list[i]
+        print("***************************")
+        print("x_train_idx: {}".format(x_train_idx) )
+        print("y_train_idx: {}".format(y_train_idx) )
 
-    #     gpMPC = GpTrainCombine(x_train_idx, y_train_idx, file_path, npz_name)
-
-    # one dimesion
-    x_train_idx = sys.argv[2]
-    y_train_idx = sys.argv[3]
-    gpMPC = GpTrainCombine(x_train_idx, y_train_idx, file_path, npz_name)
+        gpMPC = GpTrainCombine(x_train_idx, y_train_idx, file_path, npz_name)

@@ -63,7 +63,7 @@ class MPC_controller(object):
         # sub parameter p
         gp_mean_sub = rospy.Subscriber(
             '/gp_acceleration_world', AccelStamped, self.gp_mpc_callback)
-        self.gp_mean_accel_w = None 
+        self.gp_mean_accel_w = np.array([0, 0, 0]) 
         self.is_gp_init = False
 
         # trajectory
@@ -87,11 +87,13 @@ class MPC_controller(object):
         self.att_thread = Thread(target=self.send_command, args=())
         self.att_thread.daemon = True
         self.att_thread.start()
+        self.trajectory_init = False 
+
 
     def gp_mpc_callback(self, msg):
         # get gp predict value
         if not self.is_gp_init:
-            self.gp_mean_accel_w = np.array([0, 0, 0])
+            # self.gp_mean_accel_w = np.array([0, 0, 0])
             self.is_gp_init = True
         else:
             self.gp_mean_accel_w = np.array([msg.accel.linear.x, msg.accel.linear.y, msg.accel.linear.z])
@@ -158,7 +160,7 @@ class MPC_controller(object):
                                                     # quaternion_[3],
                                                     temp_traj[i].vx,
                                                     temp_traj[i].vy,
-                                                    temp_traj[i].vz,
+                                                    temp_traj[i].vz
                                                     ])
 
     def quadrotor_optimizer_setup(self, ):
@@ -262,7 +264,15 @@ class MPC_controller(object):
 
     def mpc_estimation_loop(self,):
         t1 = time.time()
-        if self.trajectory_path is not None and self.current_state is not None:
+        if not self.trajectory_init:
+            self.trajectory_path = np.zeros((1, 10))
+            self.trajectory_path[0] = np.array([0, 0, 0.4, 1, 0, 0, 0, 0, 0, 0])
+            self.trajectory_init = True
+        else:
+            pass
+            
+        # if self.trajectory_path is not None and self.current_state is not None:
+        if self.current_state is not None:
             current_trajectory = self.trajectory_path
             u_des = np.array([0.0, 0.0, 0.0, self.g_])
             self.solver.set(self.N, 'yref', np.concatenate(

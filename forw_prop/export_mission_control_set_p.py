@@ -86,6 +86,7 @@ if __name__ == '__main__':
         if sub_obj.command_id == 1 or sub_obj.command_id == 2 or sub_obj.command_id == 5:
             continue 
         elif sub_obj.command_id == 3: 
+            rospy.loginfo_once('begin recording')
             # data_list.append(np.append(np.append(sub_obj.uav_pose.flatten(),
             #                        sub_obj.att_rate_cmd.flatten()), sub_obj.mpc_next_state.flatten()))
             data_list.append(np.append(sub_obj.control_with_p.flatten(),

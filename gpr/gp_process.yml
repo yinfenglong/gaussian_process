@@ -1,0 +1,39 @@
+# ./.tmuxinator.yml
+
+name: gp_process
+root: /home/achilles/test_ma_ws
+
+windows:
+  - gp:
+      layout: main-vertical
+      panes:
+        - gp_full_process:
+        # - rosbag_play_sub:
+          - source ros.zsh
+          - cd src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/forw_prop
+          - python3 export_mission_state_v_est_control_npy.py <%= @settings["folder_name"] %>  
+        # - forw_prop:
+          - python3 forw_prop_npy_update_u.py <%= @settings["folder_name"] %> <%= @settings["offset"] %>
+        # - gp_train:
+          # - cd src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gpr
+          - cd ..
+          - cd ./gpr
+          - python3 gpr_GPyTorch_train.py <%= @settings["folder_name"] %>
+          # - python3 gpr_GPyTorch_train.py <%= @settings["folder_name"] %> vz y_vz 
+          # - python3 gpr_GPyTorch_train.py <%= @settings["folder_name"] %> vx y_vx 
+          # - python3 gpr_GPyTorch_train.py <%= @settings["folder_name"] %> vy y_vy 
+          # - python3 gpr_GPyTorch_train.py <%= @settings["folder_name"] %> z y_z 
+          # - python3 gpr_GPyTorch_train.py <%= @settings["folder_name"] %> x y_x 
+          # - python3 gpr_GPyTorch_train.py <%= @settings["folder_name"] %> y y_y 
+        # - gp_predict:
+          - python3 gpr_GPyTorch_predict.py <%= @settings["folder_name"] %>
+          # - python3 gpr_GPyTorch_predict.py <%= @settings["folder_name"] %> vz y_vz 
+          # - python3 gpr_GPyTorch_predict.py <%= @settings["folder_name"] %> vx y_vx 
+          # - python3 gpr_GPyTorch_predict.py <%= @settings["folder_name"] %> vy y_vy 
+          # - python3 gpr_GPyTorch_predict.py <%= @settings["folder_name"] %> z y_z 
+          # - python3 gpr_GPyTorch_predict.py <%= @settings["folder_name"] %> x y_x 
+          # - python3 gpr_GPyTorch_predict.py <%= @settings["folder_name"] %> y y_y 
+        - roscore:
+          - roscore 
+        - rosbag play:
+          - cd src/itm/bagfiles

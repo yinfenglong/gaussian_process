@@ -13,11 +13,12 @@ import numpy as np
 
 import rospy
 from nav_msgs.msg import Odometry
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped, AccelStamped
 from mavros_msgs.msg import AttitudeTarget
 from itm_mav_msgs.msg import SetMission
 # from itm_nonlinear_mpc.msg import itm_trajectory_msg 
 from itm_mav_msgs.msg import itm_trajectory_msg
+import os.path
 
 class UAVSubNpy(object):
     def __init__(self):
@@ -26,7 +27,7 @@ class UAVSubNpy(object):
         #     uav_pose_topic, PoseStamped, self.pose_callback)
         self.robot_state_sub = rospy.Subscriber('/robot_pose', Odometry, self.robot_odom_callback)
         self.robot_pose_sub = rospy.Subscriber(
-            '/vrpn_client_node/ITM_Q330/pose', PoseStamped, self.robot_pose_callback)
+            '/vrpn_client_node/ITM_Q300/pose', PoseStamped, self.robot_pose_callback)
 
         self.got_robot_pose = False
         self.got_robot_odom = False
@@ -63,6 +64,12 @@ class UAVSubNpy(object):
         #     '/itm_quadrotor_control/user_command', SetMission, self.command_callback)
         # self.got_id = False
         # self.command_id = None 
+
+        # sub parameter p
+        gp_mean_sub = rospy.Subscriber(
+            '/gp_acceleration_world', AccelStamped, self.gp_mpc_callback)
+        self.gp_mean_accel_w = np.array([0, 0, 0]) 
+        self.is_gp_init = False
 
     def robot_odom_callback(self, msg):
         # robot state as [x, y, z, qw, qx, qy, qz, vx, vy, vz]
@@ -122,7 +129,14 @@ class UAVSubNpy(object):
                                                     temp_traj[i].vy,
                                                     temp_traj[i].vz
                 ])
-        
+
+    def gp_mpc_callback(self, msg):
+        # get gp predict value
+        if not self.is_gp_init:
+            # self.gp_mean_accel_w = np.array([0, 0, 0])
+            self.is_gp_init = True
+        else:
+            self.gp_mean_accel_w = np.array([msg.accel.linear.x, msg.accel.linear.y, msg.accel.linear.z])
 
     # def attitude_rate_cmd_callback(self, msg):
     #     # robot_control as [wx, wy, wz, thrust]
@@ -153,10 +167,17 @@ if __name__ == '__main__':
             current_time_ = rospy.get_time()
             if current_time_ - sub_obj.trajectory_timer > 3. or current_time_ - sub_obj.pose_timer > 3.:
                 # safe the data
-                np.save('exp_data_pose_traj_q330_circle_30s.npy', data_list)
+                npy_path = './q300/without_gp'
+                # npy_path = './q300/with_gp'
+                if not os.path.exists(npy_path):
+                    os.makedirs( npy_path )
+                np.save(npy_path + 'exp_data_pose_traj_q300_20210920_3_circle_30s_gp_acc.npy', data_list)
                 break
-            data_list.append(np.append(sub_obj.uav_pose.flatten(),
-                                sub_obj.uav_trajectory.flatten()))
+            # data_list.append(np.append(sub_obj.uav_pose.flatten(),
+            #                     sub_obj.uav_trajectory.flatten()))
+            # get gp_acc_data
+            data_list.append(np.append(np.append(sub_obj.uav_pose.flatten(),
+                                   sub_obj.uav_trajectory.flatten()), sub_obj.gp_mean_accel_w.flatten()))
             rate.sleep()
     else:
         while not rospy.is_shutdown():

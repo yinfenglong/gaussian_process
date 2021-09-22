@@ -167,8 +167,8 @@ if __name__ == '__main__':
             pass
         current_time_ = rospy.get_time()
         data_list.append( sub_obj.gp_mean_accel_w.flatten() )
-        print("current_time_:{}".format(current_time_))
-        print("gp_timer:{}".format(sub_obj.gp_timer))
+        # print("current_time_:{}".format(current_time_))
+        # print("gp_timer:{}".format(sub_obj.gp_timer))
         # if current_time_ - sub_obj.gp_timer > 1.5:
         if sub_obj.command_id == 2:
             # safe the data
@@ -176,7 +176,7 @@ if __name__ == '__main__':
             # npy_path = './q300/with_gp'
             if not os.path.exists(npy_path):
                 os.makedirs( npy_path )
-            np.save(npy_path + 'exp_data_q300_20210920_2_random_20_gp_acc_combine.npy', data_list)
+            np.save(npy_path + 'exp_data_q300_20210920_4_random_20_gp_acc_2_data_train.npy', data_list)
             break
         # data_list.append(np.append(sub_obj.uav_pose.flatten(),
         #                     sub_obj.uav_trajectory.flatten()))

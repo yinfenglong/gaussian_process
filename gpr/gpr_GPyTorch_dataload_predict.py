@@ -49,8 +49,9 @@ class GpMeanCombine(object):
         # numpy into one dimension, then create a Tensor form from numpy (=torch.linspace)
         X = (gp_train[x_train_idx]).flatten()
         y = (gp_train[y_train_idx]).flatten()
-        np.random.shuffle(X)
-        np.random.shuffle(y) 
+        # mapping relationship of X to y cannot be guaranteed
+        # np.random.shuffle(X)
+        # np.random.shuffle(y) 
         self.train_y_range = np.max(y) - np.min(y)
         X = torch.from_numpy( X )
         y = torch.from_numpy( y )
@@ -58,18 +59,27 @@ class GpMeanCombine(object):
         print("dimension of y:", np.array(y).shape)
 
         # 80% datas for training, 20% datas for testing
-        train_n = int(floor(0.8 * len(X)))
-        train_x = X[:train_n].contiguous()
-        train_y = y[:train_n].contiguous()
-        test_x = X[train_n:].contiguous()
-        test_y = y[train_n:].contiguous()
+        # train_n = int(floor(0.8 * len(X)))
+        # train_x = X[:train_n].contiguous()
+        # train_y = y[:train_n].contiguous()
+        # test_x = X[train_n:].contiguous()
+        # test_y = y[train_n:].contiguous()
 
-        self.train_x = (train_x).float().to(device)
-        self.train_y = (train_y).float().to(device)
-        self.test_x = (test_x).float().to(device)
-        self.test_y = (test_y).float().to(device)
+        np.random.seed(0)
+        num_train = int(np.floor(.3 * X.shape[0]))
+        train_index = np.random.choice(X.shape[0], num_train, replace=False)
+        test_index = np.delete(np.arange(X.shape[0]), train_index)
+        self.train_x = X[train_index].contiguous()
+        self.train_y = y[train_index].contiguous()
+        self.test_x = X[test_index].contiguous()
+        self.test_y = y[test_index].contiguous()
 
-        test_dataset = TensorDataset(test_x, test_y)
+        self.train_x = (self.train_x).float().to(device)
+        self.train_y = (self.train_y).float().to(device)
+        self.test_x = (self.test_x).float().to(device)
+        self.test_y = (self.test_y).float().to(device)
+
+        test_dataset = TensorDataset(self.test_x, self.test_y)
         self.test_loader = DataLoader(test_dataset, batch_size=1024, shuffle=False)
 
     def load_model(self, x_train_idx):
@@ -179,30 +189,30 @@ class GPModel(ApproximateGP):
 if __name__ == '__main__':
     # ### From .npz load datas for gp training### #
     file_path = './' + sys.argv[1]
-    npz_name = 'combined_q330.npz'
-    # npz_name = sys.argv[2] 
+    # npz_name = 'combined_q330.npz'
+    npz_name = sys.argv[2] 
     gp_train = np.load( file_path + '/' + npz_name)
 
     # all dimensions: x, y, z, vx, vy, vz
-    # x_idx_list = [i for i in gp_train.keys()][:6]
-    # y_idx_list = [i for i in gp_train.keys()][6:]
-    # for i in range(len(x_idx_list)):
-    #     x_train_idx = x_idx_list[i]
-    #     y_train_idx = y_idx_list[i]
-    #     print("***************************")
-    #     print("x_train_idx: {}".format(x_train_idx) )
-    #     print("y_train_idx: {}".format(y_train_idx) )
+    x_idx_list = [i for i in gp_train.keys()][:6]
+    y_idx_list = [i for i in gp_train.keys()][6:]
+    for i in range(len(x_idx_list)):
+        x_train_idx = x_idx_list[i]
+        y_train_idx = y_idx_list[i]
+        print("***************************")
+        print("x_train_idx: {}".format(x_train_idx) )
+        print("y_train_idx: {}".format(y_train_idx) )
 
-    #     gpMPC = GpMeanCombine(x_train_idx, y_train_idx, file_path, npz_name)
-    #     gpMPC.predict_test()
-    #     gpMPC.plot_predict_result()
+        gpMPC = GpMeanCombine(x_train_idx, y_train_idx, file_path, npz_name)
+        gpMPC.predict_test()
+        gpMPC.plot_predict_result()
 
     # one dimesion
-    x_train_idx = sys.argv[2]
-    y_train_idx = sys.argv[3]
-    gpMPC = GpMeanCombine(x_train_idx, y_train_idx, file_path, npz_name)
-    gpMPC.predict_test()
-    gpMPC.plot_predict_result()
+    # x_train_idx = sys.argv[2]
+    # y_train_idx = sys.argv[3]
+    # gpMPC = GpMeanCombine(x_train_idx, y_train_idx, file_path, npz_name)
+    # gpMPC.predict_test()
+    # gpMPC.plot_predict_result()
 
     # test one point
     # file_path ="/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/gpr/q330"

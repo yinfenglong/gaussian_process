@@ -49,24 +49,31 @@ class GpTrainCombine(object):
         # numpy into one dimension, then create a Tensor form from numpy (=torch.linspace)
         X = (gp_train[x_train_idx]).flatten()
         y = (gp_train[y_train_idx]).flatten()
-        np.random.shuffle(X)
-        np.random.shuffle(y)
-        # num_train = int(np.floor(.3 * data_x_npy.shape[0]))
-        # train_index = np.random.choice(data_x_npy.shape[0], num_train, replace=False)
-        # test_index = np.delete(np.arange(data_x_npy.shape[0]), train_index)
-        self.train_y_range = np.max(y) - np.min(y)
+        # np.random.shuffle(X)
+        # np.random.shuffle(y)
         X = torch.from_numpy(X)
         y = torch.from_numpy(y)
         print("dimension of x:", np.array(X).shape)
         print("dimension of y:", np.array(y).shape)
 
         # 80% datas for training, 20% datas for testing
-        train_n = int(floor(0.8 * len(X)))
-        train_x = X[:train_n].contiguous()
-        train_y = y[:train_n].contiguous()
+        # train_n = int(floor(0.8 * len(X)))
+        # train_x = X[:train_n].contiguous()
+        # train_y = y[:train_n].contiguous()
 
-        self.train_x = (train_x).float().to(device)
-        self.train_y = (train_y).float().to(device)
+        np.random.seed(0)
+        num_train = int(np.floor(.3 * X.shape[0]))
+        train_index = np.random.choice(X.shape[0], num_train, replace=False)
+        # test_index = np.delete(np.arange(X.shape[0]), train_index)
+        # shuffle example
+        # num_train = int(np.floor(.3 * data_x_npy.shape[0]))
+        # train_index = np.random.choice(data_x_npy.shape[0], num_train, replace=False)
+        # test_index = np.delete(np.arange(data_x_npy.shape[0]), train_index)
+        self.train_x = X[train_index].contiguous()
+        self.train_y = y[train_index].contiguous()
+
+        self.train_x = (self.train_x).float().to(device)
+        self.train_y = (self.train_y).float().to(device)
         train_dataset = TensorDataset(self.train_x, self.train_y)
         self.train_loader = DataLoader(train_dataset,
                                        batch_size=1024,

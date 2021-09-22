@@ -167,13 +167,13 @@ if __name__ == '__main__':
     # save: x_train,y_train: x, y, z, Vx, Vy, Vz
     if sys.argv[2]=='mpc':
         print("store datas of mpc_pred")
-        np.savez('/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/GPR/GPR_MPC_Gazebo/datas_for_gp_y.npz', \
+        np.savez('/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/GPR/GPR_MPC_Gazebo/datas_for_gp_y.npz', \
                 x=x_train[:,0], y=x_train[:,1], z=x_train[:,2], vx=x_train[:,7], vy=x_train[:,8], vz=x_train[:,9], \
             y_x=y_train[:,0], y_y=y_train[:,1], y_z=y_train[:,2], \
                 y_vx=y_train[:,7], y_vy=y_train[:,8], y_vz=y_train[:,9])
     elif sys.argv[2]=='RK4':
         print("store datas of forward propagation")
-        np.savez('/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/GPR/points_' + sys.argv[3] + '/datas_for_gp_y.npz', \
+        np.savez('/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/GPR/points_' + sys.argv[3] + '/datas_for_gp_y.npz', \
                 x=x_train[:,0], y=x_train[:,1], z=x_train[:,2], vx=x_train[:,7], vy=x_train[:,8], vz=x_train[:,9], \
             y_x=y_train[:,0], y_y=y_train[:,1], y_z=y_train[:,2], \
                 y_vx=y_train[:,7], y_vy=y_train[:,8], y_vz=y_train[:,9])

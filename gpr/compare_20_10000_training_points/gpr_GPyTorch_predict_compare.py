@@ -81,7 +81,7 @@ def load_model(train_x, train_y, model_state, likelihood_state):
     return model_to_predict, likelihood_pred
 
 def predict_mean( file_path, x_train_idx, y_train_idx, model_state, likelihood_state ):
-    # file_path = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/GPR'
+    # file_path = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/GPR'
     train_x, train_y = load_data(x_train_idx, y_train_idx, file_path)
     model_to_predict, likelihood_pred = load_model(train_x, train_y, model_state, likelihood_state )
     

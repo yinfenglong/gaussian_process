@@ -2,6 +2,7 @@
 
 name: gp_process
 root: /home/achilles/test_ma_ws
+# root: /home/itm_stud/test_ma_ws/MA_Experiment
 
 windows:
   - gp:
@@ -10,12 +11,12 @@ windows:
         - gp_full_process:
         # - rosbag_play_sub:
           - source ros.zsh
-          - cd src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/forw_prop
+          - cd src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/forw_prop
           - python3 export_mission_state_v_est_control_npy.py <%= @settings["folder_name"] %>  
         # - forw_prop:
           - python3 forw_prop_npy_update_u.py <%= @settings["folder_name"] %> <%= @settings["offset"] %>
         # - gp_train:
-          # - cd src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gpr
+          # - cd src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/gpr
           - cd ..
           - cd ./gpr
           - python3 gpr_GPyTorch_train.py <%= @settings["folder_name"] %>
@@ -37,3 +38,4 @@ windows:
           - roscore 
         - rosbag play:
           - cd src/itm/bagfiles
+          # - cd src/itm/itm_quadrotor_node/bagfiles

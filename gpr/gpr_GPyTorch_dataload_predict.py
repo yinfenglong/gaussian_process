@@ -205,7 +205,7 @@ if __name__ == '__main__':
     gpMPC.plot_predict_result()
 
     # test one point
-    # file_path ="/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gpr/q330"
+    # file_path ="/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/gpr/q330"
     # npz_name ="combined_q330.npz"
     # gpMPCVx = GpMeanCombine('vx', 'y_vx', file_path, npz_name)
 

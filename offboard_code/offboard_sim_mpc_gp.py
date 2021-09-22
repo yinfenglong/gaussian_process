@@ -16,6 +16,9 @@ from mavros_msgs.msg import AttitudeTarget
 from geometry_msgs.msg import AccelStamped
 from itm_mav_msgs.msg import SetMission
 
+import sys
+import os.path
+sys.path.append( os.path.join(os.path.join(os.path.dirname(__file__), '..')))
 from gpr.mpc_GPyTorch_predict import GpMean, GpMeanCombine 
 
 class GpPredict(object):

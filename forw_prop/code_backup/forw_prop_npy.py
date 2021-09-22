@@ -37,8 +37,8 @@ def datas_get( csv_name ):
 def npy_get():
     # from npy load datas
     # np_file = '/home/achilles/test_ma_ws/src/itm/itm_ros_utilities/exp_data.npy'
-    np_file = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/forw_prop/rosbag_npy/exp_data_v_est.npy'
-    # np_file = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/forw_prop/rosbag_npy/exp_data.npy'
+    np_file = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/forw_prop/rosbag_npy/exp_data_v_est.npy'
+    # np_file = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/forw_prop/rosbag_npy/exp_data.npy'
     # x, y, z, qw, qx, qy, qz, vx, vy, vz; wx, wy, wz, thrust
     exp_data = np.load(np_file, allow_pickle=True)
     data_length = exp_data.shape[0]

@@ -26,7 +26,7 @@ class UAVSubNpy(object):
         #     uav_pose_topic, PoseStamped, self.pose_callback)
         self.robot_odom_sub = rospy.Subscriber('/robot_pose', Odometry, self.robot_odom_callback)
         self.robot_pose_sub = rospy.Subscriber(
-            '/vrpn_client_node/ITM_Q330/pose', PoseStamped, self.robot_pose_callback)
+            '/vrpn_client_node/ITM_Q300/pose', PoseStamped, self.robot_pose_callback)
         self.uav_pose = None
         self.got_robot_pose = False
         self.got_robot_odom = False

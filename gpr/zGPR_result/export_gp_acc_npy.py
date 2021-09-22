@@ -176,7 +176,7 @@ if __name__ == '__main__':
             # npy_path = './q300/with_gp'
             if not os.path.exists(npy_path):
                 os.makedirs( npy_path )
-            np.save(npy_path + 'exp_data_q300_20210920_4_random_20_gp_acc_2_data_train.npy', data_list)
+            np.save(npy_path + 'exp_data_q300_20210920_2_random_20_gp_acc_4_data_train_GPModel.npy', data_list)
             break
         # data_list.append(np.append(sub_obj.uav_pose.flatten(),
         #                     sub_obj.uav_trajectory.flatten()))

@@ -118,10 +118,16 @@ class GpMeanCombine(object):
         X = torch.from_numpy( (gp_train[x_train_idx]).flatten() )
 
         # 80% datas for training, 20% datas for testing
-        train_n = int(floor(0.8 * len(X)))
-        self.train_x = X[:train_n].contiguous()
+        # train_n = int(floor(0.8 * len(X)))
+        # self.train_x = X[:train_n].contiguous()
+        # self.train_x = (self.train_x).float().to(device)
+
+        np.random.seed(0)
+        num_train = int(np.floor(.3 * X.shape[0]))
+        train_index = np.random.choice(X.shape[0], num_train, replace=False)
+        self.train_x = X[train_index].contiguous()
         self.train_x = (self.train_x).float().to(device)
-    
+
     def load_model(self, x_train_idx):
         target_device = 'cuda:0'
 

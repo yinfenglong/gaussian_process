@@ -31,12 +31,12 @@ class GpPredict(object):
         self.gp_limit = rospy.get_param('/offboard_sim_gp/gp_limit')
         print("data_type:{}".format(data_type))
         
-        if data_type == 'single':
+        if data_type == 'ExactGPModel':
             # load gp model
             self.gpMPCVx = GpMean('vx','y_vx', file_path, npz_name)
             self.gpMPCVy = GpMean('vy','y_vy', file_path, npz_name)
             self.gpMPCVz = GpMean('vz','y_vz', file_path, npz_name)
-        elif data_type == 'combine':
+        elif data_type == 'GPModel':
             # load gp model
             self.gpMPCVx = GpMeanCombine('vx', file_path, npz_name)
             self.gpMPCVy = GpMeanCombine('vy', file_path, npz_name)

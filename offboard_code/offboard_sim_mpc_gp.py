@@ -67,7 +67,8 @@ class GpPredict(object):
         # self.command_id = None 
 
         # Publisher
-        self.gp_mean_acc_pub = rospy.Publisher('/gp_acceleration_world', AccelStamped, queue_size=1)
+        # self.gp_mean_acc_pub = rospy.Publisher('/gp_acceleration_world', AccelStamped, queue_size=1)
+        self.gp_mean_acc_pub = rospy.Publisher('/gp_acc_estimation', AccelStamped, queue_size=1)
         self.gp_mean_list = AccelStamped() 
         self.gp_mean_list.header = Header()
         self.gp_mean_init = False

@@ -51,8 +51,15 @@ class GpMean(object):
         print("train_x_min:", self.train_x_min)
         self.train_y_range = np.max(train_y_ori) - np.min(train_y_ori)
 
-        self.train_x = torch.from_numpy( train_x_ori[:7000] )
-        self.train_y = torch.from_numpy( train_y_ori[:7000])
+        np.random.seed(0)
+        num_train = int(np.floor(.3 * train_x_ori.shape[0]))
+        train_index = np.random.choice(train_x_ori.shape[0], num_train, replace=False)
+        # test_index = np.delete(np.arange(X.shape[0]), train_index)
+        self.train_x = torch.from_numpy( train_x_ori[train_index] )
+        self.train_y = torch.from_numpy( train_y_ori[train_index] )
+
+        # self.train_x = torch.from_numpy( train_x_ori[:7000] )
+        # self.train_y = torch.from_numpy( train_y_ori[:7000])
 
         # numpy into one dimension, then create a Tensor form from numpy (=torch.linspace)
         print("x_train shape", self.train_x.shape)
@@ -168,8 +175,8 @@ class ExactGPModel(gpytorch.models.ExactGP):
 if __name__ == '__main__':
     # ### From .npz load datas for gp training### #
     file_path = './' + sys.argv[1]
-    npz_name = 'datas_for_gp_y.npz'
-    # npz_name = sys.argv[2] 
+    # npz_name = 'datas_for_gp_y.npz'
+    npz_name = sys.argv[2] 
     gp_train = np.load( file_path + '/' + npz_name)
 
     x_idx_list = [i for i in gp_train.keys()][:6]

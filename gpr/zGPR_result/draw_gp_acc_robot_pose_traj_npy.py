@@ -3,10 +3,10 @@
 '''
 Author: Yinfeng Long
 Date: 2021-09-02
-last_edit: 2021-09-21
+last_edit: 2021-09-23
 
 usage: 
-    python3 draw_robot_pose_traj_npy_without_gp.py q300/without_gp exp_data_pose_traj_q300_20210920_4_random_20
+    python3 draw_gp_acc_robot_pose_traj_npy.py q300/with_gp/exp_data_pose_traj_gp_acc_q300_20210923_1_random_0_03.npy
 '''
 
 import numpy as np
@@ -16,7 +16,7 @@ import os.path
 
 def load_npy(np_file):
     exp_data = np.load(np_file, allow_pickle=True)
-    data_length = exp_data.shape[0]-2
+    data_length = exp_data.shape[0]
     print("Data length:", data_length)
     # got_data = False
 
@@ -30,9 +30,6 @@ def load_npy(np_file):
     traj_x = []
     traj_y = []
     traj_z = []
-    traj_vx = []
-    traj_vy = []
-    traj_vz = []
 
     if get_gp_acc:
         gp_vx_w = []
@@ -59,13 +56,10 @@ def load_npy(np_file):
         traj_x.append(exp_data[i][10])
         traj_y.append(exp_data[i][11])
         traj_z.append(exp_data[i][12])
-        traj_vx.append(exp_data[i][13])
-        traj_vy.append(exp_data[i][14])
-        traj_vz.append(exp_data[i][15])
         if get_gp_acc:
-            gp_vx_w.append(exp_data[i][16])
-            gp_vy_w.append(exp_data[i][17])
-            gp_vz_w.append(exp_data[i][18])
+            gp_vx_w.append(exp_data[i][13])
+            gp_vy_w.append(exp_data[i][14])
+            gp_vz_w.append(exp_data[i][15])
         else:
             pass
     t = np.arange(0., 0.01*(data_length), 0.01)
@@ -75,7 +69,6 @@ def load_npy(np_file):
         return x, y, z, traj_x, traj_y, traj_z, t, gp_vx_w, gp_vy_w, gp_vz_w
     else:
         return x, y, z, traj_x, traj_y, traj_z, t
-        # return x, y, z, vx, vy, vz, traj_x, traj_y, traj_z, traj_vx, traj_vy, traj_vz, t
 
 def plot_result( pose, traj, tag ):
     f, ax = plt.subplots(1, 1, figsize=(4, 3))
@@ -102,21 +95,30 @@ def plot_result( pose, traj, tag ):
     ax.xaxis.set_major_locator(plt.MultipleLocator(5))
     ax.xaxis.set_minor_locator(plt.MultipleLocator(1))
     ax.grid(axis='x', which='both')
-    title = sys.argv[2]
+    title = np_name #sys.argv[2]
     plt.title(title + ':' + tag)
     manger = plt.get_current_fig_manager()
     manger.window.showMaximized()
     fig = plt.gcf()
     plt.show()
-    figures_path = './' + sys.argv[1] + '/figures/'
+    figures_path = './' + folder_name + '/figures_' + np_name + '/'
     if not os.path.exists(figures_path):
         os.makedirs( figures_path )
-    fig.savefig( figures_path + sys.argv[2] + '_' + tag + '.png' )
+    fig.savefig( figures_path + np_name + '_' + tag + '.png' )
 
 if __name__ == '__main__':
-    get_gp_acc = False 
+    get_gp_acc = True 
     # np_file = './exp_data_pose_traj_q330_circle_30s.npy'
-    np_file = './' + sys.argv[1] + '/' + sys.argv[2] + '.npy'
+    str_argv_1 = sys.argv[1]
+    quadrotor_name, if_with_gp, np_file = str_argv_1.split('/')
+    np_name, np_suffix = np_file.split('.', 1)
+    np_file = './' + quadrotor_name + '/' + if_with_gp + '/' + np_file
+    print("quadrotor_name:{}".format(quadrotor_name))
+    print("if_with_gp:{}".format(if_with_gp))
+    print("np_file: {}".format(np_file))
+    print("np_name: {}".format(np_name))
+    print("np_suffix: {}".format(np_suffix))
+    folder_name = quadrotor_name + '/' + if_with_gp
     
     if get_gp_acc:
         x, y, z, traj_x, traj_y, traj_z, t, gp_vx_w, gp_vy_w, gp_vz_w = load_npy(np_file)
@@ -139,35 +141,43 @@ if __name__ == '__main__':
         ax.xaxis.set_major_locator(plt.MultipleLocator(5))
         ax.xaxis.set_minor_locator(plt.MultipleLocator(1))
         ax.grid(axis='x', which='both')
-        plt.title( sys.argv[2] )
+        plt.title( np_name )
         manger = plt.get_current_fig_manager()
         manger.window.showMaximized()
         fig = plt.gcf()
         plt.show()
-        fig.savefig( './' + sys.argv[1] + '/figures/' + sys.argv[2] + '.png' )
+        figures_path = './' + folder_name + '/figures_' + np_name + '/'
+        if not os.path.exists(figures_path):
+            os.makedirs( figures_path )
+        fig.savefig( figures_path + np_name + '.png' )
+        # fig.savefig( './' + folder_name + '/figures/' + np_name + '.png' )
 
 
-    # plot_result(x, traj_x, 'x' )
-    # plot_result(y, traj_y, 'y' )
-    # plot_result(z, traj_z, 'z' )
+    plot_result(x, traj_x, 'x' )
+    plot_result(y, traj_y, 'y' )
+    plot_result(z, traj_z, 'z' )
 
-    # f, ax = plt.subplots(1, 1, figsize=(4, 3))
-    # plt.plot(t, x, 'peru', t, traj_x, 'cyan')
-    # plt.plot(t, y, 'm:', t, traj_y, 'k:')
-    # plt.plot(t, z, 'r-.', t, traj_z, 'b-.')
-    # plt.legend(labels=['robot_pose_x', 'robot_traj_x', 'robot_pose_y', 'robot_traj_y', 'robot_pose_z', 'robot_traj_z'])
-    # # y_grid
-    # ax.yaxis.set_major_locator(plt.MultipleLocator(0.1))
-    # ax.yaxis.set_minor_locator(plt.MultipleLocator(0.05))
-    # ax.grid(axis='y', which='both')
-    # # x_grid
-    # ax.xaxis.set_major_locator(plt.MultipleLocator(5))
-    # ax.xaxis.set_minor_locator(plt.MultipleLocator(1))
-    # ax.grid(axis='x', which='both')
-    # plt.title( sys.argv[2] + '_xyz.png')
-    # manger = plt.get_current_fig_manager()
-    # manger.window.showMaximized()
-    # fig = plt.gcf()
-    # plt.show()
-    # fig.savefig( './' + sys.argv[1] + '/figures/' + sys.argv[2] + '_xyz.png' )
+    f, ax = plt.subplots(1, 1, figsize=(4, 3))
+    plt.plot(t, x, 'peru', t, traj_x, 'cyan')
+    plt.plot(t, y, 'm:', t, traj_y, 'k:')
+    plt.plot(t, z, 'r-.', t, traj_z, 'b-.')
+    plt.legend(labels=['robot_pose_x', 'robot_traj_x', 'robot_pose_y', 'robot_traj_y', 'robot_pose_z', 'robot_traj_z'])
+    # y_grid
+    ax.yaxis.set_major_locator(plt.MultipleLocator(0.1))
+    ax.yaxis.set_minor_locator(plt.MultipleLocator(0.05))
+    ax.grid(axis='y', which='both')
+    # x_grid
+    ax.xaxis.set_major_locator(plt.MultipleLocator(5))
+    ax.xaxis.set_minor_locator(plt.MultipleLocator(1))
+    ax.grid(axis='x', which='both')
+    plt.title(np_name + '_xyz.png')
+    manger = plt.get_current_fig_manager()
+    manger.window.showMaximized()
+    fig = plt.gcf()
+    plt.show()
+    figures_path = './' + folder_name + '/figures_' + np_name + '/'
+    if not os.path.exists(figures_path):
+        os.makedirs( figures_path )
+    fig.savefig( figures_path + np_name + '_xyz.png' )
+    # fig.savefig( './' + folder_name + '/figures/' + np_name + '_xyz.png' )
 

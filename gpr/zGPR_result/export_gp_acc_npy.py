@@ -26,21 +26,21 @@ class UAVSubNpy(object):
         # self.uav_pose_sub = rospy.Subscriber(
         #     uav_pose_topic, PoseStamped, self.pose_callback)
         # self.robot_state_sub = rospy.Subscriber('/robot_pose', Odometry, self.robot_odom_callback)
-        # self.robot_pose_sub = rospy.Subscriber(
-        #     '/vrpn_client_node/ITM_Q300/pose', PoseStamped, self.robot_pose_callback)
+        self.robot_pose_sub = rospy.Subscriber(
+            '/vrpn_client_node/ITM_Q300/pose', PoseStamped, self.robot_pose_callback)
 
-        # self.got_robot_pose = False
-        # self.got_robot_odom = False
-        # self.uav_pose = None
-        # self.pose_timer = None
+        self.got_robot_pose = False
+        self.got_robot_odom = False
+        self.uav_pose = None
+        self.pose_timer = None
 
-        # self.is_velocity_init = False
-        # self.current_time = None
-        # self.current_position = None
-        # self.previous_time = None
-        # self.last_position = None
-        # self.last_velocity = None
-        # self.vel = None
+        self.is_velocity_init = False
+        self.current_time = None
+        self.current_position = None
+        self.previous_time = None
+        self.last_position = None
+        self.last_velocity = None
+        self.vel = None
         # if rate_cmd:
         #     # attitude rate
         #     self.att_rate_cmd_sub = rospy.Subscriber(
@@ -66,8 +66,10 @@ class UAVSubNpy(object):
         self.command_id = None 
 
         # sub parameter p
+        # gp_mean_sub = rospy.Subscriber(
+        #     '/gp_acceleration_world', AccelStamped, self.gp_mpc_callback)
         gp_mean_sub = rospy.Subscriber(
-            '/gp_acceleration_world', AccelStamped, self.gp_mpc_callback)
+            '/gp_acc_estimation', AccelStamped, self.gp_mpc_callback)
         self.gp_mean_accel_w = np.array([0, 0, 0]) 
         self.is_gp_init = False
         self.gp_timer = None 
@@ -166,18 +168,20 @@ if __name__ == '__main__':
         while not sub_obj.is_gp_init:
             pass
         current_time_ = rospy.get_time()
-        data_list.append( sub_obj.gp_mean_accel_w.flatten() )
         # print("current_time_:{}".format(current_time_))
         # print("gp_timer:{}".format(sub_obj.gp_timer))
         # if current_time_ - sub_obj.gp_timer > 1.5:
         if sub_obj.command_id == 2:
             # safe the data
-            npy_path = './q300/without_gp/'
-            # npy_path = './q300/with_gp'
+            # npy_path = './q300/without_gp/'
+            npy_path = './q300/with_gp'
             if not os.path.exists(npy_path):
                 os.makedirs( npy_path )
-            np.save(npy_path + 'exp_data_q300_20210920_2_random_20_gp_acc_4_data_train_GPModel.npy', data_list)
+            np.save(npy_path + 'exp_data_q300_20210923_2_random_20_x_gp_acc.npy', data_list)
             break
+        # data_list.append( sub_obj.gp_mean_accel_w.flatten() )
+        data_list.append(np.append(sub_obj.uav_pose.flatten(),
+                            sub_obj.gp_mean_accel_w.flatten()))
         # data_list.append(np.append(sub_obj.uav_pose.flatten(),
         #                     sub_obj.uav_trajectory.flatten()))
         # get gp_acc_data

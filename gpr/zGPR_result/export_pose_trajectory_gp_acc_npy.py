@@ -60,14 +60,16 @@ class UAVSubNpy(object):
         self.uav_trajectory = None
         self.trajectory_timer = None
 
-        # self.command_id_sub = rospy.Subscriber( 
-        #     '/itm_quadrotor_control/user_command', SetMission, self.command_callback)
-        # self.got_id = False
-        # self.command_id = None 
+        self.command_id_sub = rospy.Subscriber( 
+            '/itm_quadrotor_control/user_command', SetMission, self.command_callback)
+        self.got_id = False
+        self.command_id = None 
 
         # sub parameter p
+        # gp_mean_sub = rospy.Subscriber(
+        #     '/gp_acceleration_world', AccelStamped, self.gp_mpc_callback)
         gp_mean_sub = rospy.Subscriber(
-            '/gp_acceleration_world', AccelStamped, self.gp_mpc_callback)
+            '/gp_acc_estimation', AccelStamped, self.gp_mpc_callback)
         self.gp_mean_accel_w = np.array([0, 0, 0]) 
 
     def robot_odom_callback(self, msg):
@@ -92,6 +94,8 @@ class UAVSubNpy(object):
             self.uav_pose = np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z,
                     msg.pose.orientation.w, msg.pose.orientation.x, msg.pose.orientation.y,
                     msg.pose.orientation.z, self.vel[0], self.vel[1], self.vel[2] ])
+            rospy.loginfo_once('got_pose')
+            rospy.loginfo_once('uav_pose.shape:{}'.format(self.uav_pose.shape))
         else:
             pass
 
@@ -119,19 +123,24 @@ class UAVSubNpy(object):
         if msg.size != len(temp_traj):
             rospy.logerr('Some data are lost')
         else:
-            self.uav_trajectory = np.zeros((msg.size, 6))
-            for i in range(msg.size):
-                self.uav_trajectory[i] = np.array([temp_traj[i].x,
-                                                    temp_traj[i].y,
-                                                    temp_traj[i].z,
-                                                    temp_traj[i].vx,
-                                                    temp_traj[i].vy,
-                                                    temp_traj[i].vz
-                ])
+            self.uav_trajectory = np.zeros((1, 3))
+            # self.uav_trajectory = np.zeros((msg.size, 3))
+            # for i in range(msg.size):
+            self.uav_trajectory[0] = np.array([temp_traj[0].x,
+                                                temp_traj[0].y,
+                                                temp_traj[0].z
+                                                # temp_traj[i].vx,
+                                                # temp_traj[i].vy,
+                                                # temp_traj[i].vz
+            ])
+            rospy.loginfo_once('got_trajectory')
+            rospy.loginfo_once('trajectory.shape:{}'.format(self.uav_trajectory[0].shape))
 
     def gp_mpc_callback(self, msg):
         # get gp predict value
         self.gp_mean_accel_w = np.array([msg.accel.linear.x, msg.accel.linear.y, msg.accel.linear.z])
+        rospy.loginfo_once('got_gp_acc')
+        rospy.loginfo_once('gp_acc.shape:{}'.format(self.gp_mean_accel_w.shape))
 
     # def attitude_rate_cmd_callback(self, msg):
     #     # robot_control as [wx, wy, wz, thrust]
@@ -141,10 +150,10 @@ class UAVSubNpy(object):
     #         [msg.body_rate.x, msg.body_rate.y, msg.body_rate.z, msg.thrust])
     #     self.cmd_timer = rospy.get_time()
 
-    # def command_callback(self, msg):
-    #     if not self.got_id:
-    #         self.got_id = True
-    #     self.command_id = msg.mission_mode 
+    def command_callback(self, msg):
+        if not self.got_id:
+            self.got_id = True
+        self.command_id = msg.mission_mode 
         
 if __name__ == '__main__':
     rospy.init_node('uav_analyse')
@@ -160,19 +169,21 @@ if __name__ == '__main__':
             while sub_obj.uav_trajectory is None or sub_obj.uav_pose is None:
                 pass
             current_time_ = rospy.get_time()
-            if current_time_ - sub_obj.trajectory_timer > 3. or current_time_ - sub_obj.pose_timer > 3.:
+            # if current_time_ - sub_obj.trajectory_timer > 3. or current_time_ - sub_obj.pose_timer > 3.:
+            if sub_obj.command_id == 2:
                 # safe the data
-                npy_path = './q300/without_gp/'
-                # npy_path = './q300/with_gp'
+                # npy_path = './q300/without_gp/'
+                npy_path = './q300/with_gp/'
                 if not os.path.exists(npy_path):
                     os.makedirs( npy_path )
-                np.save(npy_path + 'exp_data_pose_traj_q300_20210920_3_circle_30s_gp_acc.npy', data_list)
+                np.save(npy_path + 'exp_data_pose_traj_gp_acc_q300_20210923_1_random_0_03.npy', data_list)
                 break
             # data_list.append(np.append(sub_obj.uav_pose.flatten(),
             #                     sub_obj.uav_trajectory.flatten()))
             # get gp_acc_data
             data_list.append(np.append(np.append(sub_obj.uav_pose.flatten(),
                                    sub_obj.uav_trajectory.flatten()), sub_obj.gp_mean_accel_w.flatten()))
+            rospy.loginfo_once('data_list[0].shape):{}'.format(data_list[0].shape))
             rate.sleep()
     else:
         while not rospy.is_shutdown():

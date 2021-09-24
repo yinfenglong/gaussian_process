@@ -41,15 +41,15 @@ class GpTrain(object):
         train_x_ori = (gp_train[x_train_idx]).flatten()
         train_y_ori = (gp_train[y_train_idx]).flatten()
 
-        np.random.seed(0)
-        num_train = int(np.floor(.3 * train_x_ori.shape[0]))
-        train_index = np.random.choice(train_x_ori.shape[0], num_train, replace=False)
-        # test_index = np.delete(np.arange(X.shape[0]), train_index)
-        self.train_x = torch.from_numpy( train_x_ori[train_index] )
-        self.train_y = torch.from_numpy( train_y_ori[train_index] )
+        # np.random.seed(0)
+        # num_train = int(np.floor(.3 * train_x_ori.shape[0]))
+        # train_index = np.random.choice(train_x_ori.shape[0], num_train, replace=False)
+        # # test_index = np.delete(np.arange(X.shape[0]), train_index)
+        # self.train_x = torch.from_numpy( train_x_ori[train_index] )
+        # self.train_y = torch.from_numpy( train_y_ori[train_index] )
 
-        # self.train_x = torch.from_numpy( train_x_ori[:7000] )
-        # self.train_y = torch.from_numpy( train_y_ori[:7000] )
+        self.train_x = torch.from_numpy( train_x_ori[:7000] )
+        self.train_y = torch.from_numpy( train_y_ori[:7000] )
         print("dimension of x after prune:", np.array(self.train_x).shape)
         print("dimension of y after prune:", np.array(self.train_y).shape)
 

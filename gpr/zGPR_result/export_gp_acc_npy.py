@@ -66,10 +66,12 @@ class UAVSubNpy(object):
         self.command_id = None 
 
         # sub parameter p
-        # gp_mean_sub = rospy.Subscriber(
-        #     '/gp_acceleration_world', AccelStamped, self.gp_mpc_callback)
+        # LYF
         gp_mean_sub = rospy.Subscriber(
-            '/gp_acc_estimation', AccelStamped, self.gp_mpc_callback)
+            '/gp_acceleration_world', AccelStamped, self.gp_mpc_callback)
+        # itm
+        # gp_mean_sub = rospy.Subscriber(
+        #     '/gp_acc_estimation', AccelStamped, self.gp_mpc_callback)
         self.gp_mean_accel_w = np.array([0, 0, 0]) 
         self.is_gp_init = False
         self.gp_timer = None 
@@ -177,11 +179,11 @@ if __name__ == '__main__':
             npy_path = './q300/with_gp'
             if not os.path.exists(npy_path):
                 os.makedirs( npy_path )
-            np.save(npy_path + 'exp_data_q300_20210923_2_random_20_x_gp_acc.npy', data_list)
+            np.save(npy_path + 'exp_data_q300_20210923_4_random_0_3_gp_acc_0_80_GPModel.npy', data_list)
             break
-        # data_list.append( sub_obj.gp_mean_accel_w.flatten() )
-        data_list.append(np.append(sub_obj.uav_pose.flatten(),
-                            sub_obj.gp_mean_accel_w.flatten()))
+        data_list.append( sub_obj.gp_mean_accel_w.flatten() )
+        # data_list.append(np.append(sub_obj.uav_pose.flatten(),
+        #                     sub_obj.gp_mean_accel_w.flatten()))
         # data_list.append(np.append(sub_obj.uav_pose.flatten(),
         #                     sub_obj.uav_trajectory.flatten()))
         # get gp_acc_data

@@ -129,6 +129,26 @@ if __name__ == '__main__':
     print("x:{}".format(len(x)))
     print("traj_x:{}".format(len(traj_x)))
 
+    # print error_mean, plot error between pose and trajectory
+    x_arr = np.array(x)
+    y_arr = np.array(y)
+    z_arr = np.array(z)
+    traj_x_arr = np.array(traj_x)
+    traj_y_arr = np.array(traj_y)
+    traj_z_arr = np.array(traj_z)
+    error = np.sqrt( (x_arr - traj_x_arr)**2 + (y_arr - traj_y_arr)**2 + (z_arr - traj_z_arr)**2 )
+    error_mean = np.mean(error)
+    print("error_mean:{}".format(error_mean))
+    f, ax = plt.subplots(1, 1, figsize=(4, 3))
+    plt.plot( t, error, 'r' )
+    plt.legend(labels=['distance between pose and trajectory'])
+    plt.title( np_name )
+    manger = plt.get_current_fig_manager()
+    manger.window.showMaximized()
+    fig = plt.gcf()
+    plt.show()
+    fig.savefig( './' + folder_name + '/error/' + np_name + '.png' )
+
     if get_gp_acc:
         f, ax = plt.subplots(1, 1, figsize=(4, 3))
         plt.plot(t, gp_vx_w, 'r-', t, gp_vy_w, 'cyan', t, gp_vz_w, 'b-.')
@@ -180,4 +200,3 @@ if __name__ == '__main__':
         os.makedirs( figures_path )
     fig.savefig( figures_path + np_name + '_xyz.png' )
     # fig.savefig( './' + folder_name + '/figures/' + np_name + '_xyz.png' )
-

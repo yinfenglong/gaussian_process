@@ -176,7 +176,7 @@ if __name__ == '__main__':
     if not os.path.exists(gp_path):
         os.makedirs( gp_path + 'train_pre_model')
         os.makedirs( gp_path + 'figures')
-    np.savez(gp_path + 'datas_for_gp_y.npz', \
+    np.savez(gp_path + 'data_for_gp_y.npz', \
             x=x_train[:,0], y=x_train[:,1], z=x_train[:,2], vx=x_train[:,7], vy=x_train[:,8], vz=x_train[:,9], \
         y_x=y_train[:,0], y_y=y_train[:,1], y_z=y_train[:,2], \
             y_vx=y_train[:,7], y_vy=y_train[:,8], y_vz=y_train[:,9])

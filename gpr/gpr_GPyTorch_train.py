@@ -41,6 +41,8 @@ class GpTrain(object):
         train_x_ori = (gp_train[x_train_idx]).flatten()
         train_y_ori = (gp_train[y_train_idx]).flatten()
 
+        print("dimension of x before prune:", np.array(train_x_ori).shape)
+        print("dimension of y before prune:", np.array(train_y_ori).shape)
         # np.random.seed(0)
         # num_train = int(np.floor(.3 * train_x_ori.shape[0]))
         # train_index = np.random.choice(train_x_ori.shape[0], num_train, replace=False)
@@ -130,7 +132,7 @@ class ExactGPModel(gpytorch.models.ExactGP):
 if __name__ == '__main__':
     # ### From .npz load datas for gp training### #
     file_path = './' + sys.argv[1]
-    # npz_name = 'datas_for_gp_y.npz'
+    # npz_name = 'data_for_gp_y.npz'
     npz_name = sys.argv[2] 
     gp_train = np.load( file_path + '/' + npz_name)
 

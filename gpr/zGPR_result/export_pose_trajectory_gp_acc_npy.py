@@ -66,10 +66,10 @@ class UAVSubNpy(object):
         self.command_id = None 
 
         # sub parameter p
-        # gp_mean_sub = rospy.Subscriber(
-        #     '/gp_acceleration_world', AccelStamped, self.gp_mpc_callback)
         gp_mean_sub = rospy.Subscriber(
-            '/gp_acc_estimation', AccelStamped, self.gp_mpc_callback)
+            '/gp_acceleration_world', AccelStamped, self.gp_mpc_callback)
+        # gp_mean_sub = rospy.Subscriber(
+        #     '/gp_acc_estimation', AccelStamped, self.gp_mpc_callback)
         self.gp_mean_accel_w = np.array([0, 0, 0]) 
 
     def robot_odom_callback(self, msg):
@@ -173,10 +173,11 @@ if __name__ == '__main__':
             if sub_obj.command_id == 2:
                 # safe the data
                 # npy_path = './q300/without_gp/'
-                npy_path = './q300/with_gp/'
+                # npy_path = './q300/with_gp/'
+                npy_path = './gazebo/with_gp/'
                 if not os.path.exists(npy_path):
                     os.makedirs( npy_path )
-                np.save(npy_path + 'exp_data_pose_traj_gp_acc_q300_20210923_1_random_0_03.npy', data_list)
+                np.save(npy_path + 'exp_data_pose_traj_gp_acc_gazebo_20210926_0819_with_GPModel.npy', data_list)
                 break
             # data_list.append(np.append(sub_obj.uav_pose.flatten(),
             #                     sub_obj.uav_trajectory.flatten()))

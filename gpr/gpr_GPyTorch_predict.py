@@ -175,7 +175,7 @@ class ExactGPModel(gpytorch.models.ExactGP):
 if __name__ == '__main__':
     # ### From .npz load datas for gp training### #
     file_path = './' + sys.argv[1]
-    # npz_name = 'datas_for_gp_y.npz'
+    # npz_name = 'data_for_gp_y.npz'
     npz_name = sys.argv[2] 
     gp_train = np.load( file_path + '/' + npz_name)
 

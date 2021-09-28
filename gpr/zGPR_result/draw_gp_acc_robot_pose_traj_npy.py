@@ -97,17 +97,17 @@ def plot_result( pose, traj, tag ):
     ax.grid(axis='x', which='both')
     title = np_name #sys.argv[2]
     plt.title(title + ':' + tag)
-    manger = plt.get_current_fig_manager()
-    manger.window.showMaximized()
-    fig = plt.gcf()
+    # manger = plt.get_current_fig_manager()
+    # manger.window.showMaximized()
+    # fig = plt.gcf()
     plt.show()
-    figures_path = './' + folder_name + '/figures_' + np_name + '/'
-    if not os.path.exists(figures_path):
-        os.makedirs( figures_path )
-    fig.savefig( figures_path + np_name + '_' + tag + '.png' )
+    # figures_path = './' + folder_name + '/figures_' + np_name + '/'
+    # if not os.path.exists(figures_path):
+    #     os.makedirs( figures_path )
+    # fig.savefig( figures_path + np_name + '_' + tag + '.png' )
 
 if __name__ == '__main__':
-    get_gp_acc = True 
+    get_gp_acc = False 
     # np_file = './exp_data_pose_traj_q330_circle_30s.npy'
     str_argv_1 = sys.argv[1]
     quadrotor_name, if_with_gp, np_file = str_argv_1.split('/')
@@ -143,11 +143,11 @@ if __name__ == '__main__':
     plt.plot( t, error, 'r' )
     plt.legend(labels=['distance between pose and trajectory'])
     plt.title( np_name )
-    manger = plt.get_current_fig_manager()
-    manger.window.showMaximized()
-    fig = plt.gcf()
+    # manger = plt.get_current_fig_manager()
+    # manger.window.showMaximized()
+    # fig = plt.gcf()
     plt.show()
-    fig.savefig( './' + folder_name + '/error/' + np_name + '.png' )
+    # fig.savefig( './' + folder_name + '/error/' + np_name + '.png' )
 
     if get_gp_acc:
         f, ax = plt.subplots(1, 1, figsize=(4, 3))
@@ -191,12 +191,12 @@ if __name__ == '__main__':
     ax.xaxis.set_minor_locator(plt.MultipleLocator(1))
     ax.grid(axis='x', which='both')
     plt.title(np_name + '_xyz.png')
-    manger = plt.get_current_fig_manager()
-    manger.window.showMaximized()
-    fig = plt.gcf()
+    # manger = plt.get_current_fig_manager()
+    # manger.window.showMaximized()
+    # fig = plt.gcf()
     plt.show()
-    figures_path = './' + folder_name + '/figures_' + np_name + '/'
-    if not os.path.exists(figures_path):
-        os.makedirs( figures_path )
-    fig.savefig( figures_path + np_name + '_xyz.png' )
+    # figures_path = './' + folder_name + '/figures_' + np_name + '/'
+    # if not os.path.exists(figures_path):
+    #     os.makedirs( figures_path )
+    # fig.savefig( figures_path + np_name + '_xyz.png' )
     # fig.savefig( './' + folder_name + '/figures/' + np_name + '_xyz.png' )

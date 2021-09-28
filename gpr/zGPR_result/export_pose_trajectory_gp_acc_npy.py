@@ -173,11 +173,11 @@ if __name__ == '__main__':
             if sub_obj.command_id == 2:
                 # safe the data
                 # npy_path = './q300/without_gp/'
-                # npy_path = './q300/with_gp/'
-                npy_path = './gazebo/with_gp/'
+                npy_path = './q300/with_gp/'
+                # npy_path = './gazebo/with_gp/'
                 if not os.path.exists(npy_path):
                     os.makedirs( npy_path )
-                np.save(npy_path + 'exp_data_pose_traj_gp_acc_gazebo_20210926_0819_with_GPModel.npy', data_list)
+                np.save(npy_path + 'exp_data_pose_traj_gp_acc_q300_20210928_7_with_gp_EGP.npy', data_list)
                 break
             # data_list.append(np.append(sub_obj.uav_pose.flatten(),
             #                     sub_obj.uav_trajectory.flatten()))

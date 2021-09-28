@@ -123,7 +123,8 @@ class GpMeanCombine(object):
         # self.train_x = (self.train_x).float().to(device)
 
         np.random.seed(0)
-        num_train = int(np.floor(.3 * X.shape[0]))
+        num_train = int(np.floor(X.shape[0]))
+        # num_train = int(np.floor(.3 * X.shape[0]))
         train_index = np.random.choice(X.shape[0], num_train, replace=False)
         self.train_x = X[train_index].contiguous()
         self.train_x = (self.train_x).float().to(device)

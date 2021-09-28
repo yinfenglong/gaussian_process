@@ -20,11 +20,8 @@ import casadi as ca
 
 def npy_get():
     # from npy load datas
-    # np_file = '/home/achilles/test_ma_ws/src/itm/itm_ros_utilities/exp_data.npy'
-    # np_file = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/forw_prop/rosbag_npy/exp_data_v_est.npy'
-    # np_file = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/forw_prop/rosbag_npy/exp_data.npy'
-    # np_file_root = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/forw_prop/rosbag_npy/q330/'
-    np_file_root = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/forw_prop/rosbag_npy/'
+    # np_file_root = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/forw_prop/rosbag_npy/'
+    np_file_root = '/home/itm_stud/test_ma_ws/MA_Experiment/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/forw_prop/rosbag_npy/'
     np_file = np_file_root + sys.argv[1] + '.npy' 
     control_offset = float( sys.argv[2] )
     # x, y, z, qw, qx, qy, qz, vx, vy, vz; wx, wy, wz, thrust
@@ -172,7 +169,8 @@ if __name__ == '__main__':
 
     # save: x_train,y_train: x, y, z, Vx, Vy, Vz
     # datas of mpc or rk4
-    gp_path = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/gpr/' + sys.argv[1] + '/' 
+    # gp_path = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/gpr/' + sys.argv[1] + '/' 
+    gp_path = '/home/itm_stud/test_ma_ws/MA_Experiment/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/gpr/' + sys.argv[1] + '/' 
     if not os.path.exists(gp_path):
         os.makedirs( gp_path + 'train_pre_model')
         os.makedirs( gp_path + 'figures')

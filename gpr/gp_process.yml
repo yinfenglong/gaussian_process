@@ -1,8 +1,8 @@
 # ./.tmuxinator.yml
 
 name: gp_process
-root: /home/achilles/test_ma_ws
-# root: /home/itm_stud/test_ma_ws/MA_Experiment
+# root: /home/achilles/test_ma_ws
+root: /home/itm_stud/test_ma_ws/MA_Experiment
 
 windows:
   - gp:
@@ -18,6 +18,7 @@ windows:
         # - gp_train:
           # - cd src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/gpr
           - cd ..
+          - sdsd
           - cd ./gpr
           - python3 gpr_GPyTorch_dataload_train.py <%= @settings["folder_name"] %>
           # - python3 gpr_GPyTorch_train.py <%= @settings["folder_name"] %>

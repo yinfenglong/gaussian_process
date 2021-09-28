@@ -14,7 +14,8 @@ import numpy as np
 combined = {"x": [], "y": [], "z":[], "vx":[], "vy":[], "vz":[], "y_x":[], "y_y":[], "y_z":[],\
 	"y_vx":[], "y_vy":[], "y_vz":[]}
 
-gp_path = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/gpr/' + sys.argv[1]
+# gp_path = '/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/gpr/' + sys.argv[1]
+gp_path = './' + sys.argv[1]
 dirs = os.listdir(gp_path)
 print("dirs: {}".format(dirs))
 

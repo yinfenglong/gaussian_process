@@ -67,11 +67,11 @@ class UAVSubNpy(object):
 
         # sub parameter p
         # LYF
-        gp_mean_sub = rospy.Subscriber(
-            '/gp_acceleration_world', AccelStamped, self.gp_mpc_callback)
-        # itm
         # gp_mean_sub = rospy.Subscriber(
-        #     '/gp_acc_estimation', AccelStamped, self.gp_mpc_callback)
+        #     '/gp_acceleration_world', AccelStamped, self.gp_mpc_callback)
+        # itm
+        gp_mean_sub = rospy.Subscriber(
+            '/gp_acc_estimation', AccelStamped, self.gp_mpc_callback)
         self.gp_mean_accel_w = np.array([0, 0, 0]) 
         self.is_gp_init = False
         self.gp_timer = None 

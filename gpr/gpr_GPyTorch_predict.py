@@ -52,12 +52,12 @@ class GpMean(object):
         self.train_y_range = np.max(train_y_ori) - np.min(train_y_ori)
 
         # np.random.seed(0)
-        # num_train = int(np.floor(.3 * train_x_ori.shape[0]))
+        # num_train = int(np.floor(.5 * train_x_ori.shape[0]))
         # train_index = np.random.choice(train_x_ori.shape[0], num_train, replace=False)
-        # # test_index = np.delete(np.arange(X.shape[0]), train_index)
         # self.train_x = torch.from_numpy( train_x_ori[train_index] )
         # self.train_y = torch.from_numpy( train_y_ori[train_index] )
-
+        # # test_index = np.delete(np.arange(train_x_ori.shape[0]), train_index)
+        
         self.train_x = torch.from_numpy( train_x_ori[:7000] )
         self.train_y = torch.from_numpy( train_y_ori[:7000])
 
@@ -140,14 +140,14 @@ class GpMean(object):
             ax.grid(axis='y', which='minor', color='darkorange', alpha=0.5)
 
             plt.title( sys.argv[1] + '/' + x_train_idx )
-            manger = plt.get_current_fig_manager()
-            manger.window.showMaximized()
-            fig = plt.gcf()
+            # manger = plt.get_current_fig_manager()
+            # manger.window.showMaximized()
+            # fig = plt.gcf()
             plt.show()
-            figures_path = './' + sys.argv[1] + '/figures/'
-            if not os.path.exists(figures_path):
-                os.makedirs( figures_path )
-            fig.savefig( figures_path + x_train_idx + '.png' )
+            # figures_path = './' + sys.argv[1] + '/figures/'
+            # if not os.path.exists(figures_path):
+            #     os.makedirs( figures_path )
+            # fig.savefig( figures_path + x_train_idx + '.png' )
 
     def predict_mean(self, test_point):
         target_device = 'cuda:0'

@@ -66,10 +66,10 @@ class UAVSubNpy(object):
         self.command_id = None 
 
         # sub parameter p
-        gp_mean_sub = rospy.Subscriber(
-            '/gp_acceleration_world', AccelStamped, self.gp_mpc_callback)
         # gp_mean_sub = rospy.Subscriber(
-        #     '/gp_acc_estimation', AccelStamped, self.gp_mpc_callback)
+        #     '/gp_acceleration_world', AccelStamped, self.gp_mpc_callback)
+        gp_mean_sub = rospy.Subscriber(
+            '/gp_acc_estimation', AccelStamped, self.gp_mpc_callback)
         self.gp_mean_accel_w = np.array([0, 0, 0]) 
 
     def robot_odom_callback(self, msg):

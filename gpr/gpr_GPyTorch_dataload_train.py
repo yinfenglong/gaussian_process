@@ -62,8 +62,8 @@ class GpTrainCombine(object):
         # train_y = y[:train_n].contiguous()
 
         np.random.seed(0)
-        # num_train = int(np.floor(X.shape[0]))
-        num_train = int(np.floor(.9 * X.shape[0]))
+        num_train = int(np.floor(X.shape[0]))
+        # num_train = int(np.floor(.9 * X.shape[0]))
         train_index = np.random.choice(X.shape[0], num_train, replace=False)
         # test_index = np.delete(np.arange(X.shape[0]), train_index)
         # shuffle example

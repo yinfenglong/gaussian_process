@@ -70,7 +70,7 @@ def load_npy(np_file):
     else:
         return x, y, z, traj_x, traj_y, traj_z, t
 
-def plot_result( pose, traj, tag ):
+def plot_pose_traj( pose, traj, tag ):
     f, ax = plt.subplots(1, 1, figsize=(4, 3))
     plt.plot(t, pose, 'r', t, traj, 'b')
     plt.legend(labels=['robot_pose', 'robot_traj'])
@@ -97,18 +97,80 @@ def plot_result( pose, traj, tag ):
     ax.grid(axis='x', which='both')
     title = np_name #sys.argv[2]
     plt.title(title + ':' + tag)
-    # manger = plt.get_current_fig_manager()
-    # manger.window.showMaximized()
-    # fig = plt.gcf()
+    manger = plt.get_current_fig_manager()
+    manger.window.showMaximized()
+    fig = plt.gcf()
     plt.show()
     # figures_path = './' + folder_name + '/figures_' + np_name + '/'
-    # if not os.path.exists(figures_path):
-    #     os.makedirs( figures_path )
-    # fig.savefig( figures_path + np_name + '_' + tag + '.png' )
+    if not os.path.exists(figures_path):
+        os.makedirs( figures_path )
+    fig.savefig( figures_path + np_name + '_' + tag + '.png' )
+
+def plot_pose_traj_gp( pose, traj, gp_acc, tag ):
+    f, ax = plt.subplots(1, 1, figsize=(4, 3))
+    plt.plot(t, pose, 'r', t, traj, 'b', t, gp_acc, 'k')
+    plt.legend(labels=['robot_pose', 'robot_traj', 'gp_acc'])
+    data_range = np.max(pose) - np.min(pose)
+    if data_range < 0.3:
+        maloc = 0.02 
+        miloc = 0.01
+    elif data_range < 2:
+        maloc = 0.2 
+        miloc = 0.1
+    elif data_range > 2:
+        # maloc = float( '%.1f'%(train_y_range/30))
+        # miloc = maloc / 2
+        maloc = 1 
+        miloc = 0.2
+
+    # y_grid
+    ax.yaxis.set_major_locator(plt.MultipleLocator(maloc))
+    ax.yaxis.set_minor_locator(plt.MultipleLocator(miloc))
+    ax.grid(axis='y', which='both')
+    # x_grid
+    ax.xaxis.set_major_locator(plt.MultipleLocator(5))
+    ax.xaxis.set_minor_locator(plt.MultipleLocator(1))
+    ax.grid(axis='x', which='both')
+    title = np_name #sys.argv[2]
+    plt.title(title + ':' + tag)
+    manger = plt.get_current_fig_manager()
+    manger.window.showMaximized()
+    fig = plt.gcf()
+    plt.show()
+    # figures_path = './' + folder_name + '/figures_' + np_name + '/'
+    if not os.path.exists(figures_path):
+        os.makedirs( figures_path )
+    fig.savefig( figures_path + np_name + '_' + tag + '.png' )
+
+def plot_error():
+    # print error_mean, plot error between pose and trajectory
+    x_arr = np.array(x)
+    y_arr = np.array(y)
+    z_arr = np.array(z)
+    traj_x_arr = np.array(traj_x)
+    traj_y_arr = np.array(traj_y)
+    traj_z_arr = np.array(traj_z)
+    error = np.sqrt( (x_arr - traj_x_arr)**2 + (y_arr - traj_y_arr)**2 + (z_arr - traj_z_arr)**2 )
+    error_x_mean = np.mean( np.abs(x_arr - traj_x_arr) )
+    print("error_x_mean:{}".format(error_x_mean))
+    error_y_mean = np.mean( np.abs(y_arr - traj_y_arr) )
+    print("error_y_mean:{}".format(error_y_mean))
+    error_z_mean = np.mean( np.abs(z_arr - traj_z_arr) )
+    print("error_z_mean:{}".format(error_z_mean))
+    error_mean = np.mean(error)
+    print("error_mean:{}".format(error_mean))
+    f, ax = plt.subplots(1, 1, figsize=(4, 3))
+    plt.plot( t, error, 'r' )
+    plt.legend(labels=['distance between pose and trajectory'])
+    plt.title( np_name )
+    manger = plt.get_current_fig_manager()
+    manger.window.showMaximized()
+    fig = plt.gcf()
+    plt.show()
+    fig.savefig( './' + folder_name + '/error/' + np_name + '.png' )
 
 if __name__ == '__main__':
-    get_gp_acc = False 
-    # np_file = './exp_data_pose_traj_q330_circle_30s.npy'
+    get_gp_acc = True 
     str_argv_1 = sys.argv[1]
     quadrotor_name, if_with_gp, np_file = str_argv_1.split('/')
     np_name, np_suffix = np_file.split('.', 1)
@@ -119,6 +181,7 @@ if __name__ == '__main__':
     print("np_name: {}".format(np_name))
     print("np_suffix: {}".format(np_suffix))
     folder_name = quadrotor_name + '/' + if_with_gp
+    figures_path = './' + folder_name + '/figures_' + np_name + '/'
     
     if get_gp_acc:
         x, y, z, traj_x, traj_y, traj_z, t, gp_vx_w, gp_vy_w, gp_vz_w = load_npy(np_file)
@@ -128,26 +191,6 @@ if __name__ == '__main__':
     print("t:{}".format(t.shape))
     print("x:{}".format(len(x)))
     print("traj_x:{}".format(len(traj_x)))
-
-    # print error_mean, plot error between pose and trajectory
-    x_arr = np.array(x)
-    y_arr = np.array(y)
-    z_arr = np.array(z)
-    traj_x_arr = np.array(traj_x)
-    traj_y_arr = np.array(traj_y)
-    traj_z_arr = np.array(traj_z)
-    error = np.sqrt( (x_arr - traj_x_arr)**2 + (y_arr - traj_y_arr)**2 + (z_arr - traj_z_arr)**2 )
-    error_mean = np.mean(error)
-    print("error_mean:{}".format(error_mean))
-    f, ax = plt.subplots(1, 1, figsize=(4, 3))
-    plt.plot( t, error, 'r' )
-    plt.legend(labels=['distance between pose and trajectory'])
-    plt.title( np_name )
-    # manger = plt.get_current_fig_manager()
-    # manger.window.showMaximized()
-    # fig = plt.gcf()
-    plt.show()
-    # fig.savefig( './' + folder_name + '/error/' + np_name + '.png' )
 
     if get_gp_acc:
         f, ax = plt.subplots(1, 1, figsize=(4, 3))
@@ -166,37 +209,42 @@ if __name__ == '__main__':
         manger.window.showMaximized()
         fig = plt.gcf()
         plt.show()
-        figures_path = './' + folder_name + '/figures_' + np_name + '/'
+        # figures_path = './' + folder_name + '/figures_' + np_name + '/'
         if not os.path.exists(figures_path):
             os.makedirs( figures_path )
         fig.savefig( figures_path + np_name + '.png' )
-        # fig.savefig( './' + folder_name + '/figures/' + np_name + '.png' )
+    else:
+        pass
 
+    plot_error()
 
-    plot_result(x, traj_x, 'x' )
-    plot_result(y, traj_y, 'y' )
-    plot_result(z, traj_z, 'z' )
+    plot_pose_traj_gp(x, traj_x, gp_vx_w, 'x' )
+    plot_pose_traj_gp(y, traj_y, gp_vy_w, 'y' )
+    plot_pose_traj_gp(z, traj_z, gp_vz_w, 'z' )
 
-    f, ax = plt.subplots(1, 1, figsize=(4, 3))
-    plt.plot(t, x, 'peru', t, traj_x, 'cyan')
-    plt.plot(t, y, 'm:', t, traj_y, 'k:')
-    plt.plot(t, z, 'r-.', t, traj_z, 'b-.')
-    plt.legend(labels=['robot_pose_x', 'robot_traj_x', 'robot_pose_y', 'robot_traj_y', 'robot_pose_z', 'robot_traj_z'])
-    # y_grid
-    ax.yaxis.set_major_locator(plt.MultipleLocator(0.1))
-    ax.yaxis.set_minor_locator(plt.MultipleLocator(0.05))
-    ax.grid(axis='y', which='both')
-    # x_grid
-    ax.xaxis.set_major_locator(plt.MultipleLocator(5))
-    ax.xaxis.set_minor_locator(plt.MultipleLocator(1))
-    ax.grid(axis='x', which='both')
-    plt.title(np_name + '_xyz.png')
+    # plot_pose_traj(x, traj_x, 'x' )
+    # plot_pose_traj(y, traj_y, 'y' )
+    # plot_pose_traj(z, traj_z, 'z' )
+
+    # f, ax = plt.subplots(1, 1, figsize=(4, 3))
+    # plt.plot(t, x, 'peru', t, traj_x, 'cyan')
+    # plt.plot(t, y, 'm:', t, traj_y, 'k:')
+    # plt.plot(t, z, 'r-.', t, traj_z, 'b-.')
+    # plt.legend(labels=['robot_pose_x', 'robot_traj_x', 'robot_pose_y', 'robot_traj_y', 'robot_pose_z', 'robot_traj_z'])
+    # # y_grid
+    # ax.yaxis.set_major_locator(plt.MultipleLocator(0.1))
+    # ax.yaxis.set_minor_locator(plt.MultipleLocator(0.05))
+    # ax.grid(axis='y', which='both')
+    # # x_grid
+    # ax.xaxis.set_major_locator(plt.MultipleLocator(5))
+    # ax.xaxis.set_minor_locator(plt.MultipleLocator(1))
+    # ax.grid(axis='x', which='both')
+    # plt.title(np_name + '_xyz.png')
     # manger = plt.get_current_fig_manager()
     # manger.window.showMaximized()
     # fig = plt.gcf()
-    plt.show()
-    # figures_path = './' + folder_name + '/figures_' + np_name + '/'
+    # plt.show()
+    # # figures_path = './' + folder_name + '/figures_' + np_name + '/'
     # if not os.path.exists(figures_path):
     #     os.makedirs( figures_path )
     # fig.savefig( figures_path + np_name + '_xyz.png' )
-    # fig.savefig( './' + folder_name + '/figures/' + np_name + '_xyz.png' )

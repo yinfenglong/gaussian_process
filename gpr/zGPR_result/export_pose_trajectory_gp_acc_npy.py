@@ -172,18 +172,18 @@ if __name__ == '__main__':
             # if current_time_ - sub_obj.trajectory_timer > 3. or current_time_ - sub_obj.pose_timer > 3.:
             if sub_obj.command_id == 2:
                 # safe the data
-                # npy_path = './q300/without_gp/'
-                npy_path = './q300/with_gp/'
+                npy_path = './q300/without_gp/'
+                # npy_path = './q300/with_gp/'
                 # npy_path = './gazebo/with_gp/'
                 if not os.path.exists(npy_path):
                     os.makedirs( npy_path )
-                np.save(npy_path + 'exp_data_pose_traj_gp_acc_q300_20210928_7_with_gp_EGP.npy', data_list)
+                np.save(npy_path + 'exp_data_pose_traj_q300_20210928_9_without_gp.npy', data_list)
                 break
-            # data_list.append(np.append(sub_obj.uav_pose.flatten(),
-            #                     sub_obj.uav_trajectory.flatten()))
+            data_list.append(np.append(sub_obj.uav_pose.flatten(),
+                                sub_obj.uav_trajectory.flatten()))
             # get gp_acc_data
-            data_list.append(np.append(np.append(sub_obj.uav_pose.flatten(),
-                                   sub_obj.uav_trajectory.flatten()), sub_obj.gp_mean_accel_w.flatten()))
+            # data_list.append(np.append(np.append(sub_obj.uav_pose.flatten(),
+            #                        sub_obj.uav_trajectory.flatten()), sub_obj.gp_mean_accel_w.flatten()))
             rospy.loginfo_once('data_list[0].shape):{}'.format(data_list[0].shape))
             rate.sleep()
     else:

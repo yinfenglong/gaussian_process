@@ -154,14 +154,14 @@ class GpMeanCombine(object):
             ax.grid(axis='y', which='minor', color='darkorange', alpha=0.5)
 
             plt.title( sys.argv[1] + '/' + x_train_idx )
-            # manger = plt.get_current_fig_manager()
-            # manger.window.showMaximized()
-            # fig = plt.gcf()
+            manger = plt.get_current_fig_manager()
+            manger.window.showMaximized()
+            fig = plt.gcf()
             plt.show()
-            # figures_path = './' + sys.argv[1] + '/figures/'
-            # if not os.path.exists(figures_path):
-            #     os.makedirs( figures_path )
-            # fig.savefig( figures_path + x_train_idx + '.png' )
+            figures_path = './' + sys.argv[1] + '/figures/'
+            if not os.path.exists(figures_path):
+                os.makedirs( figures_path )
+            fig.savefig( figures_path + x_train_idx + '.png' )
 
     def predict_mean(self, test_point ):
         target_device = 'cuda:0'

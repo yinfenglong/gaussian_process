@@ -69,13 +69,13 @@ def plot_3d():
     fig = plt.figure(figsize=(4, 3))
     ax = Axes3D(fig)
     # all trajectories are the same
-    ax.scatter(traj_x, traj_y, traj_z , c='r', label='trajectory')
+    ax.plot(traj_x, traj_y, traj_z , c='r', label='trajectory')
     # ax.scatter(traj_x_gp, traj_y_gp, traj_z_gp , c='g', label='GP_trajectory')
     # ax.scatter(traj_x_egp, traj_y_egp, traj_z_egp , c='b', label='EGP_trajectory')
     ax.scatter(x, y, z , c='k', label='q300_20210928_9_without_gp')
     ax.scatter(x_egp, y_egp, z_egp , c='b', label='q300_20210928_10_with_EGP')
     ax.scatter(x_gp, y_gp, z_gp , c='g', label='q300_20210928_11_with_GP')
-    plt.legend(labels=['q300_20210928_9_without_gp', 'q300_20210928_10_with_EGP', 'q300_20210928_11_with_GP'])
+    plt.legend(labels=['trajectory', 'q300_20210928_9_without_gp', 'q300_20210928_10_with_EGP', 'q300_20210928_11_with_GP'])
 
     plt.show()
 

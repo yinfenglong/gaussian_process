@@ -83,9 +83,14 @@ class UAVSubNpy(object):
         self.current_position = np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z])
         self.velocity_estimation()
         if self.vel is not None:
-            self.uav_pose = np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z,
-                    msg.pose.orientation.w, msg.pose.orientation.x, msg.pose.orientation.y,
-                    msg.pose.orientation.z, self.vel[0], self.vel[1], self.vel[2] ])
+            if msg.pose.orientation.w > 0:
+                self.uav_pose = np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z,
+                        msg.pose.orientation.w, msg.pose.orientation.x, msg.pose.orientation.y,
+                        msg.pose.orientation.z, self.vel[0], self.vel[1], self.vel[2] ])
+            elif msg.pose.orientation.w < 0:
+                self.uav_pose = np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z,
+                        -msg.pose.orientation.w, -msg.pose.orientation.x, -msg.pose.orientation.y,
+                        -msg.pose.orientation.z, self.vel[0], self.vel[1], self.vel[2] ])
         else:
             pass
 
@@ -99,7 +104,7 @@ class UAVSubNpy(object):
             dt = self.current_time - self.previous_time
             if dt>=0.01:
                 self.vel = (self.current_position - self.last_position)/(1e-5 + dt)
-                self.vel = 0.8 * self.vel + 0.2 * self.last_velocity
+                self.vel = 0.2 * self.vel + 0.8 * self.last_velocity
 
                 self.last_velocity = self.vel
                 self.previous_time = self.current_time

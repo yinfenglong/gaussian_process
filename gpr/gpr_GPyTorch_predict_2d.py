@@ -17,7 +17,7 @@ from matplotlib import pyplot as plt
 import time
 import os.path
 
-class GpMean(object):
+class GpMean2d(object):
     def __init__(self, x_train_idx, y_train_idx, x_idx_2d, gp_model_file_path, npz_name):
         self.file_path = gp_model_file_path
         self.npz_name = npz_name
@@ -33,7 +33,7 @@ class GpMean(object):
         self.load_model(x_train_idx)
 
         self.observed_pred = None
-        self.test_x = None
+        # self.test_x = None
     
     def load_data(self, x_train_idx, y_train_idx, x_idx_2d):
         gp_train = np.load(self.file_path + '/' + self.npz_name)
@@ -64,11 +64,13 @@ class GpMean(object):
         print("dimension of y before prune:", np.array(train_y_ori).shape)
 
         np.random.seed(0)
-        num_train = int(np.floor(.5 * train_x_ori.shape[0]))
+        num_train = int(np.floor(.9 * train_x_ori.shape[0]))
         train_index = np.random.choice(train_x_ori.shape[0], num_train, replace=False)
         self.train_x = torch.from_numpy( train_x_ori[train_index] )
         self.train_y = torch.from_numpy( train_y_ori[train_index] )
         test_index = np.delete(np.arange(train_x_ori.shape[0]), train_index)
+        self.test_x = torch.from_numpy( train_x_ori[test_index] )
+        print("test_x.shape:{}".format(train_x_ori[test_index].shape) )
         
         # self.train_x = torch.from_numpy( train_x_ori[:7000] )
         # self.train_y = torch.from_numpy( train_y_ori[:7000])
@@ -78,7 +80,8 @@ class GpMean(object):
         print("y_train shape", self.train_y.shape)
         self.train_x = (self.train_x).float().to(device)
         self.train_y = (self.train_y).float().to(device)
-    
+        self.test_x = (self.test_x).float().to(device)
+
     def load_model(self, x_train_idx):
         target_device = 'cuda:0'
 
@@ -100,9 +103,13 @@ class GpMean(object):
     def predict_test(self, ):
         target_device = 'cuda:0'
 
+        if self.test_x is not None:
+            print("test_x is not None")
+        else:
+            print("test_x is None")
+
         # self.test_x_1 = torch.rand(51,2) * (self.train_x_max - self.train_x_min) + self.train_x_min
         with torch.no_grad(), gpytorch.settings.fast_pred_var():
-            # test_x = train_x
             t1 = time.time()
             # t1 = datetime.datetime.now()
             self.observed_pred = self.likelihood_pred(self.model_to_predict(self.test_x.to(target_device)))
@@ -114,99 +121,71 @@ class GpMean(object):
     def plot_predict_result(self, x_train_idx):
         target_device = 'cuda:0'
         with torch.no_grad():
-            # Initialize plot
-            f, ax = plt.subplots(1, 1, figsize=(4, 3), dpi=150)
-            # Get upper and lower confidence bounds
-            lower, upper = self.observed_pred.confidence_region()
-            print("upper().shape: ", upper.cpu().numpy().shape )
-            print("lower().shape: ", lower.cpu().numpy().shape )
-            train_x_cpu = self.train_x[:,0].cpu()
-            train_y_cpu = self.train_y.cpu()
-            if target_device == 'cuda:0':
-                test_x_cpu = self.test_x[:,0].cpu()
-            else:
-                test_x_cpu = self.test_x[:,0]
-            # Plot training data as black stars
-            ax.plot(train_x_cpu.numpy(), train_y_cpu.numpy(), 'k*', alpha=0.5)
-            observed_pred_np = self.observed_pred.mean.cpu().numpy()
-            ax.plot(test_x_cpu.numpy(), observed_pred_np, 'r*')
+            for i in range(2):
+                # Initialize plot
+                f, ax = plt.subplots(1, 1, figsize=(4, 3), dpi=150)
+                # Get upper and lower confidence bounds
+                lower, upper = self.observed_pred.confidence_region()
+                print("upper().shape: ", upper.cpu().numpy().shape )
+                print("lower().shape: ", lower.cpu().numpy().shape )
+                train_x_cpu = self.train_x[:,i].cpu()
+                train_y_cpu = self.train_y.cpu()
+                if target_device == 'cuda:0':
+                    test_x_cpu = self.test_x[:,i].cpu()
+                else:
+                    test_x_cpu = self.test_x[:,i]
+                # Plot training data as black stars
+                ax.plot(train_x_cpu.numpy(), train_y_cpu.numpy(), 'k*', alpha=0.5)
+                observed_pred_np = self.observed_pred.mean.cpu().numpy()
+                ax.plot(test_x_cpu.numpy(), observed_pred_np, 'r*')
 
-            print("observed_pred.mean.numpy(): ", observed_pred_np)
-            print("observed_pred.mean.numpy().shape: ", observed_pred_np.shape )
-            ax.errorbar(test_x_cpu.numpy(), observed_pred_np, yerr=np.concatenate(((-lower.cpu().numpy() +
-                        observed_pred_np).reshape(1, -1), (upper.cpu().numpy() - observed_pred_np).reshape(1, -1)), axis=0), ecolor='b', elinewidth=2, capsize=4, fmt=' ')
-            ax.legend(['Observed Data', 'Mean', 'Confidence'])
+                print("observed_pred.mean.numpy(): ", observed_pred_np)
+                print("observed_pred.mean.numpy().shape: ", observed_pred_np.shape )
+                ax.errorbar(test_x_cpu.numpy(), observed_pred_np, yerr=np.concatenate(((-lower.cpu().numpy() +
+                            observed_pred_np).reshape(1, -1), (upper.cpu().numpy() - observed_pred_np).reshape(1, -1)), axis=0), ecolor='b', elinewidth=2, capsize=4, fmt=' ')
+                ax.legend(['Observed Data', 'Mean', 'Confidence'])
 
-            if self.train_y_range < 2:
-                maloc = 0.05 
-                miloc = 0.05
-            else:
-                # maloc = float( '%.1f'%(train_y_range/30))
-                # miloc = maloc / 2
-                maloc = 1 
-                miloc = 0.5
-            print("maloc:", maloc)
-            print("train_y_range:", self.train_y_range)
-            ax.yaxis.set_major_locator( plt.MultipleLocator(maloc) )
-            ax.yaxis.set_minor_locator( plt.MultipleLocator(miloc) )
+                if self.train_y_range < 2:
+                    maloc = 0.05 
+                    miloc = 0.05
+                else:
+                    # maloc = float( '%.1f'%(train_y_range/30))
+                    # miloc = maloc / 2
+                    maloc = 1 
+                    miloc = 0.5
+                print("maloc:", maloc)
+                print("train_y_range:", self.train_y_range)
+                ax.yaxis.set_major_locator( plt.MultipleLocator(maloc) )
+                ax.yaxis.set_minor_locator( plt.MultipleLocator(miloc) )
+                ax.grid(axis='y', which='major', color='darkorange', alpha=1)
+                ax.grid(axis='y', which='minor', color='darkorange', alpha=0.5)
+
+                plt.title( sys.argv[1] + '/' + x_train_idx )
+                manger = plt.get_current_fig_manager()
+                manger.window.showMaximized()
+                fig = plt.gcf()
+                plt.show()
+                figures_path = './' + sys.argv[1] + '/figures/'
+                if not os.path.exists(figures_path):
+                    os.makedirs( figures_path )
+                fig.savefig( figures_path + x_train_idx + str(i) + '.png' )
+
+            # plot 3d
+            fig = plt.figure()
+            ax = fig.add_subplot(projection='3d')
+            ax.scatter(self.test_x[:, 0].cpu(),   # vz
+                    self.test_x[:, 1].cpu(),      # z
+                    observed_pred_np,       # predict_mean
+                    'r',
+                    marker='o')
+
             ax.grid(axis='y', which='major', color='darkorange', alpha=1)
             ax.grid(axis='y', which='minor', color='darkorange', alpha=0.5)
 
-            plt.title( sys.argv[1] + '/' + x_train_idx )
             manger = plt.get_current_fig_manager()
             manger.window.showMaximized()
             fig = plt.gcf()
             plt.show()
-            figures_path = './' + sys.argv[1] + '/figures/'
-            if not os.path.exists(figures_path):
-                os.makedirs( figures_path )
-            fig.savefig( figures_path + x_train_idx + '.png' )
-
-            # 2d
-            f, ax = plt.subplots(1, 1, figsize=(4, 3), dpi=150)
-            # Get upper and lower confidence bounds
-            lower, upper = self.observed_pred.confidence_region()
-            train_x_cpu = self.train_x[:,1].cpu()
-            train_y_cpu = self.train_y.cpu()
-            if target_device == 'cuda:0':
-                test_x_cpu = self.test_x[:,1].cpu()
-            else:
-                test_x_cpu = self.test_x[:,1]
-            # Plot training data as black stars
-            ax.plot(train_x_cpu.numpy(), train_y_cpu.numpy(), 'k*', alpha=0.5)
-            observed_pred_np = self.observed_pred.mean.cpu().numpy()
-            ax.plot(test_x_cpu.numpy(), observed_pred_np, 'r*')
-
-            print("observed_pred.mean.numpy(): ", observed_pred_np)
-            print("observed_pred.mean.numpy().shape: ", observed_pred_np.shape )
-            ax.errorbar(test_x_cpu.numpy(), observed_pred_np, yerr=np.concatenate(((-lower.cpu().numpy() +
-                        observed_pred_np).reshape(1, -1), (upper.cpu().numpy() - observed_pred_np).reshape(1, -1)), axis=0), ecolor='b', elinewidth=2, capsize=4, fmt=' ')
-            ax.legend(['Observed Data', 'Mean', 'Confidence'])
-
-            if self.train_y_range < 2:
-                maloc = 0.05 
-                miloc = 0.05
-            else:
-                # maloc = float( '%.1f'%(train_y_range/30))
-                # miloc = maloc / 2
-                maloc = 1 
-                miloc = 0.5
-            print("maloc:", maloc)
-            print("train_y_range:", self.train_y_range)
-            ax.yaxis.set_major_locator( plt.MultipleLocator(maloc) )
-            ax.yaxis.set_minor_locator( plt.MultipleLocator(miloc) )
-            ax.grid(axis='y', which='major', color='darkorange', alpha=1)
-            ax.grid(axis='y', which='minor', color='darkorange', alpha=0.5)
-
-            plt.title( sys.argv[1] + '/' + x_train_idx + 'z')
-            manger = plt.get_current_fig_manager()
-            manger.window.showMaximized()
-            fig = plt.gcf()
-            plt.show()
-            figures_path = './' + sys.argv[1] + '/figures/'
-            if not os.path.exists(figures_path):
-                os.makedirs( figures_path )
-            fig.savefig( figures_path + x_train_idx + '_z.png' )
 
     def predict_mean(self, test_point):
         target_device = 'cuda:0'
@@ -247,7 +226,11 @@ if __name__ == '__main__':
     #     print("x_train_idx: {}".format(x_train_idx) )
     #     print("y_train_idx: {}".format(y_train_idx) )
 
-    gpMPC = GpMean('vz', 'y_vz', 'z', file_path, npz_name)
+    gpMPC = GpMean2d('vz', 'y_vz', 'z', file_path, npz_name)
+    if gpMPC.test_x is not None:
+        print("mmmtest_x is not None")
+    else:
+        print("mmmtest_x is None")
     gpMPC.predict_test()
     gpMPC.plot_predict_result('vz')
 

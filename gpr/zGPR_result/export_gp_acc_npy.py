@@ -95,9 +95,14 @@ class UAVSubNpy(object):
         self.current_position = np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z])
         self.velocity_estimation()
         if self.vel is not None:
-            self.uav_pose = np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z,
-                    msg.pose.orientation.w, msg.pose.orientation.x, msg.pose.orientation.y,
-                    msg.pose.orientation.z, self.vel[0], self.vel[1], self.vel[2] ])
+            if msg.pose.orientation.w > 0:
+                self.uav_pose = np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z,
+                        msg.pose.orientation.w, msg.pose.orientation.x, msg.pose.orientation.y,
+                        msg.pose.orientation.z, self.vel[0], self.vel[1], self.vel[2] ])
+            elif msg.pose.orientation.w < 0:
+                self.uav_pose = np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z,
+                        -msg.pose.orientation.w, -msg.pose.orientation.x, -msg.pose.orientation.y,
+                        -msg.pose.orientation.z, self.vel[0], self.vel[1], self.vel[2] ])
         else:
             pass
 

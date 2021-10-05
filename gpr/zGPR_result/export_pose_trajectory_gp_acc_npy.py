@@ -177,12 +177,12 @@ if __name__ == '__main__':
             # if current_time_ - sub_obj.trajectory_timer > 3. or current_time_ - sub_obj.pose_timer > 3.:
             if sub_obj.command_id == 2:
                 # safe the data
-                # npy_path = './q300/without_gp/'
-                npy_path = './q300/with_gp/'
+                npy_path = './q300/without_gp/'
+                # npy_path = './q300/with_gp/'
                 # npy_path = './gazebo/with_gp/'
                 if not os.path.exists(npy_path):
                     os.makedirs( npy_path )
-                np.save(npy_path + 'exp_data_pose_traj_gp_acc_q300_20211005_6_with_gp_AGP_vz.npy', data_list)
+                np.save(npy_path + 'exp_data_pose_traj_gp_acc_q300_20211005_11_without_gp.npy', data_list)
                 break
             if sub_obj.command_id == 3: 
                 # data_list.append(np.append(sub_obj.uav_pose.flatten(),

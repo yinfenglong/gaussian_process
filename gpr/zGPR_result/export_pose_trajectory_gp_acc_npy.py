@@ -182,14 +182,15 @@ if __name__ == '__main__':
                 # npy_path = './gazebo/with_gp/'
                 if not os.path.exists(npy_path):
                     os.makedirs( npy_path )
-                np.save(npy_path + 'exp_data_pose_traj_gp_acc_q300_20210928_7_with_gp_EGP.npy', data_list)
+                np.save(npy_path + 'exp_data_pose_traj_gp_acc_q300_20211005_6_with_gp_AGP_vz.npy', data_list)
                 break
-            # data_list.append(np.append(sub_obj.uav_pose.flatten(),
-            #                     sub_obj.uav_trajectory.flatten()))
-            # get gp_acc_data
-            data_list.append(np.append(np.append(sub_obj.uav_pose.flatten(),
-                                   sub_obj.uav_trajectory.flatten()), sub_obj.gp_mean_accel_w.flatten()))
-            rospy.loginfo_once('data_list[0].shape):{}'.format(data_list[0].shape))
+            if sub_obj.command_id == 3: 
+                # data_list.append(np.append(sub_obj.uav_pose.flatten(),
+                #                     sub_obj.uav_trajectory.flatten()))
+                # get gp_acc_data
+                data_list.append(np.append(np.append(sub_obj.uav_pose.flatten(),
+                                    sub_obj.uav_trajectory.flatten()), sub_obj.gp_mean_accel_w.flatten()))
+                rospy.loginfo_once('data_list[0].shape):{}'.format(data_list[0].shape))
             rate.sleep()
     else:
         while not rospy.is_shutdown():

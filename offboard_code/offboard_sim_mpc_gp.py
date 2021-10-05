@@ -20,6 +20,7 @@ import sys
 import os.path
 sys.path.append( os.path.join(os.path.join(os.path.dirname(__file__), '..')))
 from gpr.mpc_GPyTorch_predict import GpMean, GpMeanCombine 
+from gpr.gpr_GPyTorch_predict_2d import GpMean2d 
 
 class GpPredict(object):
     def __init__(self):
@@ -36,6 +37,13 @@ class GpPredict(object):
             self.gpMPCVx = GpMean('vx','y_vx', file_path, npz_name)
             self.gpMPCVy = GpMean('vy','y_vy', file_path, npz_name)
             self.gpMPCVz = GpMean('vz','y_vz', file_path, npz_name)
+
+            # vz, z -> az
+            # self.gpMPCVx = GpMean('vx','y_vx', file_path, npz_name)
+            # self.gpMPCVy = GpMean('vy','y_vy', file_path, npz_name)
+            # model_2d_path = os.path.join(os.path.join(os.path.dirname(__file__), '..')) + \
+            # '/gpr/q300/20210928_combine_4_random_ExactGPModel_2d'
+            # self.gpMPCVz = GpMean2d('vz','y_vz','z', model_2d_path, npz_name)
         elif data_type == 'GPModel':
             # load gp model
             self.gpMPCVx = GpMeanCombine('vx', file_path, npz_name)
@@ -146,6 +154,9 @@ class GpPredict(object):
             gp_vx_b = self.gpMPCVx.predict_mean( np.array([v_b[0]]) )[0]
             gp_vy_b = self.gpMPCVy.predict_mean( np.array([v_b[1]]) )[0]
             gp_vz_b = self.gpMPCVz.predict_mean( np.array([v_b[2]]) )[0]
+
+            # exact gp model: z with vz
+            # gp_vz_b = self.gpMPCVz.predict_mean( np.c_[v_b[2], self.uav_pose[2]] )[0]
 
             # transform velocity to world frame
             gp_v_w = self.body_to_world( \

@@ -26,7 +26,7 @@ windows:
           # - python3 gpr_GPyTorch_dataload_predict.py <%= @settings["folder_name"] %>
           # - python3 gpr_GPyTorch_dataload_train.py <%= @settings["folder_name"] %>
         - roscore:
-          - roscore 
+          # - roscore 
         - rosbag play:
           - cd src/itm/bagfiles
           # - cd src/itm/itm_quadrotor_node/bagfiles

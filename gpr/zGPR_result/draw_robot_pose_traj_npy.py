@@ -64,19 +64,13 @@ def load_npy(np_file):
     return x, y, z, vx, vy, vz, traj_x, traj_y, traj_z, traj_vx, traj_vy, traj_vz, t
 
 if __name__ == '__main__':
-    # np_file_gp = './exp_data_pose_traj_gp.npy'
-    # np_file = './exp_data_pose_traj_offset_0.61.npy' #m=1.709, without gp, offset=0.61
-
-    # same trajectory: [0, 0, 0.4] + 20 random points + [0, 0, 0.8]
-    # m=1.709, without gp, offset=0.59, update_u_new
-    # np_file = './exp_data_pose_traj_offset_new_u.npy'
-    # m=1.709, without gp, offset=0.61, update_u_new
-    np_file = './exp_data_pose_traj_offset_new_u_0.61.npy'
-    # m=1.709, with gp, offset=0.59, update_u_new
-    np_file_gp = './exp_data_pose_traj_gp_offset_new_u.npy'
+    np_file_agp_z = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_5_with_gp_AGP_z_vz.npy'
+    # np_file_egp_z = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_7_with_gp_EGP_z_vz.npy'
+    np_file_agp = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_6_with_gp_AGP_vz.npy'
+    # np_file_egp = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_8_with_gp_EGP_vz.npy'
     
-    x, y, z, vx, vy, vz, traj_x, traj_y, traj_z, traj_vx, traj_vy, traj_vz, t = load_npy(np_file)
-    x_gp, y_gp, z_gp, vx_gp, vy_gp, vz_gp, traj_x_gp, traj_y_gp, traj_z_gp, traj_vx_gp, traj_vy_gp, traj_vz_gp, t_gp = load_npy(np_file_gp)
+    x, y, z, vx, vy, vz, traj_x, traj_y, traj_z, traj_vx, traj_vy, traj_vz, t = load_npy(np_file_agp_z)
+    x_gp, y_gp, z_gp, vx_gp, vy_gp, vz_gp, traj_x_gp, traj_y_gp, traj_z_gp, traj_vx_gp, traj_vy_gp, traj_vz_gp, t_gp = load_npy(np_file_agp)
 
     # plt.plot(t, x, 'r--', t, traj_x, 'b--')
     # plt.legend(labels=['robot_pose:x', 'robot_traj:x' ])
@@ -88,20 +82,22 @@ if __name__ == '__main__':
     # plt.show()
 
     plt.plot(t, x, 'b', t, traj_x, 'r', t_gp, x_gp, 'g-.', t_gp, traj_x_gp, 'k:')
-    # plt.legend(labels=['robot_pose_control_0.61', 'robot_traj_control_0.61', 'robot_pose_gp', 'robot_traj_gp' ])
-    plt.legend(labels=['robot_pose', 'robot_traj', 'robot_pose_gp', 'robot_traj_gp' ])
-    plt.title('m=1.709: x')
+    # plt.legend(labels=['robot_pose_agp', 'robot_traj_agp', 'robot_pose_egp', 'robot_traj_egp' ])
+    # plt.legend(labels=['robot_pose_z_egp', 'robot_traj_z_egp', 'robot_pose_egp', 'robot_traj_egp' ])
+    plt.legend(labels=['robot_pose_z_agp', 'robot_traj_z_agp', 'robot_pose_agp', 'robot_traj_agp' ])
+    plt.title('x')
     plt.show()
     plt.plot(t, y, 'b', t, traj_y, 'r', t_gp, y_gp, 'g-.', t_gp, traj_y_gp, 'k:')
-    # plt.legend(labels=['robot_pose_control_0.61', 'robot_traj_control_0.61', 'robot_pose_gp', 'robot_traj_gp' ])
-    plt.legend(labels=['robot_pose', 'robot_traj', 'robot_pose_gp', 'robot_traj_gp' ])
-    plt.title('m=1.709: y')
+    # plt.legend(labels=['robot_pose_agp', 'robot_traj_agp', 'robot_pose_egp', 'robot_traj_egp' ])
+    # plt.legend(labels=['robot_pose_z_egp', 'robot_traj_z_egp', 'robot_pose_egp', 'robot_traj_egp' ])
+    plt.legend(labels=['robot_pose_z_agp', 'robot_traj_z_agp', 'robot_pose_agp', 'robot_traj_agp' ])
+    plt.title('y')
     plt.show()
     plt.plot(t, z, 'b', t, traj_z, 'r', t_gp, z_gp, 'g-.', t_gp, traj_z_gp, 'k:')
-    # plt.legend(labels=['robot_pose:z', 'robot_traj:z' ])
-    plt.legend(labels=['robot_pose', 'robot_traj', 'robot_pose_gp', 'robot_traj_gp' ])
-    # plt.legend(labels=['robot_pose_control_0.61', 'robot_traj_control_0.61', 'robot_pose_gp', 'robot_traj_gp' ])
-    plt.title('m=1.709: z')
+    # plt.legend(labels=['robot_pose_agp', 'robot_traj_agp', 'robot_pose_egp', 'robot_traj_egp' ])
+    # plt.legend(labels=['robot_pose_z_egp', 'robot_traj_z_egp', 'robot_pose_egp', 'robot_traj_egp' ])
+    plt.legend(labels=['robot_pose_z_agp', 'robot_traj_z_agp', 'robot_pose_agp', 'robot_traj_agp' ])
+    plt.title('z')
     plt.show()
 
     # plt.plot(t, vz, 'r--', t_gp, vz_gp, 'g')

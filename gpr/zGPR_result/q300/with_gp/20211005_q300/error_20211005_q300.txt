@@ -1,0 +1,60 @@
+➜  zGPR_result git:(master) python3 draw_gp_acc_robot_pose_traj_npy.py q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_7_with_gp_EGP_z_vz.npy 
+quadrotor_name:q300
+if_with_gp:with_gp
+np_file: ./q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_7_with_gp_EGP_z_vz.npy
+np_name: exp_data_pose_traj_gp_acc_q300_20211005_7_with_gp_EGP_z_vz
+np_suffix: npy
+Data length: 5116
+t:(5116,)
+x:5116
+traj_x:5116
+error_x_mean:0.0357510136936498
+error_y_mean:0.04531619928111771
+error_z_mean:0.028467154316709736
+error_mean:0.07491173566871245
+
+➜  zGPR_result git:(master) ✗ python3 draw_gp_acc_robot_pose_traj_npy.py q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_8_with_gp_EGP_vz.npy  
+quadrotor_name:q300
+if_with_gp:with_gp
+np_file: ./q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_8_with_gp_EGP_vz.npy
+np_name: exp_data_pose_traj_gp_acc_q300_20211005_8_with_gp_EGP_vz
+np_suffix: npy
+Data length: 5096
+t:(5096,)
+x:5096
+traj_x:5096
+error_x_mean:0.03572957750416735
+error_y_mean:0.04895052927134985
+error_z_mean:0.0389674376284009
+error_mean:0.08592505054381426
+
+➜  zGPR_result git:(master) ✗ python3 draw_gp_acc_robot_pose_traj_npy.py q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_5_with_gp_AGP_z_vz.npy 
+quadrotor_name:q300
+if_with_gp:with_gp
+np_file: ./q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_5_with_gp_AGP_z_vz.npy
+np_name: exp_data_pose_traj_gp_acc_q300_20211005_5_with_gp_AGP_z_vz
+np_suffix: npy
+Data length: 5157
+t:(5157,)
+x:5157
+traj_x:5157
+error_x_mean:0.0676017061844287
+error_y_mean:0.044398283878674644
+error_z_mean:0.02169137579175061
+error_mean:0.09250503393804921
+
+➜  zGPR_result git:(master) ✗ python3 draw_gp_acc_robot_pose_traj_npy.py q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_6_with_gp_AGP_vz.npy  
+quadrotor_name:q300
+if_with_gp:with_gp
+np_file: ./q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_6_with_gp_AGP_vz.npy
+np_name: exp_data_pose_traj_gp_acc_q300_20211005_6_with_gp_AGP_vz
+np_suffix: npy
+Data length: 5366
+t:(5366,)
+x:5366
+traj_x:5366
+error_x_mean:0.07626167873693984
+error_y_mean:0.04780272349803538
+error_z_mean:0.02391787199233407
+error_mean:0.10442367260536944
+

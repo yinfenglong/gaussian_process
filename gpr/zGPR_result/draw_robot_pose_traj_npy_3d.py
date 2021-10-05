@@ -69,23 +69,26 @@ def plot_3d():
     fig = plt.figure(figsize=(4, 3))
     ax = Axes3D(fig)
     # all trajectories are the same
-    ax.plot(traj_x, traj_y, traj_z , c='r', label='trajectory')
-    # ax.scatter(traj_x_gp, traj_y_gp, traj_z_gp , c='g', label='GP_trajectory')
-    # ax.scatter(traj_x_egp, traj_y_egp, traj_z_egp , c='b', label='EGP_trajectory')
-    ax.scatter(x, y, z , c='k', label='q300_20210928_9_without_gp')
-    ax.scatter(x_egp, y_egp, z_egp , c='b', label='q300_20210928_10_with_EGP')
-    ax.scatter(x_gp, y_gp, z_gp , c='g', label='q300_20210928_11_with_GP')
-    plt.legend(labels=['trajectory', 'q300_20210928_9_without_gp', 'q300_20210928_10_with_EGP', 'q300_20210928_11_with_GP'])
+    # ax.plot(traj_x, traj_y, traj_z , c='r', label='trajectory')
+    ax.plot(traj_x_gp, traj_y_gp, traj_z_gp , c='r', label='GP_trajectory')
+    # ax.scatter(traj_x_egp, traj_y_egp, traj_z_egp , c='r', label='EGP_trajectory')
+    # ax.scatter(x, y, z , c='k', label='q300_20210928_9_without_gp')
+    ax.scatter(x_egp, y_egp, z_egp , c='b', label='q300_with_EGP')
+    ax.scatter(x_gp, y_gp, z_gp , c='g', label='q300_with_AGP')
+    # plt.legend(labels=['trajectory', 'q300_20210928_9_without_gp', 'q300_20210928_10_with_EGP', 'q300_20210928_11_with_GP'])
+    plt.legend(labels=['trajectory', 'q300_with_EGP', 'q300_with_AGP'])
 
     plt.show()
 
 if __name__ == '__main__':
     get_gp_acc = False
-    np_file = './q300/without_gp/exp_data_pose_traj_q300_20210928_9_without_gp.npy'
-    np_file_EGP = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20210928_10_with_gp_EGP.npy'
-    np_file_GP = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20210928_11_with_gp_GP.npy'
+    # np_file = './q300/without_gp/exp_data_pose_traj_q300_20210928_9_without_gp.npy'
+    np_file_EGP = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_7_with_gp_EGP_z_vz.npy'
+    np_file_GP = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_5_with_gp_AGP_z_vz.npy'
+    # np_file_EGP = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_8_with_gp_EGP_vz.npy'
+    # np_file_GP = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_6_with_gp_AGP_vz.npy'
     
-    x, y, z, traj_x, traj_y, traj_z, t = load_npy(np_file)
+    # x, y, z, traj_x, traj_y, traj_z, t = load_npy(np_file)
     x_egp, y_egp, z_egp, traj_x_egp, traj_y_egp, traj_z_egp, t_egp = load_npy(np_file_EGP)
     x_gp, y_gp, z_gp, traj_x_gp, traj_y_gp, traj_z_gp, t_gp = load_npy(np_file_GP)
 

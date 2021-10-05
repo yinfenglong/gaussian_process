@@ -77,7 +77,7 @@ class GpMean(object):
             return observed_pred.mean.cpu().numpy()
 
 ##############################
-# GpyTorch #
+# GpyTorch using exact gp#
 ##############################
 class ExactGPModel(gpytorch.models.ExactGP):
     def __init__(self, train_x, train_y, likelihood):
@@ -94,9 +94,9 @@ class ExactGPModel(gpytorch.models.ExactGP):
 
 
 #################################
-# GpyTorch using combined datas#
+# GpyTorch using approxiamte gp #
 #################################
-class GpMeanCombine(object):
+class AppGpMean(object):
     def __init__(self, x_train_idx, gp_model_file_path, npz_name):
         self.file_path = gp_model_file_path
         self.npz_name = npz_name

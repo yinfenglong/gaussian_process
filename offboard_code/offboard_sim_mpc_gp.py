@@ -19,7 +19,7 @@ from itm_mav_msgs.msg import SetMission
 import sys
 import os.path
 sys.path.append( os.path.join(os.path.join(os.path.dirname(__file__), '..')))
-from gpr.mpc_GPyTorch_predict import GpMean, GpMeanCombine 
+from gpr.mpc_GPyTorch_predict import GpMean, AppGpMean 
 from gpr.gpr_GPyTorch_predict_2d import GpMean2d 
 
 class GpPredict(object):
@@ -27,6 +27,7 @@ class GpPredict(object):
         self.rate = rospy.Rate(100)
 
         file_path = rospy.get_param('/offboard_sim_gp/gp_model')
+        file_path_2d = rospy.get_param('/offboard_sim_gp/gp_model_2d')
         npz_name = rospy.get_param('/offboard_sim_gp/npz_name')
         data_type= rospy.get_param('/offboard_sim_gp/data_type')
         self.gp_limit = rospy.get_param('/offboard_sim_gp/gp_limit')
@@ -34,21 +35,21 @@ class GpPredict(object):
         
         if data_type == 'ExactGPModel':
             # load gp model
-            self.gpMPCVx = GpMean('vx','y_vx', file_path, npz_name)
-            self.gpMPCVy = GpMean('vy','y_vy', file_path, npz_name)
-            self.gpMPCVz = GpMean('vz','y_vz', file_path, npz_name)
-
-            # vz, z -> az
             # self.gpMPCVx = GpMean('vx','y_vx', file_path, npz_name)
             # self.gpMPCVy = GpMean('vy','y_vy', file_path, npz_name)
-            # model_2d_path = os.path.join(os.path.join(os.path.dirname(__file__), '..')) + \
+            # self.gpMPCVz = GpMean('vz','y_vz', file_path, npz_name)
+
+            # vz, z -> az
+            self.gpMPCVx = GpMean('vx','y_vx', file_path, npz_name)
+            self.gpMPCVy = GpMean('vy','y_vy', file_path, npz_name)
+            # file_path_2d = os.path.join(os.path.join(os.path.dirname(__file__), '..')) + \
             # '/gpr/q300/20210928_combine_4_random_ExactGPModel_2d'
-            # self.gpMPCVz = GpMean2d('vz','y_vz','z', model_2d_path, npz_name)
-        elif data_type == 'GPModel':
+            self.gpMPCVz = GpMean2d('vz','y_vz','z', file_path_2d, npz_name)
+        elif data_type == 'AppGPModel':
             # load gp model
-            self.gpMPCVx = GpMeanCombine('vx', file_path, npz_name)
-            self.gpMPCVy = GpMeanCombine('vy', file_path, npz_name)
-            self.gpMPCVz = GpMeanCombine('vz', file_path, npz_name)
+            self.gpMPCVx = AppGpMean('vx', file_path, npz_name)
+            self.gpMPCVy = AppGpMean('vy', file_path, npz_name)
+            self.gpMPCVz = AppGpMean('vz', file_path, npz_name)
 
         # subscribers
         robot_odom_sub = rospy.Subscriber('/robot_pose', Odometry, self.robot_odom_callback)
@@ -153,10 +154,10 @@ class GpPredict(object):
             # gp predict
             gp_vx_b = self.gpMPCVx.predict_mean( np.array([v_b[0]]) )[0]
             gp_vy_b = self.gpMPCVy.predict_mean( np.array([v_b[1]]) )[0]
-            gp_vz_b = self.gpMPCVz.predict_mean( np.array([v_b[2]]) )[0]
+            # gp_vz_b = self.gpMPCVz.predict_mean( np.array([v_b[2]]) )[0]
 
             # exact gp model: z with vz
-            # gp_vz_b = self.gpMPCVz.predict_mean( np.c_[v_b[2], self.uav_pose[2]] )[0]
+            gp_vz_b = self.gpMPCVz.predict_mean( np.c_[v_b[2], self.uav_pose[2]] )[0]
 
             # transform velocity to world frame
             gp_v_w = self.body_to_world( \

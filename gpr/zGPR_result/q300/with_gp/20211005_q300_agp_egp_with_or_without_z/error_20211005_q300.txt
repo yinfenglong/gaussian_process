@@ -58,3 +58,51 @@ error_y_mean:0.04780272349803538
 error_z_mean:0.02391787199233407
 error_mean:0.10442367260536944
 
+##############################
+grasp trajectory
+##############################
+➜  zGPR_result git:(master) python3 draw_gp_acc_robot_pose_traj_npy.py q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_9_with_gp_EGP.npy   
+quadrotor_name:q300
+if_with_gp:with_gp
+np_file: ./q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_9_with_gp_EGP.npy
+np_name: exp_data_pose_traj_gp_acc_q300_20211005_9_with_gp_EGP
+np_suffix: npy
+Data length: 6795
+t:(6795,)
+x:6795
+traj_x:6795
+error_x_mean:0.013693827350557719
+error_y_mean:0.02002718109576439
+error_z_mean:0.028949665601665897
+error_mean:0.0426957671326398
+
+➜  zGPR_result git:(master) ✗ python3 draw_gp_acc_robot_pose_traj_npy.py q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_10_with_gp_AGP.npy 
+quadrotor_name:q300
+if_with_gp:with_gp
+np_file: ./q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_10_with_gp_AGP.npy
+np_name: exp_data_pose_traj_gp_acc_q300_20211005_10_with_gp_AGP
+np_suffix: npy
+Data length: 6780
+t:(6780,)
+x:6780
+traj_x:6780
+error_x_mean:0.07633828431421429
+error_y_mean:0.03378241287409621
+error_z_mean:0.04468737434588509
+error_mean:0.0985473819315575
+
+➜  zGPR_result git:(master) ✗ python3 draw_gp_acc_robot_pose_traj_npy.py q300/without_gp/exp_data_pose_traj_gp_acc_q300_20211005_11_without_gp.npy
+quadrotor_name:q300
+if_with_gp:without_gp
+np_file: ./q300/without_gp/exp_data_pose_traj_gp_acc_q300_20211005_11_without_gp.npy
+np_name: exp_data_pose_traj_gp_acc_q300_20211005_11_without_gp
+np_suffix: npy
+Data length: 6577
+t:(6577,)
+x:6577
+traj_x:6577
+error_x_mean:0.021716397732642424
+error_y_mean:0.026988241400995455
+error_z_mean:0.08158462280546938
+error_mean:0.0921220509597115
+

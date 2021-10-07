@@ -227,10 +227,10 @@ if __name__ == '__main__':
     #     print("y_train_idx: {}".format(y_train_idx) )
 
     gpMPC = GpMean2d('vz', 'y_vz', 'z', file_path, npz_name)
-    if gpMPC.test_x is not None:
-        print("mmmtest_x is not None")
-    else:
-        print("mmmtest_x is None")
+    # if gpMPC.test_x is not None:
+    #     print("mmmtest_x is not None")
+    # else:
+    #     print("mmmtest_x is None")
     gpMPC.predict_test()
     gpMPC.plot_predict_result('vz')
 

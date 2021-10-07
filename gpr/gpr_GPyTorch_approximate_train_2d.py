@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 '''
-Date: 19.09.2021
+Date: 07.10.2021
 Author: Yinfeng Long
 usage
     x_train_idx = ['x', 'y', 'z', 'vx', 'vy', 'vz']
@@ -24,8 +24,8 @@ import tqdm
 import os.path
 
 
-class GpTrainApp(object):
-    def __init__(self, x_train_idx, y_train_idx, gp_model_file_path, npz_name):
+class GpTrainCombine(object):
+    def __init__(self, x_train_idx, y_train_idx, x_idx_2d, gp_model_file_path, npz_name):
         self.file_path = gp_model_file_path
         self.npz_name = npz_name
 
@@ -33,12 +33,12 @@ class GpTrainApp(object):
         self.train_y = None
         self.train_loader = None
         self.train_y_range = None
-        self.load_data(x_train_idx, y_train_idx)
+        self.load_data(x_train_idx, y_train_idx, x_idx_2d)
 
         self.observed_pred = None
         self.model_to_predict = self.train_model(x_train_idx)
 
-    def load_data(self, x_train_idx, y_train_idx):
+    def load_data(self, x_train_idx, y_train_idx, x_idx_2d):
         gp_train = np.load(self.file_path + '/' + self.npz_name)
 
         if torch.cuda.is_available():
@@ -47,7 +47,15 @@ class GpTrainApp(object):
             device = torch.device("cpu")
 
         # numpy into one dimension, then create a Tensor form from numpy (=torch.linspace)
-        X = (gp_train[x_train_idx]).flatten()
+        train_x_1d_ori = (gp_train[x_train_idx]).reshape(-1, 1)
+        train_x_2d_ori = (gp_train[x_idx_2d]).reshape(-1, 1)
+        X = np.concatenate( (train_x_1d_ori, train_x_2d_ori), axis=1 )
+
+        print("dimension of x_1d before prune:", np.array(train_x_1d_ori).shape)
+        print("dimension of x_2d before prune:", np.array(train_x_2d_ori).shape)
+        print("dimension of x before prune:", np.array(X).shape)
+
+        # X = (gp_train[x_train_idx]).flatten()
         y = (gp_train[y_train_idx]).flatten()
         # np.random.shuffle(X)
         # np.random.shuffle(y)
@@ -165,13 +173,13 @@ if __name__ == '__main__':
     npz_name = sys.argv[2]
     gp_train = np.load(file_path + '/' + npz_name)
 
-    x_idx_list = [i for i in gp_train.keys()][:6]
-    y_idx_list = [i for i in gp_train.keys()][6:]
-    for i in range(len(x_idx_list)):
-        x_train_idx = x_idx_list[i]
-        y_train_idx = y_idx_list[i]
-        print("***************************")
-        print("x_train_idx: {}".format(x_train_idx))
-        print("y_train_idx: {}".format(y_train_idx))
+    # x_idx_list = [i for i in gp_train.keys()][:6]
+    # y_idx_list = [i for i in gp_train.keys()][6:]
+    # for i in range(len(x_idx_list)):
+    #     x_train_idx = x_idx_list[i]
+    #     y_train_idx = y_idx_list[i]
+    #     print("***************************")
+    #     print("x_train_idx: {}".format(x_train_idx))
+    #     print("y_train_idx: {}".format(y_train_idx))
 
-        gpMPC = GpTrainCombine(x_train_idx, y_train_idx, file_path, npz_name)
+    gpMPC = GpTrainCombine('vz', 'y_vz', 'z', file_path, npz_name)

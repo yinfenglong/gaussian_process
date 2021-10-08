@@ -21,6 +21,7 @@ import os.path
 sys.path.append( os.path.join(os.path.join(os.path.dirname(__file__), '..')))
 from gpr.mpc_GPyTorch_predict import GpMean, AppGpMean 
 from gpr.gpr_GPyTorch_predict_2d import GpMean2d 
+from gpr.gpr_GPyTorch_approximate_predict_2d import GpMeanApp2d
 
 class GpPredict(object):
     def __init__(self):
@@ -47,9 +48,14 @@ class GpPredict(object):
             self.gpMPCVz = GpMean2d('vz','y_vz','z', file_path_2d, npz_name)
         elif data_type == 'AppGPModel':
             # load gp model
+            # self.gpMPCVx = AppGpMean('vx', file_path, npz_name)
+            # self.gpMPCVy = AppGpMean('vy', file_path, npz_name)
+            # self.gpMPCVz = AppGpMean('vz', file_path, npz_name)
+            
+            # vz, z -> az
             self.gpMPCVx = AppGpMean('vx', file_path, npz_name)
             self.gpMPCVy = AppGpMean('vy', file_path, npz_name)
-            self.gpMPCVz = AppGpMean('vz', file_path, npz_name)
+            self.gpMPCVz = GpMeanApp2d('vz','y_vz','z', file_path_2d, npz_name)
 
         # subscribers
         robot_odom_sub = rospy.Subscriber('/robot_pose', Odometry, self.robot_odom_callback)

@@ -54,7 +54,44 @@ t:(5535,)
 x:5535
 traj_x:5535
 error_x_mean:0.07245194209977299
+
+
+################################
+grasp traj
+################################
+
+➜  zGPR_result git:(master) python3 draw_gp_acc_robot_pose_traj_npy.py q330/without_gp/exp_data_pose_traj_gp_acc_q330_20211008_5_withoutgp.npy 
+quadrotor_name:q330
+if_with_gp:without_gp
+np_file: ./q330/without_gp/exp_data_pose_traj_gp_acc_q330_20211008_5_withoutgp.npy
+np_name: exp_data_pose_traj_gp_acc_q330_20211008_5_withoutgp
+np_suffix: npy
+Data length: 6867
+t:(6867,)
+x:6867
+traj_x:6867
+error_x_mean:0.03904502439452222
+error_y_mean:0.0338983367286167
+error_z_mean:0.11873093646099186
+error_mean:0.1339422142013146
+
 error_y_mean:0.07665477993243015
 error_z_mean:0.056635688495385736
 error_mean:0.13246294922708957
+
+➜  zGPR_result git:(master) ✗ python3 draw_gp_acc_robot_pose_traj_npy.py q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211008_6_with_exactgp.npy 
+quadrotor_name:q330
+if_with_gp:with_gp
+np_file: ./q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211008_6_with_exactgp.npy
+np_name: exp_data_pose_traj_gp_acc_q330_20211008_6_with_exactgp
+np_suffix: npy
+Data length: 6638
+t:(6638,)
+x:6638
+traj_x:6638
+error_x_mean:0.017305753994960815
+error_y_mean:0.027579955826792225
+error_z_mean:0.035838023247155064
+error_mean:0.05401116286368701
+
 

@@ -95,3 +95,33 @@ error_z_mean:0.035838023247155064
 error_mean:0.05401116286368701
 
 
+➜  zGPR_result git:(master) python3 draw_gp_acc_robot_pose_traj_npy.py q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211008_7_with_appgp.npy  
+quadrotor_name:q330
+if_with_gp:with_gp
+np_file: ./q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211008_7_with_appgp.npy
+np_name: exp_data_pose_traj_gp_acc_q330_20211008_7_with_appgp
+np_suffix: npy
+Data length: 6656
+t:(6656,)
+x:6656
+traj_x:6656
+error_x_mean:0.021122349773998985
+error_y_mean:0.023666665503223702
+error_z_mean:0.06169308675118778
+error_mean:0.0744836667480846
+
+➜  zGPR_result git:(master) ✗ python3 draw_gp_acc_robot_pose_traj_npy.py q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211008_8_with_appgp.npy 
+quadrotor_name:q330
+if_with_gp:with_gp
+np_file: ./q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211008_8_with_appgp.npy
+np_name: exp_data_pose_traj_gp_acc_q330_20211008_8_with_appgp
+np_suffix: npy
+Data length: 6599
+t:(6599,)
+x:6599
+traj_x:6599
+error_x_mean:0.06742058175353852
+error_y_mean:0.062157904875244856
+error_z_mean:0.046499861350823776
+error_mean:0.1116190096176473
+

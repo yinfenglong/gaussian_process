@@ -64,7 +64,7 @@ class GpMean2d(object):
         print("dimension of y before prune:", np.array(train_y_ori).shape)
 
         np.random.seed(0)
-        num_train = int(np.floor(.9 * train_x_ori.shape[0]))
+        num_train = int(np.floor(.4 * train_x_ori.shape[0]))
         train_index = np.random.choice(train_x_ori.shape[0], num_train, replace=False)
         self.train_x = torch.from_numpy( train_x_ori[train_index] )
         self.train_y = torch.from_numpy( train_y_ori[train_index] )
@@ -161,14 +161,14 @@ class GpMean2d(object):
                 ax.grid(axis='y', which='minor', color='darkorange', alpha=0.5)
 
                 plt.title( sys.argv[1] + '/' + x_train_idx )
-                manger = plt.get_current_fig_manager()
-                manger.window.showMaximized()
-                fig = plt.gcf()
+                # manger = plt.get_current_fig_manager()
+                # manger.window.showMaximized()
+                # fig = plt.gcf()
                 plt.show()
-                figures_path = './' + sys.argv[1] + '/figures/'
-                if not os.path.exists(figures_path):
-                    os.makedirs( figures_path )
-                fig.savefig( figures_path + x_train_idx + str(i) + '.png' )
+                # figures_path = './' + sys.argv[1] + '/figures/'
+                # if not os.path.exists(figures_path):
+                #     os.makedirs( figures_path )
+                # fig.savefig( figures_path + x_train_idx + str(i) + '.png' )
 
             # plot 3d
             fig = plt.figure()
@@ -182,9 +182,9 @@ class GpMean2d(object):
             ax.grid(axis='y', which='major', color='darkorange', alpha=1)
             ax.grid(axis='y', which='minor', color='darkorange', alpha=0.5)
 
-            manger = plt.get_current_fig_manager()
-            manger.window.showMaximized()
-            fig = plt.gcf()
+            # manger = plt.get_current_fig_manager()
+            # manger.window.showMaximized()
+            # fig = plt.gcf()
             plt.show()
 
     def predict_mean(self, test_point):

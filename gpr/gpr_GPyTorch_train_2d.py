@@ -51,7 +51,7 @@ class GpTrain(object):
         print("dimension of y before prune:", np.array(train_y_ori).shape)
 
         np.random.seed(0)
-        num_train = int(np.floor(.5 * train_x_ori.shape[0]))
+        num_train = int(np.floor(.4 * train_x_ori.shape[0]))
         train_index = np.random.choice(train_x_ori.shape[0], num_train, replace=False)
         self.train_x = torch.from_numpy( train_x_ori[train_index] )
         self.train_y = torch.from_numpy( train_y_ori[train_index] )

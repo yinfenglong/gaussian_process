@@ -174,4 +174,4 @@ if __name__ == '__main__':
         print("x_train_idx: {}".format(x_train_idx))
         print("y_train_idx: {}".format(y_train_idx))
 
-        gpMPC = GpTrainCombine(x_train_idx, y_train_idx, file_path, npz_name)
+        gpMPC = GpTrainApp(x_train_idx, y_train_idx, file_path, npz_name)

@@ -204,7 +204,7 @@ if __name__ == '__main__':
         print("x_train_idx: {}".format(x_train_idx) )
         print("y_train_idx: {}".format(y_train_idx) )
 
-        gpMPC = GpMeanCombine(x_train_idx, y_train_idx, file_path, npz_name)
+        gpMPC = GpMeanApp(x_train_idx, y_train_idx, file_path, npz_name)
         gpMPC.predict_test()
         gpMPC.plot_predict_result()
 

@@ -15,6 +15,7 @@ import torch
 import gpytorch
 import time
 import sys
+import os.path
 
 class GpTrain(object):
     def __init__(self, x_train_idx, y_train_idx, gp_model_file_path, npz_name ):
@@ -107,11 +108,14 @@ class GpTrain(object):
 
         time_2 = time.time()
         print("training time is: ", (time_2 - time_1))
-        # torch.save(model.state_dict(), './model_state.pth')
-        torch.save(model.state_dict(), './' +  sys.argv[1] + '/train_pre_model/model_state_' + x_train_idx +'.pth')
+        gp_model_path =  './' +  sys.argv[1] + '/train_pre_model'
+        if not os.path.exists(gp_model_path):
+            os.makedirs( gp_model_path )
+        # torch.save(model.state_dict(), './' +  sys.argv[1] + '/train_pre_model/model_state_' + x_train_idx +'.pth')
+        torch.save(model.state_dict(), gp_model_path + '/model_state_' + x_train_idx +'.pth')
         likelihood_state_dict = likelihood.state_dict()
-        # torch.save(likelihood_state_dict, './likelihood_state.pth')
-        torch.save(likelihood_state_dict, './' + sys.argv[1] + '/train_pre_model/likelihood_state_' + x_train_idx +'.pth')
+        # torch.save(likelihood_state_dict, './' + sys.argv[1] + '/train_pre_model/likelihood_state_' + x_train_idx +'.pth')
+        torch.save(likelihood_state_dict, gp_model_path + '/likelihood_state_' + x_train_idx +'.pth')
 
 ##############################
 # GpyTorch #

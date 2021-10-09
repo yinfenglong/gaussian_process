@@ -33,7 +33,8 @@ for dir in dirs:
 		else:
 			pass
 
-np.savez( gp_path + '/combined_' + sys.argv[1] + '.npz', \
+# np.savez( gp_path + '/combined_' + sys.argv[1] + '.npz', \
+np.savez( gp_path + '/data_for_gp_y.npz', \
 		x=combined['x'], y=combined['y'], z=combined['z'], \
 			vx = combined['vx'], vy = combined['vy'], vz = combined['vz'],\
 			y_x = combined['y_x'], y_y = combined['y_y'], y_z = combined['y_z'], \

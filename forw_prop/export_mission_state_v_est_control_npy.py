@@ -128,13 +128,14 @@ if __name__ == '__main__':
         while sub_obj.att_rate_cmd is None or sub_obj.uav_pose is None:
             pass
         current_time_ = rospy.get_time()
-        if current_time_ - sub_obj.cmd_timer > 2. or current_time_ - sub_obj.pose_timer > 2.:
+        # if current_time_ - sub_obj.cmd_timer > 2. or current_time_ - sub_obj.pose_timer > 2.:
+        if sub_obj.command_id == 2:
             # safe the data
             # np.save('./q330/exp_data_20210913_1_hover.npy', data_list)
             # np.save('./gazebo/exp_data_20210819_gazebo_vel_est.npy', data_list)
             np.save('./rosbag_npy/' + sys.argv[1] + '.npy', data_list)
             break
-        if sub_obj.command_id == 1 or sub_obj.command_id == 2 or sub_obj.command_id == 5:
+        if sub_obj.command_id == 1 or sub_obj.command_id == 5:
             continue 
         elif sub_obj.command_id == 3: 
         # take_off, hover, land

@@ -80,10 +80,10 @@ def plot_3d():
 
     plt.show()
 
-def plot_2d(pose, traj, pose_agp, pose_egp,  tag ):
+def plot_2d(pose, traj, pose_agp, pose_egp, gp_agp, gp_egp, tag ):
     f, ax = plt.subplots(1, 1, figsize=(4, 3))
-    plt.plot(t, pose, 'r-.', t, traj, 'b', t_agp, pose_agp, 'peru', t_egp, pose_egp, 'm:')
-    plt.legend(labels=['pose', 'traj', 'pose_agp', 'pose_egp'])
+    plt.plot(t, pose, 'r-.', t, traj, 'b', t_agp, pose_agp, 'peru', t_agp, gp_agp ,'g:', t_egp, pose_egp, 'm',  t_egp, gp_egp, 'k:')
+    plt.legend(labels=['pose', 'traj', 'pose_agp','gp_agp', 'pose_egp', 'gp_egp'])
     data_range = np.max(pose) - np.min(pose)
     if data_range < 0.3:
         maloc = 0.02 
@@ -116,10 +116,10 @@ def plot_2d(pose, traj, pose_agp, pose_egp,  tag ):
     #     os.makedirs( figures_path )
     # fig.savefig( figures_path + np_name + '_' + tag + '.png' )
 
-def plot_compare(traj, pose_agp1, pose_agp2,  tag ):
+def plot_compare(traj, pose_agp1, pose_agp2, gp_agp, gp_egp, tag ):
     f, ax = plt.subplots(1, 1, figsize=(4, 3))
-    plt.plot(t_agp, traj, 'b', t_agp, pose_agp1, 'peru', t_egp, pose_agp2, 'm:')
-    plt.legend(labels=['traj', '2_pose_agp', '4_pose_agp'])
+    plt.plot(t_agp, traj, 'b', t_agp, pose_agp1, 'peru', t_agp, gp_agp ,'g:', t_egp, pose_agp2, 'm', t_egp, gp_egp, 'k:')
+    plt.legend(labels=['traj', '1_pose_agp','1_gp', '2_pose_agp', '2_gp'])
     data_range = np.max(pose_agp1) - np.min(pose_agp1)
     if data_range < 0.3:
         maloc = 0.02 
@@ -153,7 +153,7 @@ def plot_compare(traj, pose_agp1, pose_agp2,  tag ):
     # fig.savefig( figures_path + np_name + '_' + tag + '.png' )
 
 if __name__ == '__main__':
-    get_gp_acc = False
+    get_gp_acc = True 
     # np_file = './q300/without_gp/exp_data_pose_traj_gp_acc_q300_20211005_11_without_gp.npy'
     # np_file_EGP = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_9_with_gp_EGP.npy'
     # np_file_AGP = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_10_with_gp_AGP.npy'
@@ -172,8 +172,8 @@ if __name__ == '__main__':
     ###########################
 
     x, y, z, traj_x, traj_y, traj_z, t = load_npy(np_file)
-    x_agp, y_agp, z_agp, traj_x_agp, traj_y_agp, traj_z_agp, t_agp = load_npy(np_file_AGP)
-    x_egp, y_egp, z_egp, traj_x_egp, traj_y_egp, traj_z_egp, t_egp = load_npy(np_file_EGP)
+    x_agp, y_agp, z_agp, traj_x_agp, traj_y_agp, traj_z_agp, t_agp, gp_vx_agp, gp_vy_agp, gp_vz_agp = load_npy(np_file_AGP)
+    x_egp, y_egp, z_egp, traj_x_egp, traj_y_egp, traj_z_egp, t_egp, gp_vx_egp, gp_vy_egp, gp_vz_egp = load_npy(np_file_EGP)
 
     plot_3d()
 

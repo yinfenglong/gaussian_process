@@ -217,22 +217,26 @@ if __name__ == '__main__':
     npz_name = sys.argv[2] 
     gp_train = np.load( file_path + '/' + npz_name)
 
-    # x_idx_list = [i for i in gp_train.keys()][:6]
-    # y_idx_list = [i for i in gp_train.keys()][6:]
-    # for i in range(len(x_idx_list)):
-    #     x_train_idx = x_idx_list[i]
-    #     y_train_idx = y_idx_list[i]
-    #     print("***************************")
-    #     print("x_train_idx: {}".format(x_train_idx) )
-    #     print("y_train_idx: {}".format(y_train_idx) )
+    x_idx_list = [i for i in gp_train.keys()][3:6]
+    y_idx_list = [i for i in gp_train.keys()][9:]
+    print("x_idx_list:{}".format(x_idx_list))
+    print("y_idx_list:{}".format(y_idx_list))
+    for i in range(len(x_idx_list)):
+        x_train_idx = x_idx_list[i]
+        y_train_idx = y_idx_list[i]
+        print("***************************")
+        print("x_train_idx: {}".format(x_train_idx) )
+        print("y_train_idx: {}".format(y_train_idx) )
 
-    gpMPC = GpMean2d('vz', 'y_vz', 'z', file_path, npz_name)
+        gpMPC = GpMean2d(x_train_idx, y_train_idx, 'z', file_path, npz_name)
+        gpMPC.predict_test()
+        gpMPC.plot_predict_result(x_train_idx)
+
+    # gpMPC = GpMean2d('vz', 'y_vz', 'z', file_path, npz_name)
     # if gpMPC.test_x is not None:
     #     print("mmmtest_x is not None")
     # else:
     #     print("mmmtest_x is None")
-    gpMPC.predict_test()
-    gpMPC.plot_predict_result('vz')
 
     # test one point
     # file_path ="/home/achilles/test_ma_ws/src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/gpr/q330"

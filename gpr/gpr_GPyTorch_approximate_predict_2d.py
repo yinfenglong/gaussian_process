@@ -119,8 +119,8 @@ class GpMeanApp2d(object):
         means = means[1:]
         print('Test MAE: {}'.format(torch.mean(torch.abs(means - self.test_y.cpu()))))
 
-    def plot_predict_result(self,):
-        x_train_idx = 'vz' 
+    def plot_predict_result(self, x_train_idx):
+        # x_train_idx = 'vz' 
         target_device = 'cuda:0'
         with torch.no_grad():
             for i in range(2):
@@ -222,18 +222,18 @@ if __name__ == '__main__':
     gp_train = np.load( file_path + '/' + npz_name)
 
     # all dimensions: x, y, z, vx, vy, vz
-    # x_idx_list = [i for i in gp_train.keys()][:6]
-    # y_idx_list = [i for i in gp_train.keys()][6:]
-    # for i in range(len(x_idx_list)):
-    #     x_train_idx = x_idx_list[i]
-    #     y_train_idx = y_idx_list[i]
-    #     print("***************************")
-    #     print("x_train_idx: {}".format(x_train_idx) )
-    #     print("y_train_idx: {}".format(y_train_idx) )
+    x_idx_list = [i for i in gp_train.keys()][3:6]
+    y_idx_list = [i for i in gp_train.keys()][9:]
+    for i in range(len(x_idx_list)):
+        x_train_idx = x_idx_list[i]
+        y_train_idx = y_idx_list[i]
+        print("***************************")
+        print("x_train_idx: {}".format(x_train_idx) )
+        print("y_train_idx: {}".format(y_train_idx) )
 
-    gpMPC = GpMeanApp2d('vz', 'y_vz', 'z', file_path, npz_name)
-    gpMPC.predict_test()
-    gpMPC.plot_predict_result()
+        gpMPC = GpMeanApp2d(x_train_idx, y_train_idx, 'z', file_path, npz_name)
+        gpMPC.predict_test()
+        gpMPC.plot_predict_result(x_train_idx)
 
     # one dimesion
     # x_train_idx = sys.argv[2]

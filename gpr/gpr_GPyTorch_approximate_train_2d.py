@@ -173,13 +173,14 @@ if __name__ == '__main__':
     npz_name = sys.argv[2]
     gp_train = np.load(file_path + '/' + npz_name)
 
-    # x_idx_list = [i for i in gp_train.keys()][:6]
-    # y_idx_list = [i for i in gp_train.keys()][6:]
-    # for i in range(len(x_idx_list)):
-    #     x_train_idx = x_idx_list[i]
-    #     y_train_idx = y_idx_list[i]
-    #     print("***************************")
-    #     print("x_train_idx: {}".format(x_train_idx))
-    #     print("y_train_idx: {}".format(y_train_idx))
+    x_idx_list = [i for i in gp_train.keys()][3:6]
+    y_idx_list = [i for i in gp_train.keys()][9:]
+    for i in range(len(x_idx_list)):
+        x_train_idx = x_idx_list[i]
+        y_train_idx = y_idx_list[i]
+        print("***************************")
+        print("x_train_idx: {}".format(x_train_idx))
+        print("y_train_idx: {}".format(y_train_idx))
 
-    gpMPC = GpTrainCombine('vz', 'y_vz', 'z', file_path, npz_name)
+        gpMPC = GpTrainCombine(x_train_idx, y_train_idx, 'z', file_path, npz_name)
+    # gpMPC = GpTrainCombine('vz', 'y_vz', 'z', file_path, npz_name)

@@ -171,15 +171,15 @@ if __name__ == '__main__':
     # x_egp, y_egp, z_egp, traj_x_egp, traj_y_egp, traj_z_egp, t_egp = load_npy(np_file_AGP_4)
     ###########################
 
-    x, y, z, traj_x, traj_y, traj_z, t = load_npy(np_file)
+    x, y, z, traj_x, traj_y, traj_z, t, gp_vx_w, gp_vy_w, gp_vz_w= load_npy(np_file)
     x_agp, y_agp, z_agp, traj_x_agp, traj_y_agp, traj_z_agp, t_agp, gp_vx_agp, gp_vy_agp, gp_vz_agp = load_npy(np_file_AGP)
     x_egp, y_egp, z_egp, traj_x_egp, traj_y_egp, traj_z_egp, t_egp, gp_vx_egp, gp_vy_egp, gp_vz_egp = load_npy(np_file_EGP)
 
     plot_3d()
 
-    plot_2d(x, traj_x, x_agp, x_egp, 'x' )
-    plot_2d(y, traj_y, y_agp, y_egp, 'y' )
-    plot_2d(z, traj_z, z_agp, z_egp, 'z' )
+    plot_2d(x, traj_x, x_agp, x_egp, gp_vx_agp, gp_vx_egp, 'x' )
+    plot_2d(y, traj_y, y_agp, y_egp, gp_vy_agp, gp_vy_egp, 'y' )
+    plot_2d(z, traj_z, z_agp, z_egp, gp_vz_agp, gp_vz_egp, 'z' )
 
     # compare
     # plot_compare(traj_x_agp, x_agp, x_egp, 'x' )

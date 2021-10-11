@@ -1,0 +1,6 @@
+gp_error
+
+error_x_mean:0.05126369587012501
+error_y_mean:0.0187687111547927
+error_z_mean:0.17750177988216811
+

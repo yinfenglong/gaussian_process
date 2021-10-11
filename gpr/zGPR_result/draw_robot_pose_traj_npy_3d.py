@@ -107,9 +107,9 @@ def plot_2d(pose, traj, pose_agp, pose_egp, gp_agp, gp_egp, tag ):
     ax.grid(axis='x', which='both')
     # title =  #sys.argv[2]
     # plt.title(title + ':' + tag)
-    manger = plt.get_current_fig_manager()
-    manger.window.showMaximized()
-    fig = plt.gcf()
+    # manger = plt.get_current_fig_manager()
+    # manger.window.showMaximized()
+    # fig = plt.gcf()
     plt.show()
     # figures_path = './' + folder_name + '/figures_' + np_name + '/'
     # if not os.path.exists(figures_path):
@@ -119,7 +119,7 @@ def plot_2d(pose, traj, pose_agp, pose_egp, gp_agp, gp_egp, tag ):
 def plot_compare(traj, pose_agp1, pose_agp2, gp_agp, gp_egp, tag ):
     f, ax = plt.subplots(1, 1, figsize=(4, 3))
     plt.plot(t_agp, traj, 'b', t_agp, pose_agp1, 'peru', t_agp, gp_agp ,'g:', t_egp, pose_agp2, 'm', t_egp, gp_egp, 'k:')
-    plt.legend(labels=['traj', '1_pose_agp','1_gp', '2_pose_agp', '2_gp'])
+    plt.legend(labels=['traj', '1_pose_gp','1_gp', '2_pose_gp', '2_gp'])
     data_range = np.max(pose_agp1) - np.min(pose_agp1)
     if data_range < 0.3:
         maloc = 0.02 
@@ -143,9 +143,9 @@ def plot_compare(traj, pose_agp1, pose_agp2, gp_agp, gp_egp, tag ):
     ax.grid(axis='x', which='both')
     # title =  #sys.argv[2]
     # plt.title(title + ':' + tag)
-    manger = plt.get_current_fig_manager()
-    manger.window.showMaximized()
-    fig = plt.gcf()
+    # manger = plt.get_current_fig_manager()
+    # manger.window.showMaximized()
+    # fig = plt.gcf()
     plt.show()
     # figures_path = './' + folder_name + '/figures_' + np_name + '/'
     # if not os.path.exists(figures_path):
@@ -154,16 +154,19 @@ def plot_compare(traj, pose_agp1, pose_agp2, gp_agp, gp_egp, tag ):
 
 if __name__ == '__main__':
     get_gp_acc = True 
-    # np_file = './q300/without_gp/exp_data_pose_traj_gp_acc_q300_20211005_11_without_gp.npy'
-    # np_file_EGP = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_9_with_gp_EGP.npy'
-    # np_file_AGP = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_10_with_gp_AGP.npy'
-    # np_file_EGP = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_8_with_gp_EGP_vz.npy'
-    # np_file_GP = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_6_with_gp_AGP_vz.npy'
-    np_file = './q330/without_gp/exp_data_pose_traj_gp_acc_q330_20211008_1_without_gp.npy'
-    np_file_EGP = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211008_3_with_exactgp.npy'
-    # np_file_AGP = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211008_2_with_appgp.npy'
-    np_file_AGP = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211008_4_with_appgp.npy'
     
+    np_file = './q330/without_gp/exp_data_pose_traj_gp_acc_q330_20211008_1_without_gp.npy'
+    np_file_AGP = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211011_9_with_appgp.npy'
+    np_file_EGP = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211011_10_with_egp.npy'
+    # exp_data_pose_traj_gp_acc_q330_20211011_1_with_appgp
+    # exp_data_pose_traj_gp_acc_q330_20211011_2_with_appgp_luo
+    # exp_data_pose_traj_gp_acc_q330_20211011_3_with_egp
+    # exp_data_pose_traj_gp_acc_q330_20211011_4_with_appgp
+    # exp_data_pose_traj_gp_acc_q330_20211011_5_with_appgp
+    # exp_data_pose_traj_gp_acc_q330_20211011_6_with_egp
+    # exp_data_pose_traj_gp_acc_q330_20211011_7_with_egp
+    # exp_data_pose_traj_gp_acc_q330_20211011_8_with_appgp
+
     # compare
     # np_file_AGP_2 = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211008_2_with_appgp.npy'
     # np_file_AGP_4 = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211008_4_with_appgp.npy'
@@ -175,15 +178,15 @@ if __name__ == '__main__':
     x_agp, y_agp, z_agp, traj_x_agp, traj_y_agp, traj_z_agp, t_agp, gp_vx_agp, gp_vy_agp, gp_vz_agp = load_npy(np_file_AGP)
     x_egp, y_egp, z_egp, traj_x_egp, traj_y_egp, traj_z_egp, t_egp, gp_vx_egp, gp_vy_egp, gp_vz_egp = load_npy(np_file_EGP)
 
-    plot_3d()
+    # plot_3d()
 
-    plot_2d(x, traj_x, x_agp, x_egp, gp_vx_agp, gp_vx_egp, 'x' )
-    plot_2d(y, traj_y, y_agp, y_egp, gp_vy_agp, gp_vy_egp, 'y' )
-    plot_2d(z, traj_z, z_agp, z_egp, gp_vz_agp, gp_vz_egp, 'z' )
+    # plot_2d(x, traj_x, x_agp, x_egp, gp_vx_agp, gp_vx_egp, 'x' )
+    # plot_2d(y, traj_y, y_agp, y_egp, gp_vy_agp, gp_vy_egp, 'y' )
+    # plot_2d(z, traj_z, z_agp, z_egp, gp_vz_agp, gp_vz_egp, 'z' )
 
     # compare
-    # plot_compare(traj_x_agp, x_agp, x_egp, 'x' )
-    # plot_compare(traj_y_agp, y_agp, y_egp, 'y' )
-    # plot_compare(traj_z_agp, z_agp, z_egp, 'z' )
+    plot_compare(traj_x_agp, x_agp, x_egp, gp_vx_agp, gp_vx_egp, 'x' )
+    plot_compare(traj_y_agp, y_agp, y_egp, gp_vy_agp, gp_vy_egp, 'y' )
+    plot_compare(traj_z_agp, z_agp, z_egp, gp_vz_agp, gp_vz_egp, 'z' )
     #############################################
 

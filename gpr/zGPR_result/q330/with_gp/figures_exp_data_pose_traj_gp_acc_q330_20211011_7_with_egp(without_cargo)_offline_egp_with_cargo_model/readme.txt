@@ -1,0 +1,6 @@
+gp_difference
+
+error_x_mean:0.010969361673903307
+error_y_mean:0.008804815220576601
+error_z_mean:0.12268301767152283
+

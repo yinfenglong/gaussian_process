@@ -45,7 +45,9 @@ class GpPredict(object):
             self.gpMPCVy = GpMean('vy','y_vy', file_path, npz_name)
             # file_path_2d = os.path.join(os.path.join(os.path.dirname(__file__), '..')) + \
             # '/gpr/q300/20210928_combine_4_random_ExactGPModel_2d'
-            self.gpMPCVz = GpMean2d('vz','y_vz','z', file_path_2d, npz_name)
+            # self.gpMPCVx = GpMean2d('vx', 'y_vx', 'z', file_path_2d, npz_name)
+            # self.gpMPCVy = GpMean2d('vy', 'y_vy', 'z', file_path_2d, npz_name)
+            self.gpMPCVz = GpMean2d('vz', 'y_vz', 'z', file_path_2d, npz_name)
         elif data_type == 'AppGPModel':
             # load gp model
             # self.gpMPCVx = AppGpMean('vx', file_path, npz_name)
@@ -53,9 +55,11 @@ class GpPredict(object):
             # self.gpMPCVz = AppGpMean('vz', file_path, npz_name)
             
             # vz, z -> az
-            self.gpMPCVx = AppGpMean('vx', file_path, npz_name)
-            self.gpMPCVy = AppGpMean('vy', file_path, npz_name)
-            self.gpMPCVz = GpMeanApp2d('vz','y_vz','z', file_path_2d, npz_name)
+            # self.gpMPCVx = AppGpMean('vx', file_path, npz_name)
+            # self.gpMPCVy = AppGpMean('vy', file_path, npz_name)
+            self.gpMPCVx = GpMeanApp2d('vx', 'y_vz', 'z', file_path_2d, npz_name)
+            self.gpMPCVy = GpMeanApp2d('vy', 'y_vz', 'z', file_path_2d, npz_name)
+            self.gpMPCVz = GpMeanApp2d('vz', 'y_vz', 'z', file_path_2d, npz_name)
 
         # subscribers
         robot_odom_sub = rospy.Subscriber('/robot_pose', Odometry, self.robot_odom_callback)
@@ -157,12 +161,15 @@ class GpPredict(object):
             # transform velocity to body frame
             v_b = self.world_to_body( \
                 np.array([self.uav_pose[7], self.uav_pose[8], self.uav_pose[9]]), self.uav_pose[3:7])
-            # gp predict
+            # gp predict: 1 dimension
             gp_vx_b = self.gpMPCVx.predict_mean( np.array([v_b[0]]) )[0]
             gp_vy_b = self.gpMPCVy.predict_mean( np.array([v_b[1]]) )[0]
             # gp_vz_b = self.gpMPCVz.predict_mean( np.array([v_b[2]]) )[0]
 
-            # exact gp model: z with vz
+            # gp model: x, y with vz
+            # gp_vx_b = self.gpMPCVx.predict_mean( np.c_[v_b[0], self.uav_pose[2]] )[0]
+            # gp_vy_b = self.gpMPCVy.predict_mean( np.c_[v_b[1], self.uav_pose[2]] )[0]
+            # gp model: z with vz
             gp_vz_b = self.gpMPCVz.predict_mean( np.c_[v_b[2], self.uav_pose[2]] )[0]
 
             # transform velocity to world frame

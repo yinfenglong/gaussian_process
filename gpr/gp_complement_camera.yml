@@ -1,0 +1,47 @@
+# ./.tmuxinator.yml
+
+name: gp_process
+# root: /home/achilles/test_ma_ws
+root: /home/itm_stud/test_ma_ws/MA_Experiment
+
+windows:
+  - gp:
+      layout: even-horizontal # main-vertical
+      panes:
+        - rosbag_play_sub:
+          - source ros.zsh
+          - export ROS_MASTER_URI=http://192.168.1.151:11311
+          - cd src/itm/itm_quadrotor_node/bagfiles/rosbag_Q330/
+          # - rosbag record -a
+        - pi_camera:
+          - cd src/itm/itm_quadrotor_node/bagfiles/picam
+          - ssh pi@192.168.1.113  # password: berrycam
+          # - raspivid -md 2 -k -ISO 200 -w 1440 -h 1080 -b 20000000 -fps 25 -o 20211012_1_egp.h264
+          # - scp pi@192.168.1.113:~/20211012_1_egp.h264 /home/itm_stud/test_ma_ws/MA_Experiment/src/itm/itm_quadrotor_node/bagfiles/picam
+          # - ffmpeg -framerate 25 -i 20211012_2_appgp.h264 -c copy 20211012_2_appgp.mp4
+        - complement:
+          - source ros.zsh
+          - export ROS_MASTER_URI=http://192.168.1.151:11311
+          # - rostopic pub /gp_acc_complement geometry_msgs/AccelStamped "header:
+          #   seq: 0
+          #   stamp:
+          #     secs: 0
+          #     nsecs: 0
+          #   frame_id: ''
+          # accel:
+          #   linear:
+          #     x: 0.0
+          #     y: 0.0
+          #     z: -0.177 #egp:-0.123
+          #   angular:
+          #     x: 0.0
+          #     y: 0.0
+          #     z: 0.0"
+        - rqt:
+          - source ros.zsh
+          - export ROS_MASTER_URI=http://192.168.1.151:11311
+          - rqt_plot 
+        - roslaunch gp:
+          - source ros.zsh
+          - export ROS_MASTER_URI=http://192.168.1.151:11311
+          # - roslaunch itm_nonlinear_mpc compare_control_with_without_p.launch

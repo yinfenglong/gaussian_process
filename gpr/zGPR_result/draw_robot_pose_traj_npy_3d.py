@@ -156,8 +156,8 @@ if __name__ == '__main__':
     get_gp_acc = True 
     
     np_file = './q330/without_gp/exp_data_pose_traj_gp_acc_q330_20211008_1_without_gp.npy'
-    np_file_AGP = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211011_9_with_appgp.npy'
-    np_file_EGP = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211011_10_with_egp.npy'
+    np_file_AGP = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211012_2_with_appgp.npy'
+    np_file_EGP = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211012_1_with_egp.npy'
     # exp_data_pose_traj_gp_acc_q330_20211011_1_with_appgp
     # exp_data_pose_traj_gp_acc_q330_20211011_2_with_appgp_luo
     # exp_data_pose_traj_gp_acc_q330_20211011_3_with_egp
@@ -166,6 +166,8 @@ if __name__ == '__main__':
     # exp_data_pose_traj_gp_acc_q330_20211011_6_with_egp
     # exp_data_pose_traj_gp_acc_q330_20211011_7_with_egp
     # exp_data_pose_traj_gp_acc_q330_20211011_8_with_appgp
+    # exp_data_pose_traj_gp_acc_q330_20211011_9_with_appgp
+    # exp_data_pose_traj_gp_acc_q330_20211011_10_with_egp
 
     # compare
     # np_file_AGP_2 = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211008_2_with_appgp.npy'

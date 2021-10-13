@@ -184,7 +184,7 @@ if __name__ == '__main__':
                 npy_path = './q330/with_gp/'
                 if not os.path.exists(npy_path):
                     os.makedirs( npy_path )
-                np.save(npy_path + 'exp_data_pose_traj_gp_acc_q330_20211011_10_with_appgp.npy', data_list)
+                np.save(npy_path + 'exp_data_pose_traj_gp_acc_q330_20211012_2_with_appgp.npy', data_list)
                 break
             if sub_obj.command_id == 3: 
                 # data_list.append(np.append(sub_obj.uav_pose.flatten(),

@@ -62,7 +62,7 @@ def load_npy(np_file):
             gp_vz_w.append(exp_data[i][15])
         else:
             pass
-    t = np.arange(0., 0.01*(data_length), 0.01)
+    t = 0.01 * np.arange(data_length)
     # t = np.arange(0., 0.01*(data_length-index), 0.01)
    
     if get_gp_acc:
@@ -97,14 +97,13 @@ def plot_pose_traj( pose, traj, tag ):
     ax.grid(axis='x', which='both')
     title = np_name #sys.argv[2]
     plt.title(title + ':' + tag)
-    manger = plt.get_current_fig_manager()
-    manger.window.showMaximized()
-    fig = plt.gcf()
+    # manger = plt.get_current_fig_manager()
+    # manger.window.showMaximized()
+    # fig = plt.gcf()
     plt.show()
-    # figures_path = './' + folder_name + '/figures_' + np_name + '/'
-    if not os.path.exists(figures_path):
-        os.makedirs( figures_path )
-    fig.savefig( figures_path + np_name + '_' + tag + '.png' )
+    # if not os.path.exists(figures_path):
+    #     os.makedirs( figures_path )
+    # fig.savefig( figures_path + np_name + '_' + tag + '.png' )
 
 def plot_pose_traj_gp( pose, traj, gp_acc, tag ):
     f, ax = plt.subplots(1, 1, figsize=(4, 3))
@@ -134,13 +133,12 @@ def plot_pose_traj_gp( pose, traj, gp_acc, tag ):
     title = np_name #sys.argv[2]
     plt.title(title + ':' + tag)
     manger = plt.get_current_fig_manager()
-    manger.window.showMaximized()
-    fig = plt.gcf()
+    # manger.window.showMaximized()
+    # fig = plt.gcf()
     plt.show()
-    # figures_path = './' + folder_name + '/figures_' + np_name + '/'
-    if not os.path.exists(figures_path):
-        os.makedirs( figures_path )
-    fig.savefig( figures_path + np_name + '_' + tag + '.png' )
+    # if not os.path.exists(figures_path):
+    #     os.makedirs( figures_path )
+    # fig.savefig( figures_path + np_name + '_' + tag + '.png' )
 
 def plot_error():
     # print error_mean, plot error between pose and trajectory
@@ -163,11 +161,11 @@ def plot_error():
     plt.plot( t, error, 'r' )
     plt.legend(labels=['distance between pose and trajectory'])
     plt.title( np_name )
-    manger = plt.get_current_fig_manager()
-    manger.window.showMaximized()
-    fig = plt.gcf()
+    # manger = plt.get_current_fig_manager()
+    # manger.window.showMaximized()
+    # fig = plt.gcf()
     plt.show()
-    fig.savefig( './' + folder_name + '/error/' + np_name + '.png' )
+    # fig.savefig( './' + folder_name + '/error/' + np_name + '.png' )
 
 if __name__ == '__main__':
     get_gp_acc = True 
@@ -192,29 +190,29 @@ if __name__ == '__main__':
     print("x:{}".format(len(x)))
     print("traj_x:{}".format(len(traj_x)))
 
-    if get_gp_acc:
-        f, ax = plt.subplots(1, 1, figsize=(4, 3))
-        plt.plot(t, gp_vx_w, 'r-', t, gp_vy_w, 'cyan', t, gp_vz_w, 'b-.')
-        plt.legend(labels=['gp_ax_w', 'gp_ay_w', 'gp_az_w'])
-        # y_grid
-        ax.yaxis.set_major_locator(plt.MultipleLocator(0.1))
-        ax.yaxis.set_minor_locator(plt.MultipleLocator(0.05))
-        ax.grid(axis='y', which='both')
-        # x_grid
-        ax.xaxis.set_major_locator(plt.MultipleLocator(5))
-        ax.xaxis.set_minor_locator(plt.MultipleLocator(1))
-        ax.grid(axis='x', which='both')
-        plt.title( np_name )
-        manger = plt.get_current_fig_manager()
-        manger.window.showMaximized()
-        fig = plt.gcf()
-        plt.show()
-        # figures_path = './' + folder_name + '/figures_' + np_name + '/'
-        if not os.path.exists(figures_path):
-            os.makedirs( figures_path )
-        fig.savefig( figures_path + np_name + '.png' )
-    else:
-        pass
+    # if get_gp_acc:
+    #     f, ax = plt.subplots(1, 1, figsize=(4, 3))
+    #     plt.plot(t, gp_vx_w, 'r-', t, gp_vy_w, 'cyan', t, gp_vz_w, 'b-.')
+    #     plt.legend(labels=['gp_ax_w', 'gp_ay_w', 'gp_az_w'])
+    #     # y_grid
+    #     ax.yaxis.set_major_locator(plt.MultipleLocator(0.1))
+    #     ax.yaxis.set_minor_locator(plt.MultipleLocator(0.05))
+    #     ax.grid(axis='y', which='both')
+    #     # x_grid
+    #     ax.xaxis.set_major_locator(plt.MultipleLocator(5))
+    #     ax.xaxis.set_minor_locator(plt.MultipleLocator(1))
+    #     ax.grid(axis='x', which='both')
+    #     plt.title( np_name )
+    #     manger = plt.get_current_fig_manager()
+    #     manger.window.showMaximized()
+    #     fig = plt.gcf()
+    #     plt.show()
+    #     # figures_path = './' + folder_name + '/figures_' + np_name + '/'
+    #     if not os.path.exists(figures_path):
+    #         os.makedirs( figures_path )
+    #     fig.savefig( figures_path + np_name + '.png' )
+    # else:
+    #     pass
 
     plot_error()
 

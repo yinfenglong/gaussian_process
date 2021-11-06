@@ -22,25 +22,28 @@ from gpr_GPyTorch_approximate_predict_2d import GpMeanApp2d
 def load_npy(np_file):
     exp_data = np.load(np_file, allow_pickle=True)
     model_path = os.path.join(os.path.join(os.path.dirname(__file__), '..')) + \
-    '/q330/20211008_combine_with_cargo_egp'
+    '/q330/20211005_1234_random_exact'
     model_2d_path = os.path.join(os.path.join(os.path.dirname(__file__), '..')) + \
-    '/q330/20211008_combine_with_cargo_appgp_2d'
+    '/q330/20211005_1234_random_exact_2d'
+    # model_2d_path = os.path.join(os.path.join(os.path.dirname(__file__), '..')) + \
+    # '/q330/20211008_combine_with_cargo_appgp_2d'
     # 20211008_combine_with_cargo_appgp_2d
     # 20211008_combine_with_cargo_egp_2d
     npz_name = 'data_for_gp_y.npz'
     # gpMPCVx = GpMean('vx','y_vx', model_path, npz_name)
     # gpMPCVy = GpMean('vy','y_vy', model_path, npz_name)
-    # gpMPCVx = GpMean('vx','y_vx', 'z', model_2d_path, npz_name)
-    # gpMPCVy = GpMean('vy','y_vy', 'z', model_2d_path, npz_name)
-    # gpMPCVz = GpMean2d('vz','y_vz','z', model_2d_path, npz_name)
+    # gpMPCVz = GpMean('vz','y_vz', model_path, npz_name)
+    gpMPCVx = GpMean2d('vx','y_vx', 'z', model_2d_path, npz_name)
+    gpMPCVy = GpMean2d('vy','y_vy', 'z', model_2d_path, npz_name)
+    gpMPCVz = GpMean2d('vz','y_vz','z', model_2d_path, npz_name)
 
     # Approximate GP Model
     # npz_name = 'data_for_gp_y.npz'
     # gpMPCVx = GpMeanApp('vx','y_vx', model_path, npz_name)
     # gpMPCVy = GpMeanApp('vy','y_vy', model_path, npz_name)
-    gpMPCVx = GpMeanApp2d('vx','y_vx', 'z', model_2d_path, npz_name)
-    gpMPCVy = GpMeanApp2d('vy','y_vy', 'z', model_2d_path, npz_name)
-    gpMPCVz = GpMeanApp2d('vz','y_vz', 'z', model_2d_path, npz_name)
+    # gpMPCVx = GpMeanApp2d('vx','y_vx', 'z', model_2d_path, npz_name)
+    # gpMPCVy = GpMeanApp2d('vy','y_vy', 'z', model_2d_path, npz_name)
+    # gpMPCVz = GpMeanApp2d('vz','y_vz', 'z', model_2d_path, npz_name)
 
     gp_offline = []
     for data in exp_data:
@@ -139,8 +142,16 @@ def quaternion_inverse( q):
 
 def plot_pose_traj_gp( pose, traj, gp_acc, tag, gp_offline_i ):
     f, ax = plt.subplots(1, 1, figsize=(4, 3))
-    plt.plot(t, pose, 'r', t, traj, 'b', t, gp_acc, 'k', t, gp_offline_i, 'g')
-    plt.legend(labels=['robot_pose', 'robot_traj', 'gp_acc', 'gp_offline'])
+    plt.plot(t, pose, 'r', t, traj, 'b')
+    plt.legend(labels=['robot_pose', 'robot_traj'])
+    ax2 = ax.twinx()
+    ax2.plot(t, gp_acc,'m:')
+    ax2.plot(t, gp_offline_i, 'k:')
+    ax2.legend([
+        'gp_acc',
+        'gp_offline',
+    ], loc=2)
+    # ax2.set_ylim( [-0.2,0.2])
     data_range = np.max(pose) - np.min(pose)
     if data_range < 0.3:
         maloc = 0.02 
@@ -164,14 +175,15 @@ def plot_pose_traj_gp( pose, traj, gp_acc, tag, gp_offline_i ):
     ax.grid(axis='x', which='both')
     title = np_name #sys.argv[2]
     plt.title(title + ':' + tag)
-    # manger = plt.get_current_fig_manager()
-    # manger.window.showMaximized()
-    # fig = plt.gcf()
+    manger = plt.get_current_fig_manager()
+    manger.window.showMaximized()
+    fig = plt.gcf()
     plt.show()
     # figures_path = './' + folder_name + '/figures' + np_name + '/'
     if not os.path.exists(figures_path):
         os.makedirs( figures_path )
     # fig.savefig( figures_path + np_name + '_' + tag + '.png' )
+    fig.savefig('../../thesis_figures/svg/' + 'figures' + '_' + tag + '.svg', format='svg', dpi=800 )
 
 def plot_error():
     # print error_mean, plot error between pose and trajectory
@@ -184,24 +196,26 @@ def plot_error():
     # error = np.sqrt( (x_arr - traj_x_arr)**2 + (y_arr - traj_y_arr)**2 + (z_arr - traj_z_arr)**2 )
     error_x = np.abs(gp_online_x - gp_offline_x)
     error_x_mean = np.mean( error_x )
-    print("error_x_mean:{}".format(error_x_mean))
+    print("difference_x_mean:{}".format(error_x_mean))
     error_y = np.abs(gp_online_y - gp_offline_y)
     error_y_mean = np.mean( error_y )
-    print("error_y_mean:{}".format(error_y_mean))
+    print("difference_y_mean:{}".format(error_y_mean))
     error_z = np.abs(gp_online_z - gp_offline_z)
     error_z_mean = np.mean( error_z )
-    print("error_z_mean:{}".format(error_z_mean))
+    print("difference_z_mean:{}".format(error_z_mean))
     # error_mean = np.mean(error)
     # print("error_mean:{}".format(error_mean))
     f, ax = plt.subplots(1, 1, figsize=(4, 3))
     plt.plot( t, error_x, 'r', t, error_y, 'b', t, error_z, 'g' )
-    plt.legend(labels=['gp_error_x', 'gp_error_y', 'gp_error_z'])
+    ax.set_ylim( [0,0.3])
+    plt.legend(labels=['gp_difference_x', 'gp_difference_y', 'gp_difference_z'])
     plt.title( np_name )
-    # manger = plt.get_current_fig_manager()
-    # manger.window.showMaximized()
-    # fig = plt.gcf()
+    manger = plt.get_current_fig_manager()
+    manger.window.showMaximized()
+    fig = plt.gcf()
     plt.show()
     # fig.savefig( './' + folder_name + '/error/' + np_name + '.png' 
+    fig.savefig('../../thesis_figures/svg/' + 'difference.svg', format='svg', dpi=800 )
 
 if __name__ == '__main__':
     get_gp_acc = True 
@@ -227,6 +241,7 @@ if __name__ == '__main__':
     print("traj_x:{}".format(len(traj_x)))
 
     gp_offline = np.array(gp_offline)
+    np.save('egp_with_z.npy', gp_offline)
     print("gp_offline.shape:{}".format(gp_offline.shape))
     plot_pose_traj_gp(x, traj_x, gp_vx_w, 'x', gp_offline[:,0])
     plot_pose_traj_gp(y, traj_y, gp_vy_w, 'y', gp_offline[:,1])

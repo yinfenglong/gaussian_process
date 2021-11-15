@@ -4,7 +4,7 @@
 Author: Wei Luo
 Date: 2021-03-14 22:01:33
 LastEditors: Wei Luo
-LastEditTime: 2021-11-15 18:10:41
+LastEditTime: 2021-11-15 18:32:20
 Note: Note
 '''
 
@@ -221,8 +221,8 @@ class QuadOptimizer:
             self.solver.set(0, 'lbx', x_current)
             self.solver.set(0, 'ubx', x_current)
             # set parameter
-            for j in range(0, self.N):
-                self.solver.set(j, 'p', np.array([0.0, 0.0, -0.286]))
+            for j in range(0, self.N + 1):
+                self.solver.set(j, 'p', np.array([0.0, 0.0, 0]))  # -0.286
                 # self.acados_ocp_solver[use_model].set(j, 'p', np.array([0.0] * (len(gp_state) + 1)))
 
             status = self.solver.solve()

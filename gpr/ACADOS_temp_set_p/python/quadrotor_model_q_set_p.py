@@ -4,7 +4,7 @@
 Author: Wei Luo
 Date: 2021-03-26 12:03:00
 LastEditors: Wei Luo
-LastEditTime: 2021-11-15 18:12:09
+LastEditTime: 2021-11-15 18:34:36
 '''
 import casadi as ca
 import numpy as np
@@ -61,7 +61,7 @@ class QuadRotorSetPModel(object):
             2 * (qw_ * qy_ + qx_ * qz_) * thrust_ref_ + gp_vx_,  # 1.031 *
             2 * (qy_ * qz_ - qw_ * qx_) * thrust_ref_ + gp_vy_,  #
             (qw_ * qw_ - qx_ * qx_ - qy_ * qy_ + qz_ * qz_) * thrust_ref_ -
-            g_ * 1.659 / 1.709 + gp_vz_
+            g_ + gp_vz_ * 0 - 0.29
         ]
 
         # B_x = np.array([[0., 0., 0.], [0., 0., 0.], [0., 0., 0.], [0., 0., 0.],

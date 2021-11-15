@@ -4,7 +4,7 @@
 Author: Wei Luo
 Date: 2021-09-28 18:27:41
 LastEditors: Wei Luo
-LastEditTime: 2021-11-15 18:44:05
+LastEditTime: 2021-11-15 21:51:28
 Note: Note
 '''
 from quadrotor_model_q import QuadRotorModel
@@ -14,8 +14,10 @@ import numpy as np
 
 if __name__ == '__main__':
     # quad_model = QuadRotorModel()
-    quad_model = QuadRotorSetPModel(mass_offset=0.29)
-    quad_model_p = QuadRotorSetPModel(mass_offset=0.29)
+    # quad_model = QuadRotorSetPModel(mass_offset=0.29)
+    # quad_model_p = QuadRotorSetPModel(mass_offset=0.29)
+    quad_model = QuadRotorModel()
+    quad_model_p = QuadRotorModel()
     opt = QuadOptimizer(quad_model.model,
                         quad_model_p.model,
                         quad_model.constraints,

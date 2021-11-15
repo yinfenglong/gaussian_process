@@ -46,24 +46,24 @@ int quadrotor_q_expl_ode_fun(const real_t** arg, real_t** res, int* iw, real_t* 
 int quadrotor_q_expl_ode_fun_work(int *, int *, int *, int *);
 const int *quadrotor_q_expl_ode_fun_sparsity_in(int);
 const int *quadrotor_q_expl_ode_fun_sparsity_out(int);
-int quadrotor_q_expl_ode_fun_n_in();
-int quadrotor_q_expl_ode_fun_n_out();
+int quadrotor_q_expl_ode_fun_n_in(void);
+int quadrotor_q_expl_ode_fun_n_out(void);
 
 // explicit forward VDE
 int quadrotor_q_expl_vde_forw(const real_t** arg, real_t** res, int* iw, real_t* w, void *mem);
 int quadrotor_q_expl_vde_forw_work(int *, int *, int *, int *);
 const int *quadrotor_q_expl_vde_forw_sparsity_in(int);
 const int *quadrotor_q_expl_vde_forw_sparsity_out(int);
-int quadrotor_q_expl_vde_forw_n_in();
-int quadrotor_q_expl_vde_forw_n_out();
+int quadrotor_q_expl_vde_forw_n_in(void);
+int quadrotor_q_expl_vde_forw_n_out(void);
 
 // explicit adjoint VDE
 int quadrotor_q_expl_vde_adj(const real_t** arg, real_t** res, int* iw, real_t* w, void *mem);
 int quadrotor_q_expl_vde_adj_work(int *, int *, int *, int *);
 const int *quadrotor_q_expl_vde_adj_sparsity_in(int);
 const int *quadrotor_q_expl_vde_adj_sparsity_out(int);
-int quadrotor_q_expl_vde_adj_n_in();
-int quadrotor_q_expl_vde_adj_n_out();
+int quadrotor_q_expl_vde_adj_n_in(void);
+int quadrotor_q_expl_vde_adj_n_out(void);
 
 
 

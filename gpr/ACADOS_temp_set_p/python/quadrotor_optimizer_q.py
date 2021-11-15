@@ -4,7 +4,7 @@
 Author: Wei Luo
 Date: 2021-03-14 22:01:33
 LastEditors: Wei Luo
-LastEditTime: 2021-11-15 21:43:46
+LastEditTime: 2021-11-15 22:08:08
 Note: Note
 '''
 
@@ -104,7 +104,7 @@ class QuadOptimizer:
 
         P_m_ = np.diag([10.0, 10.0, 10.0, 0.05, 0.05, 0.05])  # only p and v
 
-        R_m_ = np.diag([5.0, 5.0, 5.0, 1.0])  # w, t
+        R_m_ = np.diag([5.0, 5.0, 5.0, 0.1])  # w, t
 
         # Ensure current working directory is current folder
         # cost type

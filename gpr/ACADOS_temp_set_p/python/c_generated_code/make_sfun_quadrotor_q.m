@@ -31,33 +31,39 @@
 % POSSIBILITY OF SUCH DAMAGE.;
 %
 
-SOURCES = [ ...
-            'quadrotor_q_model/quadrotor_q_expl_ode_fun.c ', ...
-            'quadrotor_q_model/quadrotor_q_expl_vde_forw.c ',...
-            'acados_solver_sfunction_quadrotor_q.c ', ...
-            'acados_solver_quadrotor_q.c '
-          ];
+SOURCES = { ...
+            'quadrotor_q_model/quadrotor_q_expl_ode_fun.c', ...
+            'quadrotor_q_model/quadrotor_q_expl_vde_forw.c',...
+            'acados_solver_sfunction_quadrotor_q.c', ...
+            'acados_solver_quadrotor_q.c'
+          };
 
-INC_PATH = '/home/achilles/acados/include';
+INC_PATH = '/home/arnold/Develop/github_ws/acados/include';
 
-INCS = [ ' -I', fullfile(INC_PATH, 'blasfeo', 'include'), ...
-         ' -I', fullfile(INC_PATH, 'hpipm', 'include'), ...
-        ' -I', INC_PATH, ' -I', fullfile(INC_PATH, 'acados'), ' '];
-
-
-
-CFLAGS  = ' -O';
+INCS = {['-I', fullfile(INC_PATH, 'blasfeo', 'include')], ...
+        ['-I', fullfile(INC_PATH, 'hpipm', 'include')], ...
+        ['-I', fullfile(INC_PATH, 'acados')], ...
+        ['-I', fullfile(INC_PATH)]};
 
 
 
-LIB_PATH = '/home/achilles/acados/lib';
+CFLAGS = 'CFLAGS=$CFLAGS';
+LDFLAGS = 'LDFLAGS=$LDFLAGS';
+COMPFLAGS = 'COMPFLAGS=$COMPFLAGS';
+COMPDEFINES = 'COMPDEFINES=$COMPDEFINES';
 
-LIBS = '-lacados -lhpipm -lblasfeo';
 
 
+LIB_PATH = ['-L', fullfile('/home/arnold/Develop/github_ws/acados/lib')];
 
-eval( [ 'mex -v -output  acados_solver_sfunction_quadrotor_q ', ...
-    CFLAGS, INCS, ' ', SOURCES, ' -L', LIB_PATH, ' ', LIBS ]);
+LIBS = {'-lacados', '-lhpipm', '-lblasfeo'};
+
+% acados linking libraries and flags
+    
+
+mex('-v', '-O', CFLAGS, LDFLAGS, COMPFLAGS, COMPDEFINES, INCS{:}, ...
+    LIB_PATH, LIBS{:}, SOURCES{:}, ...
+    '-output', 'acados_solver_sfunction_quadrotor_q' );
 
 fprintf( [ '\n\nSuccessfully created sfunction:\nacados_solver_sfunction_quadrotor_q', '.', ...
     eval('mexext')] );

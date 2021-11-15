@@ -4,7 +4,7 @@
 Author: Wei Luo
 Date: 2021-03-14 22:01:33
 LastEditors: Wei Luo
-LastEditTime: 2021-11-15 18:43:54
+LastEditTime: 2021-11-15 20:44:42
 Note: Note
 '''
 
@@ -58,6 +58,8 @@ class QuadOptimizer:
             n_params_p,
             t_horizon,
         )
+        self.acados_source_path = os.environ['ACADOS_SOURCE_DIR']
+        sys.path.insert(0, self.acados_source_path)
 
         # compile acados ocp
         json_file_p = os.path.join('./' + model_p.name + '_acados_ocp.json')
@@ -80,13 +82,11 @@ class QuadOptimizer:
         n_params,
         t_horizon,
     ):
-        acados_source_path = os.environ['ACADOS_SOURCE_DIR']
-        sys.path.insert(0, acados_source_path)
 
         # create OCP
         ocp = AcadosOcp()
-        ocp.acados_include_path = acados_source_path + '/include'
-        ocp.acados_lib_path = acados_source_path + '/lib'
+        ocp.acados_include_path = self.acados_source_path + '/include'
+        ocp.acados_lib_path = self.acados_source_path + '/lib'
         ocp.model = model
         # # AcadosSimSolver need ocp.dims.nx
         # ocp.dims.nx = self.nx

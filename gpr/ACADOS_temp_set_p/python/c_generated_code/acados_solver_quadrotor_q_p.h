@@ -37,12 +37,43 @@
 #include "acados_c/ocp_nlp_interface.h"
 #include "acados_c/external_function_interface.h"
 
+#define QUADROTOR_Q_P_NX     10
+#define QUADROTOR_Q_P_NZ     0
+#define QUADROTOR_Q_P_NU     4
+#define QUADROTOR_Q_P_NP     3
+#define QUADROTOR_Q_P_NBX    0
+#define QUADROTOR_Q_P_NBX0   10
+#define QUADROTOR_Q_P_NBU    4
+#define QUADROTOR_Q_P_NSBX   0
+#define QUADROTOR_Q_P_NSBU   0
+#define QUADROTOR_Q_P_NSH    0
+#define QUADROTOR_Q_P_NSG    0
+#define QUADROTOR_Q_P_NSPHI  0
+#define QUADROTOR_Q_P_NSHN   0
+#define QUADROTOR_Q_P_NSGN   0
+#define QUADROTOR_Q_P_NSPHIN 0
+#define QUADROTOR_Q_P_NSBXN  0
+#define QUADROTOR_Q_P_NS     0
+#define QUADROTOR_Q_P_NSN    0
+#define QUADROTOR_Q_P_NG     0
+#define QUADROTOR_Q_P_NBXN   0
+#define QUADROTOR_Q_P_NGN    0
+#define QUADROTOR_Q_P_NY0    14
+#define QUADROTOR_Q_P_NY     14
+#define QUADROTOR_Q_P_NYN    6
+#define QUADROTOR_Q_P_N      20
+#define QUADROTOR_Q_P_NH     0
+#define QUADROTOR_Q_P_NPHI   0
+#define QUADROTOR_Q_P_NHN    0
+#define QUADROTOR_Q_P_NPHIN  0
+#define QUADROTOR_Q_P_NR     0
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // ** capsule for solver data **
-typedef struct nlp_solver_capsule
+typedef struct quadrotor_q_p_solver_capsule
 {
     // acados objects
     ocp_nlp_in *nlp_in;
@@ -58,72 +89,43 @@ typedef struct nlp_solver_capsule
 
     /* external functions */
     // dynamics
+
     external_function_param_casadi *forw_vde_casadi;
     external_function_param_casadi *expl_ode_fun;
-    external_function_param_casadi *hess_vde_casadi;
-    external_function_param_casadi *impl_dae_fun;
-    external_function_param_casadi *impl_dae_fun_jac_x_xdot_z;
-    external_function_param_casadi *impl_dae_jac_x_xdot_u_z;
-    external_function_param_casadi *impl_dae_hess;
-    external_function_param_casadi *gnsf_phi_fun;
-    external_function_param_casadi *gnsf_phi_fun_jac_y;
-    external_function_param_casadi *gnsf_phi_jac_y_uhat;
-    external_function_param_casadi *gnsf_f_lo_jac_x1_x1dot_u_z;
-    external_function_param_casadi *gnsf_get_matrices_fun;
-    external_function_param_casadi *discr_dyn_phi_fun;
-    external_function_param_casadi *discr_dyn_phi_fun_jac_ut_xt;
-    external_function_param_casadi *discr_dyn_phi_fun_jac_ut_xt_hess;
+
+
+
 
     // cost
-    external_function_param_casadi *cost_y_fun;
-    external_function_param_casadi *cost_y_fun_jac_ut_xt;
-    external_function_param_casadi *cost_y_hess;
-    external_function_param_casadi *ext_cost_fun;
-    external_function_param_casadi *ext_cost_fun_jac;
-    external_function_param_casadi *ext_cost_fun_jac_hess;
 
-    external_function_param_casadi cost_y_0_fun;
-    external_function_param_casadi cost_y_0_fun_jac_ut_xt;
-    external_function_param_casadi cost_y_0_hess;
-    external_function_param_casadi ext_cost_0_fun;
-    external_function_param_casadi ext_cost_0_fun_jac;
-    external_function_param_casadi ext_cost_0_fun_jac_hess;
 
-    external_function_param_casadi cost_y_e_fun;
-    external_function_param_casadi cost_y_e_fun_jac_ut_xt;
-    external_function_param_casadi cost_y_e_hess;
-    external_function_param_casadi ext_cost_e_fun;
-    external_function_param_casadi ext_cost_e_fun_jac;
-    external_function_param_casadi ext_cost_e_fun_jac_hess;
+
+
+
 
     // constraints
-    external_function_param_casadi *phi_constraint;
-    external_function_param_casadi *nl_constr_h_fun_jac;
-    external_function_param_casadi *nl_constr_h_fun;
-    external_function_param_casadi *nl_constr_h_fun_jac_hess;
 
-    external_function_param_casadi phi_e_constraint;
-    external_function_param_casadi nl_constr_h_e_fun_jac;
-    external_function_param_casadi nl_constr_h_e_fun;
-    external_function_param_casadi nl_constr_h_e_fun_jac_hess;
-} nlp_solver_capsule;
 
-nlp_solver_capsule * quadrotor_q_p_acados_create_capsule();
-int quadrotor_q_p_acados_free_capsule(nlp_solver_capsule *capsule);
 
-int quadrotor_q_p_acados_create(nlp_solver_capsule * capsule);
-int quadrotor_q_p_acados_update_params(nlp_solver_capsule * capsule, int stage, double *value, int np);
-int quadrotor_q_p_acados_solve(nlp_solver_capsule * capsule);
-int quadrotor_q_p_acados_free(nlp_solver_capsule * capsule);
-void quadrotor_q_p_acados_print_stats(nlp_solver_capsule * capsule);
 
-ocp_nlp_in *quadrotor_q_p_acados_get_nlp_in(nlp_solver_capsule * capsule);
-ocp_nlp_out *quadrotor_q_p_acados_get_nlp_out(nlp_solver_capsule * capsule);
-ocp_nlp_solver *quadrotor_q_p_acados_get_nlp_solver(nlp_solver_capsule * capsule);
-ocp_nlp_config *quadrotor_q_p_acados_get_nlp_config(nlp_solver_capsule * capsule);
-void *quadrotor_q_p_acados_get_nlp_opts(nlp_solver_capsule * capsule);
-ocp_nlp_dims *quadrotor_q_p_acados_get_nlp_dims(nlp_solver_capsule * capsule);
-ocp_nlp_plan *quadrotor_q_p_acados_get_nlp_plan(nlp_solver_capsule * capsule);
+} quadrotor_q_p_solver_capsule;
+
+quadrotor_q_p_solver_capsule * quadrotor_q_p_acados_create_capsule(void);
+int quadrotor_q_p_acados_free_capsule(quadrotor_q_p_solver_capsule *capsule);
+
+int quadrotor_q_p_acados_create(quadrotor_q_p_solver_capsule * capsule);
+int quadrotor_q_p_acados_update_params(quadrotor_q_p_solver_capsule * capsule, int stage, double *value, int np);
+int quadrotor_q_p_acados_solve(quadrotor_q_p_solver_capsule * capsule);
+int quadrotor_q_p_acados_free(quadrotor_q_p_solver_capsule * capsule);
+void quadrotor_q_p_acados_print_stats(quadrotor_q_p_solver_capsule * capsule);
+
+ocp_nlp_in *quadrotor_q_p_acados_get_nlp_in(quadrotor_q_p_solver_capsule * capsule);
+ocp_nlp_out *quadrotor_q_p_acados_get_nlp_out(quadrotor_q_p_solver_capsule * capsule);
+ocp_nlp_solver *quadrotor_q_p_acados_get_nlp_solver(quadrotor_q_p_solver_capsule * capsule);
+ocp_nlp_config *quadrotor_q_p_acados_get_nlp_config(quadrotor_q_p_solver_capsule * capsule);
+void *quadrotor_q_p_acados_get_nlp_opts(quadrotor_q_p_solver_capsule * capsule);
+ocp_nlp_dims *quadrotor_q_p_acados_get_nlp_dims(quadrotor_q_p_solver_capsule * capsule);
+ocp_nlp_plan *quadrotor_q_p_acados_get_nlp_plan(quadrotor_q_p_solver_capsule * capsule);
 
 #ifdef __cplusplus
 } /* extern "C" */

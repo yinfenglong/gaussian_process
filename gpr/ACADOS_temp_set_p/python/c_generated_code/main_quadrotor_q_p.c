@@ -46,7 +46,7 @@
 int main()
 {
 
-    nlp_solver_capsule *acados_ocp_capsule = quadrotor_q_p_acados_create_capsule();
+    quadrotor_q_p_solver_capsule *acados_ocp_capsule = quadrotor_q_p_acados_create_capsule();
     int status = quadrotor_q_p_acados_create(acados_ocp_capsule);
 
     if (status)

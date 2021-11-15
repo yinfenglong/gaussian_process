@@ -4,7 +4,7 @@
 Author: Wei Luo
 Date: 2021-03-14 22:01:33
 LastEditors: Wei Luo
-LastEditTime: 2021-11-15 20:44:42
+LastEditTime: 2021-11-15 21:43:46
 Note: Note
 '''
 
@@ -45,6 +45,8 @@ class QuadOptimizer:
         n_params = model_ori.p.size()[0] if isinstance(model_ori.p,
                                                        ca.SX) else 0
         n_params_p = model_p.p.size()[0] if isinstance(model_p.p, ca.SX) else 0
+        self.acados_source_path = os.environ['ACADOS_SOURCE_DIR']
+        sys.path.insert(0, self.acados_source_path)
 
         # create OCP
         ocp_ori = self.create_ocp(model_ori, constraints, nx, nu, ny, n_params,
@@ -58,12 +60,10 @@ class QuadOptimizer:
             n_params_p,
             t_horizon,
         )
-        self.acados_source_path = os.environ['ACADOS_SOURCE_DIR']
-        sys.path.insert(0, self.acados_source_path)
 
         # compile acados ocp
         json_file_p = os.path.join('./' + model_p.name + '_acados_ocp.json')
-        self.solver = AcadosOcpSolver(ocp_p, json_file=json_file_p)
+        # self.solver = AcadosOcpSolver(ocp_p, json_file=json_file_p)
 
         # compile sim solver (without parameter)
         json_file_ori = os.path.join('./' + model_ori.name +
@@ -208,31 +208,46 @@ class QuadOptimizer:
         # current_trajectory = np.array([1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
         t1 = time.time()
         while (mpc_iter < sim_time / dt and mpc_iter < 208):
+            # # define cost constraints
+            # self.solver.set(
+            #     self.N, 'yref',
+            #     np.concatenate(
+            #         (current_trajectory[-1, :3], current_trajectory[-1, -3:])))
+            # # self.solver.set(0, 'yref', np.concatenate([x_current, u_des]))
+            # for i in range(self.N):
+            #     self.solver.set(i, 'yref',
+            #                     np.concatenate([current_trajectory[i], u_des]))
+
+            # self.solver.set(0, 'lbx', x_current)
+            # self.solver.set(0, 'ubx', x_current)
+            # # set parameter
+            # for j in range(0, self.N + 1):
+            #     self.solver.set(j, 'p', np.array([0.0, 0.0, 0]))  # -0.286
+            #     # self.acados_ocp_solver[use_model].set(j, 'p', np.array([0.0] * (len(gp_state) + 1)))
+
+            # status = self.solver.solve()
+            # if status != 0:
+            #     raise Exception(
+            #         'acados acados_ocp_solver returned status {}. Exiting.'.
+            #         format(status))
+            # simU[mpc_iter, :] = self.solver.get(0, 'u')
+            # simU[mpc_iter, 3] = simU[mpc_iter, 3]  # 0.971 1.659 / 1.709 *
+
             # define cost constraints
-            self.solver.set(
+            self.solver_org.set(
                 self.N, 'yref',
                 np.concatenate(
                     (current_trajectory[-1, :3], current_trajectory[-1, -3:])))
             # self.solver.set(0, 'yref', np.concatenate([x_current, u_des]))
             for i in range(self.N):
-                self.solver.set(i, 'yref',
-                                np.concatenate([current_trajectory[i], u_des]))
+                self.solver_org.set(
+                    i, 'yref', np.concatenate([current_trajectory[i], u_des]))
 
-            self.solver.set(0, 'lbx', x_current)
-            self.solver.set(0, 'ubx', x_current)
-            # set parameter
-            for j in range(0, self.N + 1):
-                self.solver.set(j, 'p', np.array([0.0, 0.0, 0]))  # -0.286
-                # self.acados_ocp_solver[use_model].set(j, 'p', np.array([0.0] * (len(gp_state) + 1)))
-
-            status = self.solver.solve()
-            if status != 0:
-                raise Exception(
-                    'acados acados_ocp_solver returned status {}. Exiting.'.
-                    format(status))
-            simU[mpc_iter, :] = self.solver.get(0, 'u')
+            self.solver_org.set(0, 'lbx', x_current)
+            self.solver_org.set(0, 'ubx', x_current)
+            status = self.solver_org.solve()
+            simU[mpc_iter, :] = self.solver_org.get(0, 'u')
             simU[mpc_iter, 3] = simU[mpc_iter, 3]  # 0.971 1.659 / 1.709 *
-
             # print(current_trajectory)
             # print('-----')
             # for i in range(self.N):

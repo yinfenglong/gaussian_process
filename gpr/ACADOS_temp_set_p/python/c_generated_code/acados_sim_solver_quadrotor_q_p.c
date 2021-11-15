@@ -73,6 +73,7 @@ int quadrotor_q_p_acados_sim_create(sim_solver_capsule * capsule)
     int nx = 10;
     int nu = 4;
     int nz = 0;
+    bool tmp_bool;
 
     
     double Tsim = 0.1;
@@ -119,15 +120,18 @@ int quadrotor_q_p_acados_sim_create(sim_solver_capsule * capsule)
     // sim opts
     sim_opts *quadrotor_q_p_sim_opts = sim_opts_create(quadrotor_q_p_sim_config, quadrotor_q_p_sim_dims);
     capsule->acados_sim_opts = quadrotor_q_p_sim_opts;
-    int tmp_int = 4;
+    int tmp_int = 3;
+    sim_opts_set(quadrotor_q_p_sim_config, quadrotor_q_p_sim_opts, "newton_iter", &tmp_int);
+    sim_collocation_type collocation_type = GAUSS_LEGENDRE;
+    sim_opts_set(quadrotor_q_p_sim_config, quadrotor_q_p_sim_opts, "collocation_type", &collocation_type);
+
+ 
+    tmp_int = 4;
     sim_opts_set(quadrotor_q_p_sim_config, quadrotor_q_p_sim_opts, "num_stages", &tmp_int);
     tmp_int = 1;
     sim_opts_set(quadrotor_q_p_sim_config, quadrotor_q_p_sim_opts, "num_steps", &tmp_int);
-    tmp_int = 3;
-    sim_opts_set(quadrotor_q_p_sim_config, quadrotor_q_p_sim_opts, "newton_iter", &tmp_int);
-    bool tmp_bool = false;
+    tmp_bool = 0;
     sim_opts_set(quadrotor_q_p_sim_config, quadrotor_q_p_sim_opts, "jac_reuse", &tmp_bool);
-
 
 
     // sim in / out
@@ -150,17 +154,14 @@ int quadrotor_q_p_acados_sim_create(sim_solver_capsule * capsule)
                                                quadrotor_q_p_sim_dims, quadrotor_q_p_sim_opts);
     capsule->acados_sim_solver = quadrotor_q_p_sim_solver;
 
+
     /* initialize parameter values */
+    double* p = calloc(3, sizeof(double));
     
-    // initialize parameters to nominal value
-    double p[3];
-    
-    p[0] = 0;
-    p[1] = 0;
-    p[2] = 0;
-    capsule->sim_forw_vde_casadi[0].set_param(capsule->sim_forw_vde_casadi, p);
-    capsule->sim_expl_ode_fun_casadi[0].set_param(capsule->sim_expl_ode_fun_casadi, p);
-    
+
+    quadrotor_q_p_acados_sim_update_params(capsule, p, 3);
+    free(p);
+
 
     /* initialize input */
     // x

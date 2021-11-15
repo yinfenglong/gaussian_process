@@ -4,7 +4,7 @@
 Author: Wei Luo
 Date: 2021-03-26 12:03:00
 LastEditors: Wei Luo
-LastEditTime: 2021-11-15 18:30:31
+LastEditTime: 2021-11-15 18:38:32
 Note: Note
 '''
 import casadi as ca
@@ -49,7 +49,7 @@ class QuadRotorModel(object):
             2 * (qw_ * qy_ + qx_ * qz_) * thrust_ref_,
             2 * (qy_ * qz_ - qw_ * qx_) * thrust_ref_,
             (qw_ * qw_ - qx_ * qx_ - qy_ * qy_ + qz_ * qz_) * thrust_ref_ -
-            g_ - 0.29
+            g_ - 0.
             # 2*(qw_*qy_ + qx_*qz_) * 1.031 * thrust_ref_,
             # 2*(qy_*qz_ - qw_*qx_) * 1.031 *thrust_ref_,
             # (qw_*qw_ - qx_*qx_ - qy_*qy_ + qz_*qz_) * 1.031 *thrust_ref_ - g_

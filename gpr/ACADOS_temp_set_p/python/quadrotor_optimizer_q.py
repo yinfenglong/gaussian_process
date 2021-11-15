@@ -4,7 +4,7 @@
 Author: Wei Luo
 Date: 2021-03-14 22:01:33
 LastEditors: Wei Luo
-LastEditTime: 2021-11-15 18:32:20
+LastEditTime: 2021-11-15 18:43:54
 Note: Note
 '''
 
@@ -300,7 +300,8 @@ class QuadOptimizer:
 
 
 if __name__ == '__main__':
-    quad_model = QuadRotorModel()
+    # quad_model = QuadRotorModel()
+    quad_model = QuadRotorSetPModel(mass_offset=-0.29)
     quad_model_p = QuadRotorSetPModel()
     opt = QuadOptimizer(quad_model.model,
                         quad_model_p.model,

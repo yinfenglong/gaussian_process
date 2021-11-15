@@ -12,7 +12,7 @@ from acados_template import AcadosModel
 
 
 class QuadRotorSetPModel(object):
-    def __init__(self, ):
+    def __init__(self, mass_offset=0.0):
         g_ = 9.8066
 
         # control input
@@ -61,7 +61,7 @@ class QuadRotorSetPModel(object):
             2 * (qw_ * qy_ + qx_ * qz_) * thrust_ref_ + gp_vx_,  # 1.031 *
             2 * (qy_ * qz_ - qw_ * qx_) * thrust_ref_ + gp_vy_,  #
             (qw_ * qw_ - qx_ * qx_ - qy_ * qy_ + qz_ * qz_) * thrust_ref_ -
-            g_ + gp_vz_ * 0 - 0.29
+            g_ + gp_vz_ - mass_offset
         ]
 
         # B_x = np.array([[0., 0., 0.], [0., 0., 0.], [0., 0., 0.], [0., 0., 0.],

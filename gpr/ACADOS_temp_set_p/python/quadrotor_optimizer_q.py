@@ -185,7 +185,10 @@ class QuadOptimizer:
             self.solver.set(0, 'lbx', x_current)
             self.solver.set(0, 'ubx', x_current)
             # set parameter
-            self.solver.set(0, 'p', np.array([0.0, 0.0, 0]))
+            for j in range(0, self.N):
+                self.solver.set(j, 'p', np.array([0.0, 0.0, -0.29]))
+                # self.acados_ocp_solver[use_model].set(j, 'p', np.array([0.0] * (len(gp_state) + 1)))
+
             status = self.solver.solve()
             if status != 0 :
                 raise Exception('acados acados_ocp_solver returned status {}. Exiting.'.format(status))
@@ -223,14 +226,23 @@ class QuadOptimizer:
         ax.plot(simX[:mpc_iter, 0], simX[:mpc_iter, 1], simX[:mpc_iter, 2], 'b')
         ax.plot(simD[:mpc_iter, 0], simD[:mpc_iter, 1], simD[:mpc_iter, 2], 'r')
         ax.legend(['trajectory with parameter:0,0,-1.92', 'original trajectory'])
+        manger = plt.get_current_fig_manager()
+        manger.window.showMaximized()
+        fig = plt.gcf()
         plt.show()
+        fig.savefig('../../../thesis_figures/svg/' + 'xyz.svg', format='svg', dpi=800 )
+
         fig = plt.figure()
         ax = fig.gca()
         ax.plot(range(mpc_iter), simX[:mpc_iter, 2], )
         ax.plot(range(mpc_iter), simD[:mpc_iter, 2], )
         ax.legend(['z with parameter: 0,0,-1.92', 'z'])
         # plt.title("1.659->1.709")
+        manger = plt.get_current_fig_manager()
+        manger.window.showMaximized()
+        fig = plt.gcf()
         plt.show()
+        fig.savefig('../../../thesis_figures/svg/' + 'z.svg', format='svg', dpi=800 )
 
 if __name__ == '__main__':
     quad_model = QuadRotorModel()

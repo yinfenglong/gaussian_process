@@ -88,7 +88,7 @@ class GpMean(object):
     def predict_test(self, ):
         target_device = 'cuda:0'
 
-        self.test_x = torch.rand(51) * (self.train_x_max - self.train_x_min) + self.train_x_min
+        self.test_x = torch.rand(922) * (self.train_x_max - self.train_x_min) + self.train_x_min
         with torch.no_grad(), gpytorch.settings.fast_pred_var():
             # test_x = train_x
             t1 = time.time()
@@ -130,8 +130,8 @@ class GpMean(object):
             else:
                 # maloc = float( '%.1f'%(train_y_range/30))
                 # miloc = maloc / 2
-                maloc = 1 
-                miloc = 0.5
+                maloc = 0.5 
+                miloc = 0.1
             print("maloc:", maloc)
             print("train_y_range:", self.train_y_range)
             ax.yaxis.set_major_locator( plt.MultipleLocator(maloc) )
@@ -147,7 +147,8 @@ class GpMean(object):
             figures_path = './' + sys.argv[1] + '/figures/'
             if not os.path.exists(figures_path):
                 os.makedirs( figures_path )
-            fig.savefig( figures_path + x_train_idx + '.png' )
+            # fig.savefig( figures_path + x_train_idx + '.png' )
+            fig.savefig('../thesis_figures/svg/' + 'vz.svg', format='svg', dpi=800 )
 
     def predict_mean(self, test_point):
         target_device = 'cuda:0'

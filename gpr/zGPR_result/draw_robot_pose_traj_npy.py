@@ -64,9 +64,11 @@ def load_npy(np_file):
     return x, y, z, vx, vy, vz, traj_x, traj_y, traj_z, traj_vx, traj_vy, traj_vz, t
 
 if __name__ == '__main__':
-    np_file_agp_z = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_8_with_gp_EGP_vz.npy'
+    # np_file_agp_z = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_8_with_gp_EGP_vz.npy'
+    np_file_agp_z = './gazebo/without_gp/exp_data_pose_traj_gp_offset_new_u.npy'
     # np_file_egp_z = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_7_with_gp_EGP_z_vz.npy'
-    np_file_agp = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_7_with_gp_EGP_z_vz.npy'
+    np_file_agp = './gazebo/without_gp/exp_data_pose_traj_offset_new_u.npy'
+    # np_file_agp = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_7_with_gp_EGP_z_vz.npy'
     # np_file_egp = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_8_with_gp_EGP_vz.npy'
     
     x, y, z, vx, vy, vz, traj_x, traj_y, traj_z, traj_vx, traj_vy, traj_vz, t = load_npy(np_file_agp_z)

@@ -162,6 +162,7 @@ class GpMeanApp(object):
             if not os.path.exists(figures_path):
                 os.makedirs( figures_path )
             fig.savefig( figures_path + x_train_idx + '.png' )
+            # fig.savefig('../thesis_figures/svg/' + 'vz.svg', format='svg', dpi=800 )
 
     def predict_mean(self, test_point ):
         target_device = 'cuda:0'

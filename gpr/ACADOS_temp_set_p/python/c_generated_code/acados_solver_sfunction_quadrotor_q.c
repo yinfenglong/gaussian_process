@@ -127,7 +127,7 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 
 static void mdlStart(SimStruct *S)
 {
-    nlp_solver_capsule *capsule = quadrotor_q_acados_create_capsule();
+    quadrotor_q_solver_capsule *capsule = quadrotor_q_acados_create_capsule();
     quadrotor_q_acados_create(capsule);
 
     ssSetUserData(S, (void*)capsule);
@@ -136,7 +136,7 @@ static void mdlStart(SimStruct *S)
 
 static void mdlOutputs(SimStruct *S, int_T tid)
 {
-    nlp_solver_capsule *capsule = ssGetUserData(S);
+    quadrotor_q_solver_capsule *capsule = ssGetUserData(S);
     ocp_nlp_config *nlp_config = quadrotor_q_acados_get_nlp_config(capsule);
     ocp_nlp_dims *nlp_dims = quadrotor_q_acados_get_nlp_dims(capsule);
     ocp_nlp_in *nlp_in = quadrotor_q_acados_get_nlp_in(capsule);
@@ -213,7 +213,7 @@ static void mdlOutputs(SimStruct *S, int_T tid)
 
     /* set outputs */
     // assign pointers to output signals
-    real_t *out_u0, *out_utraj, *out_xtraj, *out_status, *out_sqp_iter, *out_KKT_res, *out_x1, *out_cpu_time;
+    real_t *out_u0, *out_utraj, *out_xtraj, *out_status, *out_sqp_iter, *out_KKT_res, *out_x1, *out_cpu_time, *out_cpu_time_sim, *out_cpu_time_qp, *out_cpu_time_lin;
     int tmp_int;
     out_u0 = ssGetOutputPortRealSignal(S, 0);
     ocp_nlp_out_get(nlp_config, nlp_dims, nlp_out, 0, "u", (void *) out_u0);
@@ -237,7 +237,7 @@ static void mdlOutputs(SimStruct *S, int_T tid)
 
 static void mdlTerminate(SimStruct *S)
 {
-    nlp_solver_capsule *capsule = ssGetUserData(S);
+    quadrotor_q_solver_capsule *capsule = ssGetUserData(S);
 
     quadrotor_q_acados_free(capsule);
     quadrotor_q_acados_free_capsule(capsule);

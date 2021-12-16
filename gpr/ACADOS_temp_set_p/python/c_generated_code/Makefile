@@ -32,7 +32,11 @@
 #
 
 
-ACADOS_FLAGS = -fPIC -std=c99 #-fno-diagnostics-show-line-numbers -g
+
+
+
+
+ACADOS_FLAGS = -fPIC -std=c99   #-fno-diagnostics-show-line-numbers -g
 # # Debugging
 # ACADOS_FLAGS += -g3
 
@@ -62,8 +66,8 @@ OBJ+= $(OCP_OBJ)
 EXTERNAL_DIR=
 EXTERNAL_LIB=
 
-INCLUDE_PATH = /home/achilles/acados/include
-LIB_PATH = /home/achilles/acados/lib
+INCLUDE_PATH = /home/arnold/Develop/github_ws/acados/include
+LIB_PATH = /home/arnold/Develop/github_ws/acados/lib
 all: clean casadi_fun example_sim example
 shared_lib: bundled_shared_lib ocp_shared_lib sim_shared_lib
 
@@ -72,7 +76,7 @@ CASADI_MODEL_SOURCE+= quadrotor_q_expl_ode_fun.c
 CASADI_MODEL_SOURCE+= quadrotor_q_expl_vde_forw.c
 
 casadi_fun:
-	( cd quadrotor_q_model; gcc $(ACADOS_FLAGS) -c  $(CASADI_MODEL_SOURCE))
+	( cd quadrotor_q_model ; gcc $(ACADOS_FLAGS) -c $(CASADI_MODEL_SOURCE))
 
 main:
 	gcc $(ACADOS_FLAGS) -c main_quadrotor_q.c -I $(INCLUDE_PATH)/blasfeo/include/ -I $(INCLUDE_PATH)/hpipm/include/ \
@@ -88,11 +92,12 @@ ocp_solver:
 
 sim_solver:
 	gcc $(ACADOS_FLAGS) -c acados_sim_solver_quadrotor_q.c -I $(INCLUDE_PATH)/blasfeo/include/ -I $(INCLUDE_PATH)/hpipm/include/ \
-	-I $(INCLUDE_PATH) -I $(INCLUDE_PATH)/acados/  \
+	-I $(INCLUDE_PATH) -I $(INCLUDE_PATH)/acados/ \
 
 example: ocp_solver main
 	gcc $(ACADOS_FLAGS) -o main_quadrotor_q $(EX_OBJ) $(OBJ) -L $(LIB_PATH) \
 	-lacados -lhpipm -lblasfeo \
+	 \
 	-lm \
 	-I $(INCLUDE_PATH)/blasfeo/include/ \
 	-I $(INCLUDE_PATH)/hpipm/include/ \
@@ -103,25 +108,35 @@ example: ocp_solver main
 example_sim: sim_solver main_sim
 	gcc $(ACADOS_FLAGS) -o main_sim_quadrotor_q $(EX_SIM_OBJ) $(MODEL_OBJ) $(SIM_OBJ) -L $(LIB_PATH) \
 	-lacados -lhpipm -lblasfeo \
+	 \
 	-lm \
 	-I $(INCLUDE_PATH)/blasfeo/include/ \
 	-I $(INCLUDE_PATH)/acados/ \
 
 bundled_shared_lib: casadi_fun ocp_solver sim_solver
 	gcc $(ACADOS_FLAGS) -shared -o libacados_solver_quadrotor_q.so $(OBJ) \
+	-I $(INCLUDE_PATH)/blasfeo/include/ \
+	-I $(INCLUDE_PATH)/hpipm/include/ \
+	-I $(INCLUDE_PATH) \
 	-L $(LIB_PATH) \
 	-lacados -lhpipm -lblasfeo \
+	 \
 	-lm \
 
 ocp_shared_lib: casadi_fun ocp_solver
 	gcc $(ACADOS_FLAGS) -shared -o libacados_ocp_solver_quadrotor_q.so $(OCP_OBJ) $(MODEL_OBJ) \
+	-I $(INCLUDE_PATH)/blasfeo/include/ \
+	-I $(INCLUDE_PATH)/hpipm/include/ \
+	-I $(INCLUDE_PATH) \
 	-L$(EXTERNAL_DIR) -l$(EXTERNAL_LIB) \
 	-L $(LIB_PATH) -lacados -lhpipm -lblasfeo \
+	 \
 	-lm \
 
 sim_shared_lib: casadi_fun sim_solver
-	gcc $(ACADOS_FLAGS) -shared -o libacados_sim_solver_quadrotor_q.so $(SIM_OBJ) $(MODEL_OBJ) -L$(EXTERNAL_DIR) -l$(EXTERNAL_LIB)  \
+	gcc $(ACADOS_FLAGS) -shared -o libacados_sim_solver_quadrotor_q.so $(SIM_OBJ) $(MODEL_OBJ) -L$(EXTERNAL_DIR) -l$(EXTERNAL_LIB) \
 	-L $(LIB_PATH) -lacados -lhpipm -lblasfeo \
+	 \
 	-lm \
 
 clean:

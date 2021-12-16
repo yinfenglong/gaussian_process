@@ -88,7 +88,7 @@ class GpMean(object):
     def predict_test(self, ):
         target_device = 'cuda:0'
 
-        self.test_x = torch.rand(922) * (self.train_x_max - self.train_x_min) + self.train_x_min
+        self.test_x = torch.rand(100) * (self.train_x_max - self.train_x_min) + self.train_x_min
         with torch.no_grad(), gpytorch.settings.fast_pred_var():
             # test_x = train_x
             t1 = time.time()
@@ -123,6 +123,7 @@ class GpMean(object):
             ax.errorbar(test_x_cpu.numpy(), observed_pred_np, yerr=np.concatenate(((-lower.cpu().numpy() +
                         observed_pred_np).reshape(1, -1), (upper.cpu().numpy() - observed_pred_np).reshape(1, -1)), axis=0), ecolor='b', elinewidth=2, capsize=4, fmt=' ')
             ax.legend(['Observed Data', 'Mean', 'Confidence'])
+            # ax.set_ylim( [-0.95,0.5])
 
             if self.train_y_range < 2:
                 maloc = 0.05 
@@ -130,8 +131,10 @@ class GpMean(object):
             else:
                 # maloc = float( '%.1f'%(train_y_range/30))
                 # miloc = maloc / 2
-                maloc = 0.5 
-                miloc = 0.1
+                # maloc = 0.5 
+                # miloc = 0.1
+                maloc = 0.05 
+                miloc = 0.05
             print("maloc:", maloc)
             print("train_y_range:", self.train_y_range)
             ax.yaxis.set_major_locator( plt.MultipleLocator(maloc) )
@@ -181,6 +184,7 @@ if __name__ == '__main__':
     gp_train = np.load( file_path + '/' + npz_name)
 
     x_idx_list = [i for i in gp_train.keys()][:6]
+    # x_idx_list = ['vz']
     y_idx_list = [i for i in gp_train.keys()][6:]
     for i in range(len(x_idx_list)):
         x_train_idx = x_idx_list[i]

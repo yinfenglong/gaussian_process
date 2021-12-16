@@ -22,19 +22,21 @@ from gpr_GPyTorch_approximate_predict_2d import GpMeanApp2d
 def load_npy(np_file):
     exp_data = np.load(np_file, allow_pickle=True)
     model_path = os.path.join(os.path.join(os.path.dirname(__file__), '..')) + \
-    '/q330/20211005_1234_random_exact'
+    '/q330/20211008_combine_with_cargo_egp'
     model_2d_path = os.path.join(os.path.join(os.path.dirname(__file__), '..')) + \
-    '/q330/20211005_1234_random_exact_2d'
+    '/q330/20211008_combine_with_cargo_egp_2d'
     # model_2d_path = os.path.join(os.path.join(os.path.dirname(__file__), '..')) + \
     # '/q330/20211008_combine_with_cargo_appgp_2d'
     # 20211008_combine_with_cargo_appgp_2d
     # 20211008_combine_with_cargo_egp_2d
+    # '/q330/20211005_1234_random_exact'
+    # '/q330/20211005_1234_random_exact_2d'
     npz_name = 'data_for_gp_y.npz'
-    # gpMPCVx = GpMean('vx','y_vx', model_path, npz_name)
-    # gpMPCVy = GpMean('vy','y_vy', model_path, npz_name)
+    gpMPCVx = GpMean('vx','y_vx', model_path, npz_name)
+    gpMPCVy = GpMean('vy','y_vy', model_path, npz_name)
     # gpMPCVz = GpMean('vz','y_vz', model_path, npz_name)
-    gpMPCVx = GpMean2d('vx','y_vx', 'z', model_2d_path, npz_name)
-    gpMPCVy = GpMean2d('vy','y_vy', 'z', model_2d_path, npz_name)
+    # gpMPCVx = GpMean2d('vx','y_vx', 'z', model_2d_path, npz_name)
+    # gpMPCVy = GpMean2d('vy','y_vy', 'z', model_2d_path, npz_name)
     gpMPCVz = GpMean2d('vz','y_vz','z', model_2d_path, npz_name)
 
     # Approximate GP Model
@@ -50,12 +52,12 @@ def load_npy(np_file):
         v_b = world_to_body(\
             np.array([data[7], data[8], data[9]]), data[3:7])
         # gp predict
-        # gp_vx_b = gpMPCVx.predict_mean( np.array([v_b[0]]) )[0]
-        # gp_vy_b = gpMPCVy.predict_mean( np.array([v_b[1]]) )[0]
+        gp_vx_b = gpMPCVx.predict_mean( np.array([v_b[0]]) )[0]
+        gp_vy_b = gpMPCVy.predict_mean( np.array([v_b[1]]) )[0]
         # gp_vz_b = gpMPCVz.predict_mean( np.array([v_b[2]]) )[0]
         # x, y, z with vz
-        gp_vx_b = gpMPCVx.predict_mean( np.c_[v_b[0], data[2]] )[0]
-        gp_vy_b = gpMPCVy.predict_mean( np.c_[v_b[1], data[2]] )[0]
+        # gp_vx_b = gpMPCVx.predict_mean( np.c_[v_b[0], data[2]] )[0]
+        # gp_vy_b = gpMPCVy.predict_mean( np.c_[v_b[1], data[2]] )[0]
         gp_vz_b = gpMPCVz.predict_mean( np.c_[v_b[2], data[2]] )[0]
         # transform velocity to world frame
         gp_v_w = body_to_world( \
@@ -151,7 +153,7 @@ def plot_pose_traj_gp( pose, traj, gp_acc, tag, gp_offline_i ):
         'gp_acc',
         'gp_offline',
     ], loc=2)
-    # ax2.set_ylim( [-0.2,0.2])
+    ax2.set_ylim( [-0.6,-0.1])
     data_range = np.max(pose) - np.min(pose)
     if data_range < 0.3:
         maloc = 0.02 

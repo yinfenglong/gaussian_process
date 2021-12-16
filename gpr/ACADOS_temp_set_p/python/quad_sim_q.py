@@ -14,8 +14,8 @@ import numpy as np
 
 if __name__ == '__main__':
     # quad_model = QuadRotorModel()
-    quad_model = QuadRotorSetPModel(mass_offset=0.29)
-    quad_model_p = QuadRotorSetPModel(mass_offset=0.29)
+    quad_model = QuadRotorModel()
+    quad_model_p = QuadRotorModel()
     opt = QuadOptimizer(quad_model.model,
                         quad_model_p.model,
                         quad_model.constraints,

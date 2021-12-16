@@ -49,6 +49,8 @@ class GpMeanApp(object):
         # numpy into one dimension, then create a Tensor form from numpy (=torch.linspace)
         X = (gp_train[x_train_idx]).flatten()
         y = (gp_train[y_train_idx]).flatten()
+        self.train_x_max = np.max(X)
+        self.train_x_min = np.min(X)
         # mapping relationship of X to y cannot be guaranteed
         # np.random.shuffle(X)
         # np.random.shuffle(y) 
@@ -74,6 +76,7 @@ class GpMeanApp(object):
         self.train_y = y[train_index].contiguous()
         self.test_x = X[test_index].contiguous()
         self.test_y = y[test_index].contiguous()
+
 
         self.train_x = (self.train_x).float().to(device)
         self.train_y = (self.train_y).float().to(device)
@@ -105,11 +108,13 @@ class GpMeanApp(object):
         means = torch.tensor([0.])
         with torch.no_grad():
             for x_batch, y_batch in self.test_loader:
-                self.test_x = x_batch
-                self.observed_pred = self.model_to_predict( x_batch.float().to(target_device) )
+                # self.test_x = x_batch
+                self.test_x = torch.rand(100) * (self.train_x_max - self.train_x_min) + self.train_x_min
+                self.observed_pred = self.model_to_predict( self.test_x.float().to(target_device) )
+                # self.observed_pred = self.model_to_predict( x_batch.float().to(target_device) )
                 means = torch.cat([means, self.observed_pred.mean.cpu()])
         means = means[1:]
-        print('Test MAE: {}'.format(torch.mean(torch.abs(means - self.test_y.cpu()))))
+        # print('Test MAE: {}'.format(torch.mean(torch.abs(means - self.test_y.cpu()))))
 
     def plot_predict_result(self,):
         target_device = 'cuda:0'
@@ -161,8 +166,8 @@ class GpMeanApp(object):
             figures_path = './' + sys.argv[1] + '/figures/'
             if not os.path.exists(figures_path):
                 os.makedirs( figures_path )
-            fig.savefig( figures_path + x_train_idx + '.png' )
-            # fig.savefig('../thesis_figures/svg/' + 'vz.svg', format='svg', dpi=800 )
+            # fig.savefig( figures_path + x_train_idx + '.png' )
+            fig.savefig('../thesis_figures/svg/' + 'vz.svg', format='svg', dpi=800 )
 
     def predict_mean(self, test_point ):
         target_device = 'cuda:0'
@@ -196,7 +201,8 @@ if __name__ == '__main__':
     gp_train = np.load( file_path + '/' + npz_name)
 
     # all dimensions: x, y, z, vx, vy, vz
-    x_idx_list = [i for i in gp_train.keys()][:6]
+    # x_idx_list = [i for i in gp_train.keys()][:6]
+    x_idx_list = ['vz']
     y_idx_list = [i for i in gp_train.keys()][6:]
     for i in range(len(x_idx_list)):
         x_train_idx = x_idx_list[i]

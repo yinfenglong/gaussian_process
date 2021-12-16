@@ -75,13 +75,18 @@ def plot_3d():
     ax.plot(traj_x, traj_y, traj_z , c='r', label='trajectory')
     # ax.plot(traj_x_gp, traj_y_gp, traj_z_gp , c='r', label='GP_trajectory')
     # ax.scatter(traj_x_egp, traj_y_egp, traj_z_egp , c='r', label='EGP_trajectory')
+    # ###################################################################################
     ax.scatter(x, y, z , c='k', label='q300_without_gp')
     ax.scatter(x_egp, y_egp, z_egp , c='b', label='q300_with_EGP')
     ax.scatter(x_agp, y_agp, z_agp , c='g', label='q300_with_AGP')
     plt.legend(labels=['trajectory', 'q300_without_gp', 'q300_with_EGP', 'q300_with_AppGP'])
     # plt.legend(labels=['trajectory', 'q300_with_EGP', 'q300_with_AGP'])
+    manger = plt.get_current_fig_manager()
+    manger.window.showMaximized()
+    fig = plt.gcf()
 
     plt.show()
+    fig.savefig('../../thesis_figures/svg/' + 'grasping_traj.svg', format='svg', dpi=800 )
 
 def plot_2d(pose, traj, pose_agp, pose_egp, gp_agp, gp_egp, tag ):
     f, ax = plt.subplots(1, 1, figsize=(4, 3))
@@ -215,6 +220,7 @@ if __name__ == '__main__':
     # np_file_AGP = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211011_6_with_egp.npy'
     # np_file_EGP = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211011_3_with_egp.npy'
     # #######################################################################
+    # np_file = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211012_7_eight_with_egp.npy'
     np_file_AGP = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211012_13_grasp_with_appgp.npy'
     np_file_EGP = './q330/with_gp/exp_data_pose_traj_gp_acc_q330_20211012_11_grasp_with_egp.npy'
     # exp_data_pose_traj_gp_acc_q330_20211011_1_with_appgp

@@ -222,7 +222,7 @@ class QuadOptimizer:
             self.solver.set(0, 'ubx', x_current)
             # set parameter
             for j in range(0, self.N + 1):
-                self.solver.set(j, 'p', np.array([0.0, 0.0, 0]))  # -0.286
+                self.solver.set(j, 'p', np.array([0.0, 0.0, -0.286]))  # -0.286
                 # self.acados_ocp_solver[use_model].set(j, 'p', np.array([0.0] * (len(gp_state) + 1)))
 
             status = self.solver.solve()
@@ -231,7 +231,7 @@ class QuadOptimizer:
                     'acados acados_ocp_solver returned status {}. Exiting.'.
                     format(status))
             simU[mpc_iter, :] = self.solver.get(0, 'u')
-            simU[mpc_iter, 3] = simU[mpc_iter, 3]  # 0.971 1.659 / 1.709 *
+            simU[mpc_iter, 3] = 0.971*simU[mpc_iter, 3]  # 0.971 1.659 / 1.709 *
 
             # print(current_trajectory)
             # print('-----')
@@ -301,8 +301,8 @@ class QuadOptimizer:
 
 if __name__ == '__main__':
     # quad_model = QuadRotorModel()
-    quad_model = QuadRotorSetPModel(mass_offset=-0.29)
-    quad_model_p = QuadRotorSetPModel()
+    quad_model = QuadRotorModel()
+    quad_model_p = QuadRotorSetPModel(mass_offset=0.29)
     opt = QuadOptimizer(quad_model.model,
                         quad_model_p.model,
                         quad_model.constraints,

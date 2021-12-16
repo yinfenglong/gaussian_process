@@ -29,7 +29,7 @@ def load_npy(np_file):
     # ref_x = np.array([0.]*t.shape[0])
     for i in range(data_length):
         if not got_data:
-            if exp_data[i][12]>0.4:
+            if exp_data[i][11]>0:
                 index = i
                 print("index", index)
                 got_data = True
@@ -47,7 +47,8 @@ def load_npy(np_file):
             traj_vx.append(exp_data[i][13])
             traj_vy.append(exp_data[i][14])
             traj_vz.append(exp_data[i][15])
-    t = np.arange(0., 0.01*(data_length-index), 0.01)
+    # t = np.arange(0., 0.01*(data_length-index), 0.01)
+    t = 0.01 * np.arange(data_length-index)
     # traj_x = []
     # traj_y = []
     # traj_z = []
@@ -64,12 +65,14 @@ def load_npy(np_file):
     return x, y, z, vx, vy, vz, traj_x, traj_y, traj_z, traj_vx, traj_vy, traj_vz, t
 
 if __name__ == '__main__':
-    # np_file_agp_z = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_8_with_gp_EGP_vz.npy'
-    np_file_agp_z = './gazebo/without_gp/exp_data_pose_traj_gp_offset_new_u.npy'
-    # np_file_egp_z = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_7_with_gp_EGP_z_vz.npy'
-    np_file_agp = './gazebo/without_gp/exp_data_pose_traj_offset_new_u.npy'
-    # np_file_agp = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_7_with_gp_EGP_z_vz.npy'
-    # np_file_egp = './q300/with_gp/exp_data_pose_traj_gp_acc_q300_20211005_8_with_gp_EGP_vz.npy'
+    #1.709kg, random traj
+    # with gp
+    # np_file_agp_z = './gazebo/without_gp/exp_data_pose_traj_gp_offset_new_u.npy'
+    # without gp
+    # np_file_agp = './gazebo/without_gp/exp_data_pose_traj_offset_new_u.npy'
+    #1.709kg, circle
+    np_file_agp_z = './gazebo/with_gp/exp_data_pose_traj_gp_acc_gazebo_20211117_2_with_gp.npy'
+    np_file_agp = './gazebo/without_gp/exp_data_pose_traj_gp_acc_gazebo_20211117_1_without_gp.npy'
     
     x, y, z, vx, vy, vz, traj_x, traj_y, traj_z, traj_vx, traj_vy, traj_vz, t = load_npy(np_file_agp_z)
     x_gp, y_gp, z_gp, vx_gp, vy_gp, vz_gp, traj_x_gp, traj_y_gp, traj_z_gp, traj_vx_gp, traj_vy_gp, traj_vz_gp, t_gp = load_npy(np_file_agp)
@@ -83,21 +86,43 @@ if __name__ == '__main__':
     # plt.title('m=1.709, mpc without gp')
     # plt.show()
 
-    plt.plot(t, x, 'b', t, traj_x, 'r', t_gp, x_gp, 'g-.', t_gp, traj_x_gp, 'k:')
+    f, ax = plt.subplots(1, 1, figsize=(4, 3))
+    plt.plot(t, x, 'g-.', t, traj_x, 'b', t_gp, x_gp, 'r--', t_gp, traj_x_gp, 'k:')
     plt.legend(labels=['robot_pose_agp', 'robot_traj_agp', 'robot_pose_egp', 'robot_traj_egp' ])
     # plt.legend(labels=['robot_pose_z_egp', 'robot_traj_z_egp', 'robot_pose_egp', 'robot_traj_egp' ])
     # plt.legend(labels=['robot_pose_z_agp', 'robot_traj_z_agp', 'robot_pose_agp', 'robot_traj_agp' ])
+    maloc = 0.1 
+    miloc = 0.05
+    # y_grid
+    ax.yaxis.set_major_locator(plt.MultipleLocator(maloc))
+    ax.yaxis.set_minor_locator(plt.MultipleLocator(miloc))
+    ax.grid(axis='y', which='both')
+    # x_grid
+    ax.xaxis.set_major_locator(plt.MultipleLocator(5))
+    ax.xaxis.set_minor_locator(plt.MultipleLocator(1))
+    ax.grid(axis='x', which='both')
     plt.title('x')
     manger = plt.get_current_fig_manager()
     manger.window.showMaximized()
     fig = plt.gcf()
     plt.show()
     fig.savefig('../../thesis_figures/svg/' + 'figures_x.svg', format='svg', dpi=800 )
-    plt.plot(t, y, 'b', t, traj_y, 'r', t_gp, y_gp, 'g-.', t_gp, traj_y_gp, 'k:')
+
+    f, ax = plt.subplots(1, 1, figsize=(4, 3))
+    plt.plot(t, y, 'g-.', t, traj_y, 'b', t_gp, y_gp, 'r--', t_gp, traj_y_gp, 'k:')
     plt.legend(labels=['robot_pose_agp', 'robot_traj_agp', 'robot_pose_egp', 'robot_traj_egp' ])
     # plt.legend(labels=['robot_pose_z_egp', 'robot_traj_z_egp', 'robot_pose_egp', 'robot_traj_egp' ])
-    # plt.legend(labels=['robot_pose_z_agp', 'robot_traj_z_agp', 'robot_pose_agp', 'robot_traj_agp' ])
-    plt.title('y')
+    maloc = 0.1 
+    miloc = 0.05
+    # y_grid
+    ax.yaxis.set_major_locator(plt.MultipleLocator(maloc))
+    ax.yaxis.set_minor_locator(plt.MultipleLocator(miloc))
+    ax.grid(axis='y', which='both')
+    # x_grid
+    ax.xaxis.set_major_locator(plt.MultipleLocator(5))
+    ax.xaxis.set_minor_locator(plt.MultipleLocator(1))
+    ax.grid(axis='x', which='both')
+    # t.title('y')
     manger = plt.get_current_fig_manager()
     manger.window.showMaximized()
     fig = plt.gcf()
@@ -105,7 +130,7 @@ if __name__ == '__main__':
     fig.savefig('../../thesis_figures/svg/' + 'figures_y.svg', format='svg', dpi=800 )
 
     f, ax = plt.subplots(1, 1, figsize=(4, 3))
-    plt.plot(t, z, 'r-.', t, traj_z, 'b', t_gp, z_gp, 'g-.', t_gp, traj_z_gp, 'k-.')
+    plt.plot(t, z, 'g-.', t, traj_z, 'b', t_gp, z_gp, 'r--', t_gp, traj_z_gp, 'k-.')
     plt.legend(labels=['robot_pose_agp', 'robot_traj_agp', 'robot_pose_egp', 'robot_traj_egp' ])
     # plt.legend(labels=['robot_pose_z_egp', 'robot_traj_z_egp', 'robot_pose_egp', 'robot_traj_egp' ])
     # plt.legend(labels=['robot_pose_z_agp', 'robot_traj_z_agp', 'robot_pose_agp', 'robot_traj_agp' ])

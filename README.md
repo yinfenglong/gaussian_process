@@ -27,9 +27,7 @@ mission_mode: 1"
 4. The quadrotor flies on a trajectory.
 ```
 itm roslaunch itm_nonlinear_mpc offboard_sim_trajectory_generator_launch.launch horizon:=1 traj_type_idx:=1 
-
 itm rosrun itm_nonlinear_mpc offboard_sim_random_gazebo_trajectory_commander.py 
-
 offboard:
 rostopic pub /itm_quadrotor_control/user_command itm_mav_msgs/SetMission "header:
   seq: 0
@@ -54,7 +52,7 @@ mission_mode: 2"
 ### GP training
 ### standard process of GP training. 
 ```
-cd ./scripts/gaussian_process/gpr/gp_process.yml
+cd ./src/itm/itm_quadrotor_node/itm_nonlinear_mpc/scripts/gaussian_process/gpr/gp_process.yml
 tmuxinator start -p gp_process.yml folder_name=q330/20211008_10_with_cargo offset=0.44
 ```
 
@@ -84,9 +82,15 @@ python3 gpr_GPyTorch_approximate_predict_2d.py q330/20211008_10_with_cargo data_
 ```
 roslaunch itm_nonlinear_mpc px4_exp_node.launch is_simulation:=true mpc_and_gp:=true
 ```
-## mathematical simulation
+### mathematical simulation
 ```
 python3 ./ACADOS_temp_set_p/quad_sim_q.py
+```
+
+## manipulator
+Turn on the electromagnet.
+```
+roslaunch magnet_control magnet.launch pubMagnet:=true 
 ```
 
 <!-- ## SITL
